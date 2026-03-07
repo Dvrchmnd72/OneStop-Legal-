@@ -1,0 +1,439 @@
+/* ============================================
+   OneStop Legal - Custom Homepage Styles
+   ============================================ */
+
+/* ---------- Google Fonts ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --osl-navy: #1a2a4a;
+  --osl-navy-dark: #0f1d35;
+  --osl-gold: #c9a84c;
+  --osl-gold-light: #d4b965;
+  --osl-white: #ffffff;
+  --osl-light-grey: #f7f8fa;
+  --osl-medium-grey: #e8eaed;
+  --osl-text: #333333;
+  --osl-text-light: #666666;
+  --osl-font-heading: 'Playfair Display', Georgia, serif;
+  --osl-font-body: 'Inter', 'Open Sans', sans-serif;
+  --osl-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --osl-shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+  --osl-radius: 8px;
+  --osl-transition: all 0.3s ease;
+}
+
+/* ---------- Container ---------- */
+.osl-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.osl-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--osl-navy) 0%, var(--osl-navy-dark) 100%);
+  padding: 120px 0 100px;
+  overflow: hidden;
+}
+
+.osl-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(201,168,76,0.1) 100%);
+  pointer-events: none;
+}
+
+.osl-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.osl-hero h1 {
+  font-family: var(--osl-font-heading);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--osl-white);
+  line-height: 1.2;
+  margin: 0 0 24px 0;
+}
+
+.osl-highlight {
+  color: var(--osl-gold);
+}
+
+.osl-hero-subtitle {
+  font-family: var(--osl-font-body);
+  font-size: 18px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin: 0 0 40px 0;
+  max-width: 600px;
+}
+
+.osl-hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Buttons ---------- */
+.osl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-family: var(--osl-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--osl-radius);
+  transition: var(--osl-transition);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.osl-btn-primary {
+  background: var(--osl-gold);
+  color: var(--osl-navy-dark);
+  border-color: var(--osl-gold);
+}
+
+.osl-btn-primary:hover {
+  background: var(--osl-gold-light);
+  border-color: var(--osl-gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(201,168,76,0.4);
+  color: var(--osl-navy-dark);
+  text-decoration: none;
+}
+
+.osl-btn-secondary {
+  background: transparent;
+  color: var(--osl-white);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.osl-btn-secondary:hover {
+  border-color: var(--osl-white);
+  background: rgba(255,255,255,0.1);
+  color: var(--osl-white);
+  text-decoration: none;
+}
+
+.osl-btn-outline {
+  background: transparent;
+  color: var(--osl-white);
+  border-color: var(--osl-gold);
+}
+
+.osl-btn-outline:hover {
+  background: var(--osl-gold);
+  color: var(--osl-navy-dark);
+  text-decoration: none;
+}
+
+/* ============================================
+   TRUST BAR
+   ============================================ */
+.osl-trust-bar {
+  background: var(--osl-gold);
+  padding: 20px 0;
+}
+
+.osl-trust-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.osl-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--osl-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--osl-navy-dark);
+}
+
+.osl-trust-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--osl-navy);
+  color: var(--osl-gold);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ============================================
+   SECTION HEADERS
+   ============================================ */
+.osl-section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.osl-section-label {
+  display: inline-block;
+  font-family: var(--osl-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--osl-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.osl-section-header h2 {
+  font-family: var(--osl-font-heading);
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--osl-navy);
+  margin: 0 0 16px 0;
+}
+
+.osl-section-header p {
+  font-family: var(--osl-font-body);
+  font-size: 17px;
+  color: var(--osl-text-light);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ============================================
+   SERVICES / PRACTICE AREAS
+   ============================================ */
+.osl-services {
+  padding: 80px 0;
+  background: var(--osl-light-grey);
+}
+
+.osl-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.osl-service-card {
+  background: var(--osl-white);
+  padding: 36px 28px;
+  border-radius: var(--osl-radius);
+  box-shadow: var(--osl-shadow);
+  transition: var(--osl-transition);
+  text-decoration: none;
+  color: var(--osl-text);
+  display: block;
+  border-bottom: 3px solid transparent;
+}
+
+.osl-service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--osl-shadow-hover);
+  border-bottom-color: var(--osl-gold);
+  text-decoration: none;
+  color: var(--osl-text);
+}
+
+.osl-service-icon {
+  margin-bottom: 20px;
+}
+
+.osl-service-icon img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
+
+.osl-service-card h3 {
+  font-family: var(--osl-font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--osl-navy);
+  margin: 0 0 12px 0;
+}
+
+.osl-service-card p {
+  font-family: var(--osl-font-body);
+  font-size: 15px;
+  color: var(--osl-text-light);
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.osl-service-link {
+  font-family: var(--osl-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--osl-gold);
+  transition: var(--osl-transition);
+}
+
+.osl-service-card:hover .osl-service-link {
+  color: var(--osl-navy);
+}
+
+/* ============================================
+   WHY CHOOSE US
+   ============================================ */
+.osl-why-us {
+  padding: 80px 0;
+  background: var(--osl-white);
+}
+
+.osl-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.osl-why-card {
+  text-align: center;
+  padding: 40px 28px;
+  border-radius: var(--osl-radius);
+  transition: var(--osl-transition);
+}
+
+.osl-why-card:hover {
+  background: var(--osl-light-grey);
+}
+
+.osl-why-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.osl-why-card h3 {
+  font-family: var(--osl-font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--osl-navy);
+  margin: 0 0 14px 0;
+}
+
+.osl-why-card p {
+  font-family: var(--osl-font-body);
+  font-size: 15px;
+  color: var(--osl-text-light);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.osl-cta {
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--osl-navy) 0%, var(--osl-navy-dark) 100%);
+  text-align: center;
+}
+
+.osl-cta-content h2 {
+  font-family: var(--osl-font-heading);
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--osl-white);
+  margin: 0 0 16px 0;
+}
+
+.osl-cta-content p {
+  font-family: var(--osl-font-body);
+  font-size: 18px;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 36px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.osl-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 992px) {
+  .osl-hero h1 {
+    font-size: 38px;
+  }
+  .osl-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .osl-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .osl-hero {
+    padding: 80px 0 60px;
+  }
+  .osl-hero h1 {
+    font-size: 32px;
+  }
+  .osl-hero-subtitle {
+    font-size: 16px;
+  }
+  .osl-hero-cta {
+    flex-direction: column;
+  }
+  .osl-btn {
+    justify-content: center;
+    width: 100%;
+  }
+  .osl-trust-items {
+    flex-direction: column;
+    text-align: center;
+  }
+  .osl-services-grid {
+    grid-template-columns: 1fr;
+  }
+  .osl-why-grid {
+    grid-template-columns: 1fr;
+  }
+  .osl-section-header h2 {
+    font-size: 30px;
+  }
+  .osl-cta-content h2 {
+    font-size: 30px;
+  }
+  .osl-services,
+  .osl-why-us,
+  .osl-cta {
+    padding: 60px 0;
+  }
+  .osl-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .osl-hero h1 {
+    font-size: 28px;
+  }
+  .osl-container {
+    padding: 0 16px;
+  }
+}

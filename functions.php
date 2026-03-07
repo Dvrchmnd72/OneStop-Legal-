@@ -3,8 +3,6 @@
 if ( !defined( 'ABSPATH' ) ) exit;
 
 // BEGIN ENQUEUE PARENT ACTION
-// AUTO GENERATED - Do not modify or remove comment markers above or below:
-
 if ( !function_exists( 'chld_thm_cfg_locale_css' ) ):
     function chld_thm_cfg_locale_css( $uri ){
         if ( empty( $uri ) && is_rtl() && file_exists( get_template_directory() . '/rtl.css' ) )
@@ -20,8 +18,17 @@ if ( !function_exists( 'chld_thm_cfg_parent_css' ) ):
     }
 endif;
 add_action( 'wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10 );
-
 // END ENQUEUE PARENT ACTION
+
+// Enqueue custom homepage CSS
+function osl_enqueue_homepage_styles() {
+    if ( is_page_template('page-home-custom.php') ) {
+        wp_enqueue_style( 'osl-homepage', get_stylesheet_directory_uri() . '/osl-homepage.css', array(), '1.0.0' );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'osl_enqueue_homepage_styles', 20 );
+
+// Enqueue custom JS
 function custom_enqueue_scripts() {
     wp_enqueue_script('custom-js', get_stylesheet_directory_uri() . '/custom.js', array('jquery'), null, true);
 }
