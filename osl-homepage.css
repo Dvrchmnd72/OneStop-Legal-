@@ -866,3 +866,18 @@ html body .osl-cta .osl-social-links a:hover svg {
 html body .osl-social-links span {
   color: rgba(255,255,255,0.8) !important;
 }
+
+/* ============================================
+   LOGO IMAGE STYLING
+   ============================================ */
+html body .main-header-version1 .logo img {
+  width: 180px !important;
+  height: auto !important;
+  max-height: 50px !important;
+  object-fit: contain !important;
+}
+
+/* Hide the text since we have the image */
+html body .main-header-version1 .logo .logo-text-w {
+  display: none !important;
+}
