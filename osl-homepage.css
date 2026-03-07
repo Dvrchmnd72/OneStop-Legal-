@@ -741,3 +741,49 @@ header#header,
 .fixed-header-w .main-menu > li > a:hover {
   color: var(--osl-gold, #c9a84c) !important;
 }
+
+/* ============================================
+   HIDE TOP SOCIAL BAR
+   ============================================ */
+.top-bar-links-box-container,
+.top-bar-links-box-w {
+  display: none !important;
+}
+
+/* ============================================
+   SOCIAL LINKS IN CTA
+   ============================================ */
+.osl-social-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.osl-social-links span {
+  color: rgba(255,255,255,0.7);
+  font-family: var(--osl-font-body, 'Inter', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.osl-social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: var(--osl-white, #ffffff);
+  transition: all 0.3s ease;
+}
+
+.osl-social-links a:hover {
+  background: var(--osl-gold, #c9a84c);
+  color: var(--osl-navy, #1a2a4a);
+  transform: translateY(-2px);
+}
