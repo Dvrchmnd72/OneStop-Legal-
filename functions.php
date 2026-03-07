@@ -20,18 +20,29 @@ endif;
 add_action( 'wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10 );
 // END ENQUEUE PARENT ACTION
 
-// Enqueue custom CSS on ALL pages - use filemtime for cache busting
+// Enqueue custom CSS on ALL pages - bypass theme version filter
 function osl_enqueue_styles() {
     $css_file = get_stylesheet_directory() . '/osl-homepage.css';
-    $version = file_exists($css_file) ? filemtime($css_file) : time();
-    wp_enqueue_style( 'osl-homepage', get_stylesheet_directory_uri() . '/osl-homepage.css', array(), $version );
+    $ver = file_exists($css_file) ? filemtime($css_file) : time();
+    wp_enqueue_style( 'osl-custom-styles', get_stylesheet_directory_uri() . '/osl-homepage.css', array(), $ver );
 }
-add_action( 'wp_enqueue_scripts', 'osl_enqueue_styles', 20 );
+add_action( 'wp_enqueue_scripts', 'osl_enqueue_styles', 9999 );
+
+// Prevent parent theme from overriding our version
+function osl_force_css_version( $src, $handle ) {
+    if ( $handle === 'osl-custom-styles' ) {
+        $css_file = get_stylesheet_directory() . '/osl-homepage.css';
+        $ver = file_exists($css_file) ? filemtime($css_file) : time();
+        $src = add_query_arg( 'ver', $ver, $src );
+    }
+    return $src;
+}
+add_filter( 'style_loader_src', 'osl_force_css_version', 9999, 2 );
 
 // Enqueue custom JS
 function osl_enqueue_scripts() {
     $js_file = get_stylesheet_directory() . '/custom.js';
-    $version = file_exists($js_file) ? filemtime($js_file) : time();
-    wp_enqueue_script('osl-custom-js', get_stylesheet_directory_uri() . '/custom.js', array('jquery'), $version, true);
+    $ver = file_exists($js_file) ? filemtime($js_file) : time();
+    wp_enqueue_script('osl-custom-js', get_stylesheet_directory_uri() . '/custom.js', array('jquery'), $ver, true);
 }
-add_action('wp_enqueue_scripts', 'osl_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'osl_enqueue_scripts', 9999);
