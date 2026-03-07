@@ -787,3 +787,44 @@ header#header,
   color: var(--osl-navy, #1a2a4a);
   transform: translateY(-2px);
 }
+
+/* ============================================
+   FORCE HIDE TOP BAR - Maximum Specificity
+   ============================================ */
+html body .all-wrapper .os-container.top-bar-links-box-container {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 0 !important;
+}
+
+html body .top-bar-links-box-w {
+  display: none !important;
+}
+
+html body .top-bar-social-label,
+html body .bar-social {
+  display: none !important;
+}
+
+/* ============================================
+   FIX SOCIAL ICONS IN CTA - White Color
+   ============================================ */
+.osl-cta .osl-social-links a {
+  color: #ffffff !important;
+}
+
+.osl-cta .osl-social-links a svg {
+  fill: #ffffff !important;
+}
+
+.osl-cta .osl-social-links a:hover {
+  background: var(--osl-gold, #c9a84c) !important;
+}
+
+.osl-cta .osl-social-links a:hover svg {
+  fill: var(--osl-navy, #1a2a4a) !important;
+}
