@@ -942,3 +942,12 @@ html body .main-header .menu > li:last-child > a:hover {
   background: transparent !important;
   color: #ffffff !important;
 }
+
+/* Fix Contact Us font size to match other nav items */
+html body .main-header .top-menu > ul > li:last-child > a,
+html body .main-header-version1 .top-menu > ul > li:last-child > a {
+  font-size: inherit !important;
+  text-transform: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+}
