@@ -113,6 +113,7 @@ $last_item_not_button = osetin_get_field('not_button_last_menu_item', 'option', 
             <div class="main-header color-scheme-<?php echo esc_attr($top_menu_bg_color_type); ?> " style="<?php echo osetin_get_css_prop('background-color', $top_menu_bg_color); ?><?php echo osetin_get_css_prop('background-image', $top_menu_bg_image_url); ?>; background-size: cover;">
               <div class="logo">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+                  <?php if($logo_image_url){ ?><img src="<?php echo esc_url($logo_image_url); ?>" alt="<?php echo esc_attr(get_bloginfo( 'name' )); ?>" style="width: <?php echo esc_attr($logo_image_width); ?>px;"><?php } ?>
                   
                   <?php if($logo_text || $logo_sub_text){
                     echo '<span class="logo-text-w">';
