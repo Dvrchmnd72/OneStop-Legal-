@@ -645,3 +645,99 @@
     display: flex;
   }
 }
+
+/* ============================================
+   HEADER OVERRIDES (CSS Only - Safe)
+   ============================================ */
+
+/* Hide the social media top bar */
+.top-social-w,
+.top-bar-w,
+.os-top-bar,
+section.top-social-w {
+  display: none !important;
+}
+
+/* Restyle main header bar to navy */
+.header-w,
+.main-header-w,
+.header-main-w,
+header .header-w {
+  background: var(--osl-navy, #1a2a4a) !important;
+  border-bottom: none !important;
+}
+
+/* Make header sticky */
+#header,
+header#header,
+.header-holder {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 9999 !important;
+}
+
+/* Nav links white on navy */
+.main-menu > li > a,
+.header-w .main-menu > li > a,
+.menu-header-container .main-menu > li > a {
+  color: rgba(255,255,255,0.85) !important;
+  font-family: var(--osl-font-body, 'Inter', sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+.main-menu > li > a:hover,
+.main-menu > li.current-menu-item > a,
+.main-menu > li.current_page_item > a {
+  color: var(--osl-gold, #c9a84c) !important;
+}
+
+/* Menu separators */
+.main-menu > li .menu-divider,
+.main-menu > li::after {
+  color: rgba(255,255,255,0.3) !important;
+}
+
+/* Settlement Agent Hub button */
+.main-menu > li:last-child > a {
+  background: var(--osl-gold, #c9a84c) !important;
+  color: var(--osl-navy, #1a2a4a) !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 10px 24px !important;
+}
+
+.main-menu > li:last-child > a:hover {
+  background: var(--osl-gold-light, #d4b965) !important;
+}
+
+/* Logo text to white/gold */
+.logo a,
+.logo-w a,
+.logo .logo-text,
+.header-w .logo a {
+  color: var(--osl-white, #ffffff) !important;
+  font-family: var(--osl-font-heading, 'Playfair Display', serif) !important;
+}
+
+/* Logo image sizing */
+.logo img,
+.logo-w img {
+  max-height: 50px !important;
+  width: auto !important;
+}
+
+/* Fixed/scrolling header also navy */
+.fixed-header-w,
+.header-fixed .header-w,
+.fixed-header-w .fixed-menu-w {
+  background: var(--osl-navy, #1a2a4a) !important;
+}
+
+.fixed-header-w .main-menu > li > a,
+.fixed-menu-w a {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.fixed-header-w .main-menu > li > a:hover {
+  color: var(--osl-gold, #c9a84c) !important;
+}
