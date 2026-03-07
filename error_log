@@ -51,3 +51,19 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 05:48:34 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 05:48:34 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 05:48:40 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 05:49:28 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
