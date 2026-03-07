@@ -128,43 +128,22 @@ $categories = get_categories(array(
 .news-card {
   background: #f8f6f0;
   border-radius: 12px;
-  overflow: hidden;
+  padding: 35px 30px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  border-left: 4px solid #c9a84c;
 }
 .news-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-}
-.news-card-image {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-}
-.news-card-placeholder {
-  width: 100%;
-  height: 220px;
-  background: linear-gradient(135deg, #0d1b3e 0%, #1a2a4a 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-  opacity: 0.6;
-}
-.news-card-body {
-  padding: 30px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 .news-card-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 .news-card-date {
   font-size: 13px;
@@ -183,9 +162,9 @@ $categories = get_categories(array(
 }
 .news-card h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: 21px;
   color: #0d1b3e;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   line-height: 1.4;
 }
 .news-card h3 a {
@@ -384,27 +363,19 @@ $categories = get_categories(array(
       <div class="news-grid">
         <?php while ($blog_query->have_posts()) : $blog_query->the_post(); ?>
           <div class="news-card">
-            <?php if (has_post_thumbnail()) : ?>
-              <img src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'medium_large')); ?>"
-                   alt="<?php the_title_attribute(); ?>" class="news-card-image" />
-            <?php else : ?>
-              <div class="news-card-placeholder">📰</div>
-            <?php endif; ?>
-            <div class="news-card-body">
-              <div class="news-card-meta">
-                <span class="news-card-date"><?php echo get_the_date('j M Y'); ?></span>
-                <?php
-                $post_cats = get_the_category();
-                if (!empty($post_cats)) :
-                  $primary_cat = $post_cats[0];
-                ?>
-                  <span class="news-card-cat"><?php echo esc_html($primary_cat->name); ?></span>
-                <?php endif; ?>
-              </div>
-              <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-              <p class="news-card-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 25, '...'); ?></p>
-              <a href="<?php the_permalink(); ?>" class="news-read-more">Read More →</a>
+            <div class="news-card-meta">
+              <span class="news-card-date"><?php echo get_the_date('j M Y'); ?></span>
+              <?php
+              $post_cats = get_the_category();
+              if (!empty($post_cats)) :
+                $primary_cat = $post_cats[0];
+              ?>
+                <span class="news-card-cat"><?php echo esc_html($primary_cat->name); ?></span>
+              <?php endif; ?>
             </div>
+            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <p class="news-card-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 25, '...'); ?></p>
+            <a href="<?php the_permalink(); ?>" class="news-read-more">Read More →</a>
           </div>
         <?php endwhile; ?>
       </div>
@@ -426,8 +397,8 @@ $categories = get_categories(array(
       echo paginate_links(array(
         'total'     => $blog_query->max_num_pages,
         'current'   => $paged,
-        'prev_text' => '← Prev',
-        'next_text' => 'Next →',
+        'prev_text' => '&larr; Prev',
+        'next_text' => 'Next &rarr;',
         'type'      => 'plain',
       ));
       ?>
