@@ -20,14 +20,18 @@ endif;
 add_action( 'wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10 );
 // END ENQUEUE PARENT ACTION
 
-// Enqueue custom CSS on ALL pages (header styles needed everywhere)
+// Enqueue custom CSS on ALL pages - use filemtime for cache busting
 function osl_enqueue_styles() {
-    wp_enqueue_style( 'osl-homepage', get_stylesheet_directory_uri() . '/osl-homepage.css', array(), '1.0.1' );
+    $css_file = get_stylesheet_directory() . '/osl-homepage.css';
+    $version = file_exists($css_file) ? filemtime($css_file) : time();
+    wp_enqueue_style( 'osl-homepage', get_stylesheet_directory_uri() . '/osl-homepage.css', array(), $version );
 }
 add_action( 'wp_enqueue_scripts', 'osl_enqueue_styles', 20 );
 
 // Enqueue custom JS
 function osl_enqueue_scripts() {
-    wp_enqueue_script('osl-custom-js', get_stylesheet_directory_uri() . '/custom.js', array('jquery'), '1.0.1', true);
+    $js_file = get_stylesheet_directory() . '/custom.js';
+    $version = file_exists($js_file) ? filemtime($js_file) : time();
+    wp_enqueue_script('osl-custom-js', get_stylesheet_directory_uri() . '/custom.js', array('jquery'), $version, true);
 }
 add_action('wp_enqueue_scripts', 'osl_enqueue_scripts');
