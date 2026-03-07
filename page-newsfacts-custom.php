@@ -362,7 +362,7 @@ $categories = get_categories(array(
     <?php if ($blog_query->have_posts()) : ?>
       <div class="news-grid">
         <?php while ($blog_query->have_posts()) : $blog_query->the_post(); ?>
-          <div class="news-card">
+          <a href="<?php the_permalink(); ?>" class="news-card">
             <div class="news-card-meta">
               <span class="news-card-date"><?php echo get_the_date('j M Y'); ?></span>
               <?php
@@ -373,10 +373,10 @@ $categories = get_categories(array(
                 <span class="news-card-cat"><?php echo esc_html($primary_cat->name); ?></span>
               <?php endif; ?>
             </div>
-            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <h3><?php the_title(); ?></h3>
             <p class="news-card-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 25, '...'); ?></p>
-            <a href="<?php the_permalink(); ?>" class="news-read-more">Read More →</a>
-          </div>
+            <span class="news-read-more">Read More →</span>
+          </a>
         <?php endwhile; ?>
       </div>
     <?php else : ?>
