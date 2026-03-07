@@ -1,1 +1,13 @@
 [07-Mar-2026 03:38:10 UTC] PHP Warning:  Trying to access array offset on null in Command line code on line 10
+[07-Mar-2026 04:40:47 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 04:41:46 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
+[07-Mar-2026 04:41:46 UTC] PHP Fatal error:  Uncaught Error: Class "Phar" not found in /usr/local/bin/wp:3
+Stack trace:
+#0 {main}
+  thrown in /usr/local/bin/wp on line 3
