@@ -930,3 +930,24 @@ html body .main-header-version1 .top-menu > ul > li:last-child > a {
   background-color: var(--osl-navy, #1a2a4a) !important;
   color: #ffffff !important;
 }
+
+/* ============================================
+   NAV LINKS - Darker Navy on Gold
+   ============================================ */
+html body .main-header-version1 .main-header .top-menu ul li a,
+html body .main-header-version1 .main-header .top-menu > ul > li > a,
+html body .main-header .top-menu ul li a,
+html body .main-header .menu li a {
+  color: #0d1b3e !important;
+  font-weight: 600 !important;
+}
+
+html body .main-header .top-menu ul li a:hover,
+html body .main-header .menu li a:hover {
+  color: #ffffff !important;
+}
+
+/* Menu dividers - darker */
+html body .main-header .top-menu > ul > li {
+  border-color: rgba(13, 27, 62, 0.3) !important;
+}
