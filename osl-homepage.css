@@ -920,3 +920,25 @@ html body .main-header .menu li a:hover {
 html body .main-header .top-menu > ul > li {
   border-color: rgba(13, 27, 62, 0.3) !important;
 }
+
+/* ============================================
+   FIX: Remove CTA button style from last nav item
+   ============================================ */
+html body .main-header .top-menu > ul > li:last-child > a,
+html body .main-header-version1 .top-menu > ul > li:last-child > a,
+html body .main-header .menu > li:last-child > a {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #0d1b3e !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: inherit !important;
+  font-weight: 600 !important;
+}
+
+html body .main-header .top-menu > ul > li:last-child > a:hover,
+html body .main-header-version1 .top-menu > ul > li:last-child > a:hover,
+html body .main-header .menu > li:last-child > a:hover {
+  background: transparent !important;
+  color: #ffffff !important;
+}
