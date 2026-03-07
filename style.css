@@ -1,0 +1,22 @@
+/*
+Theme Name: Lawyer by Osetin Child
+Theme URI: http://lawyer.pinsupreme.com
+Template: lawyer-by-osetin
+Author: Tamik Soziev
+Author URI: http://soziev.com/
+Description: Lawyer WordPress Theme
+Version: 2.1.3.1713167470
+Updated: 2024-04-15 17:51:10
+
+*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
