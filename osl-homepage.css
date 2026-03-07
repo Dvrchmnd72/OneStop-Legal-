@@ -503,20 +503,6 @@
   color: var(--osl-gold, #c9a84c);
 }
 
-/* Settlement Agent Hub button style */
-.osl-header-nav ul li:last-child a {
-  background: var(--osl-gold, #c9a84c);
-  color: var(--osl-navy, #1a2a4a);
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 6px;
-  margin-left: 10px;
-}
-
-.osl-header-nav ul li:last-child a:hover {
-  background: var(--osl-gold-light, #d4b965);
-  color: var(--osl-navy, #1a2a4a);
-}
 
 /* Dropdown menus */
 .osl-header-nav ul li ul.sub-menu {
@@ -697,18 +683,6 @@ header#header,
   color: rgba(255,255,255,0.3) !important;
 }
 
-/* Settlement Agent Hub button */
-.main-menu > li:last-child > a {
-  background: var(--osl-gold, #c9a84c) !important;
-  color: var(--osl-navy, #1a2a4a) !important;
-  font-weight: 600 !important;
-  border-radius: 6px !important;
-  padding: 10px 24px !important;
-}
-
-.main-menu > li:last-child > a:hover {
-  background: var(--osl-gold-light, #d4b965) !important;
-}
 
 /* Logo text to white/gold */
 .logo a,
@@ -925,11 +899,6 @@ html body .main-header-version1 .top-menu > ul > li {
   border-color: rgba(26, 42, 74, 0.3) !important;
 }
 
-/* Settlement Agent Hub button - Navy on gold header */
-html body .main-header-version1 .top-menu > ul > li:last-child > a {
-  background-color: var(--osl-navy, #1a2a4a) !important;
-  color: #ffffff !important;
-}
 
 /* ============================================
    NAV LINKS - Darker Navy on Gold
