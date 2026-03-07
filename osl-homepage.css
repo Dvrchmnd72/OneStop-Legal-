@@ -934,6 +934,7 @@ html body .main-header .menu > li:last-child > a {
   border-radius: 0 !important;
   padding: inherit !important;
   font-weight: 600 !important;
+  font-size: 17px !important;
 }
 
 html body .main-header .top-menu > ul > li:last-child > a:hover,
@@ -946,7 +947,6 @@ html body .main-header .menu > li:last-child > a:hover {
 /* Fix Contact Us font size to match other nav items */
 html body .main-header .top-menu > ul > li:last-child > a,
 html body .main-header-version1 .top-menu > ul > li:last-child > a {
-  font-size: inherit !important;
   text-transform: inherit !important;
   letter-spacing: inherit !important;
   line-height: inherit !important;
