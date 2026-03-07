@@ -437,3 +437,211 @@
     padding: 0 16px;
   }
 }
+
+/* ============================================
+   CUSTOM HEADER
+   ============================================ */
+.osl-header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: var(--osl-navy, #1a2a4a);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.osl-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+}
+
+.osl-header-logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.osl-logo-img {
+  height: 50px;
+  width: auto;
+  max-width: 250px;
+}
+
+/* Navigation */
+.osl-header-nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.osl-header-nav ul li {
+  position: relative;
+}
+
+.osl-header-nav ul li a {
+  display: block;
+  padding: 28px 18px;
+  font-family: var(--osl-font-body, 'Inter', sans-serif);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.osl-header-nav ul li a:hover,
+.osl-header-nav ul li.current-menu-item a,
+.osl-header-nav ul li.current_page_item a {
+  color: var(--osl-gold, #c9a84c);
+}
+
+/* Settlement Agent Hub button style */
+.osl-header-nav ul li:last-child a {
+  background: var(--osl-gold, #c9a84c);
+  color: var(--osl-navy, #1a2a4a);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 6px;
+  margin-left: 10px;
+}
+
+.osl-header-nav ul li:last-child a:hover {
+  background: var(--osl-gold-light, #d4b965);
+  color: var(--osl-navy, #1a2a4a);
+}
+
+/* Dropdown menus */
+.osl-header-nav ul li ul.sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--osl-navy-dark, #0f1d35);
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  border-radius: 0 0 6px 6px;
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 100;
+}
+
+.osl-header-nav ul li:hover > ul.sub-menu {
+  display: flex;
+}
+
+.osl-header-nav ul li ul.sub-menu li a {
+  padding: 10px 20px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.osl-header-nav ul li ul.sub-menu li a:hover {
+  background: rgba(201,168,76,0.1);
+}
+
+/* Hide old theme header elements */
+.top-social-w,
+.top-bar-w,
+.os-top-bar,
+.fixed-header-w {
+  display: none !important;
+}
+
+/* Mobile toggle */
+.osl-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.osl-mobile-toggle span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: var(--osl-white, #fff);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile nav slide-in */
+.osl-mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100vh;
+  background: var(--osl-navy-dark, #0f1d35);
+  z-index: 10001;
+  transition: right 0.3s ease;
+  padding: 60px 20px 20px;
+  overflow-y: auto;
+}
+
+.osl-mobile-nav.active {
+  right: 0;
+}
+
+.osl-mobile-nav-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 32px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.osl-mobile-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.osl-mobile-nav ul li a {
+  display: block;
+  padding: 14px 0;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-family: var(--osl-font-body, 'Inter', sans-serif);
+  font-size: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.osl-mobile-nav ul li a:hover {
+  color: var(--osl-gold, #c9a84c);
+}
+
+.osl-mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+}
+
+.osl-mobile-overlay.active {
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .osl-header-nav {
+    display: none;
+  }
+  .osl-mobile-toggle {
+    display: flex;
+  }
+}
