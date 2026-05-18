@@ -1,0 +1,58 @@
+/* OSL Overrides v5 (REAL) */
+
+/* Ensure theme fixed header doesn’t conflict */
+.top-bar-links-box-container,
+.fixed-header-w{
+  display: none !important;
+}
+
+/* Fixed, full-width frosted header */
+.main-header-w.main-header-version1{
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  z-index: 9999;
+}
+
+.main-header-w .main-header-i{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.main-header-w .main-header{
+  background: rgba(255,255,255,0.92) !important;
+  backdrop-filter: blur(18px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  box-shadow: 0 1px 20px rgba(0,0,0,0.06) !important;
+  padding: 0 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 70px;
+  width: 100% !important;
+  max-width: 100% !important;
+  position: relative;
+}
+
+/* Remove any theme overlay tint layers */
+.main-header-w::before,
+.main-header-w::after,
+.main-header-w .main-header::before,
+.main-header-w .main-header::after{
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Prevent content from hiding under fixed header */
+body{
+  padding-top: 70px;
+}
+@media (max-width: 767px){
+  body{ padding-top: 64px; }
+}

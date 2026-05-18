@@ -1,0 +1,16 @@
+/* OSL Overrides v4 (PROOF) */
+
+/* If this loads, the whole page background becomes pink */
+html, body, .all-wrapper, .content-w, .all-content-wrapper{
+  background: #ff00ff !important;
+  background-color: #ff00ff !important;
+  background-image: none !important;
+}
+
+/* If this loads, the header DISAPPEARS */
+.main-header-w,
+.fixed-header-w,
+.mobile-header-w,
+.mobile-header{
+  display: none !important;
+}

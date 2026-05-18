@@ -1,0 +1,1121 @@
+/* OSL Overrides (production) - timestamped file because of server/CDN caching */
+
+:root{
+  /* HEADER */
+  --osl-header-bg: rgba(255,255,255,0.60);
+  --osl-header-blur: 30px;
+  --osl-header-sat: 170%;
+  --osl-header-border: rgba(15,23,42,0.08);
+  --osl-header-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+
+  /* ACCENT */
+  --osl-accent: #2F6BFF;
+  --osl-ink: #0B1220;
+  --osl-ink-2: rgba(11,18,32,0.80);
+
+  /* TRUST BAR */
+  --osl-trust-bg: rgba(255,255,255,0.08);
+}
+
+/* ===== Kill any header gold/tint ===== */
+.main-header-w,
+.main-header-w .main-header-i,
+.main-header-w .main-header{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+}
+.main-header-w::before,
+.main-header-w::after,
+.main-header-w .main-header::before,
+.main-header-w .main-header::after{
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Layout + glass */
+.top-bar-links-box-container,
+.fixed-header-w{ display:none !important; }
+
+.main-header-w.main-header-version1{
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  width: 100% !important;
+  z-index: 9999;
+}
+
+.main-header-w .main-header{
+  backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  -webkit-backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  border-bottom: 1px solid var(--osl-header-border) !important;
+  box-shadow: var(--osl-header-shadow), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  padding: 0 48px !important;
+  min-height: 76px;
+}
+
+/* clear fixed header */
+body{ padding-top: 76px; }
+@media (max-width: 1100px){ body{ padding-top: 62px; } }
+
+/* nav + CTA */
+.main-header-w.main-header-version1,
+.main-header-w.main-header-version1 .main-header-i,
+.main-header-w.main-header-version1 .main-header{
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.main-header-w.main-header-version1 .main-header{
+  border-radius: 0 !important;
+}
+
+/* If any parent wrapper shows a “theme bar” color, neutralize it */
+.all-wrapper,
+.all-wrapper-i{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* ===== Edge-to-edge header + kill any side blocks ===== */
+.main-header-w.main-header-version1,
+.main-header-w.main-header-version1 .main-header-i,
+.main-header-w.main-header-version1 .main-header{
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.main-header-w.main-header-version1 .main-header{
+  border-radius: 0 !important;
+}
+
+/* If any parent wrapper shows a “theme bar” color, neutralize it */
+.all-wrapper,
+.all-wrapper-i{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* ===== NUCLEAR OVERRIDES (wins over theme gold) ===== */
+
+/* Header: force glass background even if theme sets gold on color-scheme-light */
+.main-header-w .main-header.color-scheme-light{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+  backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  -webkit-backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+}
+
+/* Also clear any gold backgrounds applied to inner header wrappers */
+.main-header-w .main-header.color-scheme-light *,
+.main-header-w .main-header-i,
+.main-header-w .main-header-i *{
+  background-image: none !important;
+}
+
+
+/* ===== Kill theme "top bar" band (gold) coming from .all-wrapper.top-bar-color-type-light ===== */
+.all-wrapper.top-bar-color-type-light,
+.all-wrapper.top-bar-color-type-light .all-wrapper-i{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* very common: theme uses pseudo elements for the colored band */
+.all-wrapper.top-bar-color-type-light::before,
+.all-wrapper.top-bar-color-type-light::after,
+.all-wrapper.top-bar-color-type-light .all-wrapper-i::before,
+.all-wrapper.top-bar-color-type-light .all-wrapper-i::after{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  content: none !important;
+}
+
+/* in case theme uses a shadow/overlay bar */
+.all-wrapper.top-bar-color-type-light{
+  box-shadow: none !important;
+}
+
+
+
+
+
+
+/* Also outline common theme wrappers if they exist */
+
+/* ===== FINAL: kill gold on the actual header element (.main-header) ===== */
+.main-header-w .main-header,
+.main-header-w .main-header.color-scheme-light{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* If theme paints the bar via overlays/pseudo-elements */
+.main-header-w .main-header::before,
+.main-header-w .main-header::after,
+.main-header-w .main-header.color-scheme-light::before,
+.main-header-w .main-header.color-scheme-light::after{
+  background: transparent !important;
+  background-image: none !important;
+  content: none !important;
+}
+
+/* Also clear any child overlays that might be positioned */
+.main-header-w .main-header *{
+  background-image: none !important;
+}
+
+/* ===== FINAL: kill gold on the actual header element (.main-header) ===== */
+.main-header-w .main-header,
+.main-header-w .main-header.color-scheme-light{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* If theme paints the bar via overlays/pseudo-elements */
+.main-header-w .main-header::before,
+.main-header-w .main-header::after,
+.main-header-w .main-header.color-scheme-light::before,
+.main-header-w .main-header.color-scheme-light::after{
+  background: transparent !important;
+  background-image: none !important;
+  content: none !important;
+}
+
+/* Also clear any child overlays that might be positioned */
+.main-header-w .main-header *{
+  background-image: none !important;
+}
+
+/* ===== CLEANUP: disable diagnostic outlines ===== */
+body,
+.all-wrapper,
+.all-wrapper-i,
+.main-header-w,
+.main-header-i,
+.main-header,
+.mobile-header-w,
+.mobile-header,
+.mobile-header-menu-w,
+.header-w, .header-w-i, .top-bar-w, .top-bar{
+  outline-offset: 0 !important;
+}
+
+
+/* If any of these are actually painting the gold, you'll see it change now */
+.all-wrapper{ background: rgba(255,0,0,0.20) !important; }
+.all-wrapper-i{ background: rgba(255,165,0,0.20) !important; }
+.main-header-w{ background: rgba(0,255,255,0.20) !important; }
+.main-header-i{ background: rgba(255,0,255,0.20) !important; }
+
+/* Also nuke pseudo-elements on those wrappers */
+.all-wrapper::before, .all-wrapper::after,
+.all-wrapper-i::before, .all-wrapper-i::after,
+.main-header-w::before, .main-header-w::after,
+.main-header-i::before, .main-header-i::after{
+  background: transparent !important;
+  background-image: none !important;
+  content: none !important;
+}
+
+/* ===== FINAL FIX: gold is on .main-header-i (wrapper around .main-header) ===== */
+.main-header-w.main-header-version1 .main-header-i{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any overlay bars on the wrapper */
+.main-header-w.main-header-version1 .main-header-i::before,
+.main-header-w.main-header-version1 .main-header-i::after{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  content: none !important;
+}
+
+/* Safety: if theme sets the gold on a child overlay inside header-i */
+.main-header-w.main-header-version1 .main-header-i *{
+  background-image: none !important;
+}
+
+/* ===== CLEANUP: remove diagnostic outlines ===== */
+body,
+.all-wrapper,
+.all-wrapper-i,
+.main-header-w,
+.main-header-i,
+.main-header,
+.mobile-header-w,
+.mobile-header,
+.mobile-header-menu-w,
+.header-w, .header-w-i, .top-bar-w, .top-bar{
+  outline-offset: 0 !important;
+}
+
+/* ===== SCORCHED EARTH: remove ANY gold backgrounds inside header wrapper chain ===== */
+/* 1) wipe backgrounds everywhere in the header region */
+.main-header-w.main-header-version1,
+.main-header-w.main-header-version1 *{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* 2) kill pseudo-element overlays everywhere in that region */
+.main-header-w.main-header-version1 *::before,
+.main-header-w.main-header-version1 *::after{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  content: none !important;
+}
+
+/* 3) re-apply the intended glass only to the real header bar */
+.main-header-w.main-header-version1 .main-header{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  -webkit-backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+}
+
+/* ===== ABSOLUTE OVERRIDE: kill top-bar-color-type-light gold in the exact wrapper chain ===== */
+.all-wrapper.top-bar-color-type-light,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1 > .main-header-i{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Kill any theme “bar” implemented as pseudo-elements on these wrappers */
+.all-wrapper.top-bar-color-type-light::before,
+.all-wrapper.top-bar-color-type-light::after,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i::before,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i::after,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1::before,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1::after,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1 > .main-header-i::before,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i > .main-header-w.main-header-version1 > .main-header-i::after{
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  content: none !important;
+}
+
+/* Re-apply your glass only to the actual header bar */
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 .main-header{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+  backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  -webkit-backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+}
+
+/* =============================================================================
+   OSL FINAL HEADER TUNING (2026-03-13) — light clear glass + NO bottom line
+   Edit only these values going forward.
+   ========================================================================== */
+:root{
+  /* Light, clear glass */
+  --osl-header-bg: rgba(255,255,255,0.62);
+  --osl-header-blur: 22px;
+  --osl-header-sat: 140%;
+
+  /* Remove any visible “line” */
+  --osl-header-border: transparent;
+
+  /* Soft neutral shadow (avoid pink/red cast) */
+  --osl-header-shadow: 0 10px 28px rgba(0,0,0,0.10);
+}
+
+/* Apply glass to the actual header bar */
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 .main-header{
+  background: var(--osl-header-bg) !important;
+  background-color: var(--osl-header-bg) !important;
+  background-image: none !important;
+
+  backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+  -webkit-backdrop-filter: blur(var(--osl-header-blur)) saturate(var(--osl-header-sat)) !important;
+
+  border-bottom: 0 !important; /* hard kill bottom line */
+  box-shadow: var(--osl-header-shadow) !important;
+}
+
+/* Safety: stop wrapper borders/shadows showing as a line during overscroll */
+.main-header-w.main-header-version1,
+.main-header-w.main-header-version1 .main-header-i,
+.all-wrapper.top-bar-color-type-light,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i{
+  border-bottom: 0 !important;
+}
+
+/* =============================================================================
+   REMOVE “RED LINE” UNDER HEADER DURING OVERSCROLL (bounce)
+   ========================================================================== */
+
+/* 1) Absolutely no borders/shadows at the bottom of ANY header wrapper */
+.all-wrapper.top-bar-color-type-light,
+.all-wrapper.top-bar-color-type-light > .all-wrapper-i,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 > .main-header-i,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 .main-header{
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Sometimes the “line” is a pseudo-element */
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1::after,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 > .main-header-i::after,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 .main-header::after{
+  content: none !important;
+  background: transparent !important;
+}
+
+/* 2) Ensure the section below header has no top border/shadow that reads as a line */
+
+/* 3) If the theme uses a global “top bar separator” class, nuke it */
+.top-bar,
+.top-bar-w,
+.top-bar-w::after,
+.top-bar::after{
+  border: 0 !important;
+  box-shadow: none !important;
+  content: none !important;
+  background: transparent !important;
+}
+
+/* =============================================================================
+   FINAL HARD KILL: remove any “line” effects under header (borders + inset shadows)
+   This overrides earlier blocks that re-add border-bottom / inset box-shadows.
+   ========================================================================== */
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 *{
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important; /* kills inset shadows that look like a line */
+}
+
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 *::before,
+.all-wrapper.top-bar-color-type-light .main-header-w.main-header-version1 *::after{
+  box-shadow: none !important;
+}
+
+/* =============================================================================
+   OVERSCROLL (rubber-band) RED FIX:
+   Ensure the page/background revealed under header is NOT theme red.
+   ========================================================================== */
+
+/* What shows during pull-down is often html/body background */
+html, body{
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+/* Theme wrappers can also be the revealed background */
+.all-wrapper,
+.all-wrapper-i{
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+
+/* =========================================================
+   Contact Us (page-id-582) — final polish to match site
+   ========================================================= */
+
+body.page-id-582 .contact-hero{
+  background: radial-gradient(1200px 420px at 50% 25%, rgba(200,169,97,0.22), transparent 60%),
+              linear-gradient(135deg, #0d1b3e 0%, #1a2a4a 100%) !important;
+  padding: 70px 0 !important;
+}
+
+body.page-id-582 .contact-hero h1{
+  font-family: "Playfair Display", serif !important;
+  font-size: clamp(34px, 4vw, 46px) !important;
+  letter-spacing: -0.02em;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  color: rgba(255,255,255,0.90) !important;
+  font-style: italic;
+}
+
+body.page-id-582 .contact-container{
+  max-width: 1200px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Quick cards */
+body.page-id-582 .contact-quick .quick-card{
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.06) !important;
+}
+body.page-id-582 .contact-quick .quick-card:hover{
+  border-color: rgba(200,169,97,0.45) !important;
+}
+
+/* Main section spacing */
+body.page-id-582 .contact-main{
+  padding: 70px 0 !important;
+}
+
+/* Form card */
+body.page-id-582 .contact-form-wrap{
+  border-radius: 16px !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  box-shadow: 0 14px 40px rgba(13,27,62,0.08) !important;
+}
+
+body.page-id-582 .contact-form-wrap h2,
+body.page-id-582 .contact-info-side h2,
+body.page-id-582 .contact-promise h2,
+body.page-id-582 .contact-virtual h2{
+  font-family: "Playfair Display", serif !important;
+  color: #0d1b3e !important;
+}
+
+/* Inputs */
+body.page-id-582 .osl-form-group input[type="text"],
+body.page-id-582 .osl-form-group input[type="email"],
+body.page-id-582 .osl-form-group input[type="tel"],
+body.page-id-582 .osl-form-group select,
+body.page-id-582 .osl-form-group textarea{
+  border-radius: 12px !important;
+  border-color: rgba(13,27,62,0.16) !important;
+  background: #fff !important;
+}
+
+body.page-id-582 .osl-form-group input:focus,
+body.page-id-582 .osl-form-group select:focus,
+body.page-id-582 .osl-form-group textarea:focus{
+  border-color: rgba(200,169,97,0.85) !important;
+  box-shadow: 0 0 0 4px rgba(200,169,97,0.18) !important;
+}
+
+/* Button */
+body.page-id-582 .osl-form-submit{
+  background: #0d1b3e !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+}
+body.page-id-582 .osl-form-submit:hover{
+  background: #C8A961 !important;
+  color: #0d1b3e !important;
+}
+
+/* Right column card */
+body.page-id-582 .contact-info-side{
+  border-radius: 16px !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  box-shadow: 0 14px 40px rgba(13,27,62,0.06) !important;
+}
+
+/* Promise + Virtual sections */
+body.page-id-582 .contact-promise,
+body.page-id-582 .contact-virtual{
+  padding: 70px 0 !important;
+}
+
+@media (max-width: 600px){
+  body.page-id-582 .contact-hero{ padding: 54px 0 !important; }
+  body.page-id-582 .contact-main{ padding: 54px 0 !important; }
+  body.page-id-582 .contact-promise,
+  body.page-id-582 .contact-virtual{ padding: 54px 0 !important; }
+}
+
+
+/* =========================================================
+   Contact Us (page-id-582) — override inline template CSS
+   Goal: match global OSL styling (Playfair hero, refined cards/forms)
+   ========================================================= */
+
+body.page-id-582 .contact-hero{
+  background: radial-gradient(1200px 420px at 50% 25%, rgba(200,169,97,0.22), transparent 60%),
+              linear-gradient(135deg, #0d1b3e 0%, #1a2a4a 100%) !important;
+  padding: 80px 0 !important; /* keep same height */
+  text-align: center;
+}
+
+body.page-id-582 .contact-hero h1{
+  font-family: "Playfair Display", serif !important;
+  font-size: clamp(34px, 4vw, 52px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-size: 20px !important;
+  color: rgba(255,255,255,0.88) !important;
+  font-style: italic;
+}
+
+body.page-id-582 .contact-hero p.hero-desc{
+  color: rgba(255,255,255,0.80) !important;
+}
+
+/* Section backgrounds / spacing */
+body.page-id-582 .contact-quick{
+  background: #f8f6f0 !important;
+  padding: 70px 0 !important;
+}
+
+body.page-id-582 .contact-main{
+  padding: 80px 0 !important;
+}
+
+/* Quick cards -> match blog card feel */
+body.page-id-582 .quick-card{
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.06) !important;
+  border-bottom: 0 !important;
+}
+
+body.page-id-582 .quick-card:hover{
+  box-shadow: 0 16px 46px rgba(13,27,62,0.12) !important;
+  transform: translateY(-6px);
+  border-color: rgba(200,169,97,0.45) !important;
+}
+
+body.page-id-582 .quick-card h3{
+  font-family: "Playfair Display", serif !important;
+}
+
+body.page-id-582 .quick-card .quick-link{
+  color: #0d1b3e !important;
+  font-weight: 800 !important;
+}
+body.page-id-582 .quick-card:hover .quick-link{
+  color: #C8A961 !important;
+}
+
+/* Layout */
+body.page-id-582 .contact-layout{
+  gap: 56px !important;
+}
+
+/* Form + info side cards */
+body.page-id-582 .contact-form-wrap,
+body.page-id-582 .contact-info-side{
+  border-radius: 16px !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  box-shadow: 0 14px 40px rgba(13,27,62,0.08) !important;
+}
+
+body.page-id-582 .contact-form-wrap{
+  background: #ffffff !important; /* cleaner */
+}
+
+body.page-id-582 .contact-form-wrap h2,
+body.page-id-582 .contact-info-side h2{
+  font-family: "Playfair Display", serif !important;
+  color: #0d1b3e !important;
+}
+
+/* Inputs */
+body.page-id-582 .osl-form-group input[type="text"],
+body.page-id-582 .osl-form-group input[type="email"],
+body.page-id-582 .osl-form-group input[type="tel"],
+body.page-id-582 .osl-form-group select,
+body.page-id-582 .osl-form-group textarea{
+  border-radius: 12px !important;
+  border: 1px solid rgba(13,27,62,0.16) !important;
+  background: #fff !important;
+}
+
+body.page-id-582 .osl-form-group input:focus,
+body.page-id-582 .osl-form-group select:focus,
+body.page-id-582 .osl-form-group textarea:focus{
+  border-color: rgba(200,169,97,0.85) !important;
+  box-shadow: 0 0 0 4px rgba(200,169,97,0.18) !important;
+}
+
+/* Button */
+body.page-id-582 .osl-form-submit{
+  background: #0d1b3e !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+}
+body.page-id-582 .osl-form-submit:hover{
+  background: #C8A961 !important;
+  color: #0d1b3e !important;
+}
+
+/* Mobile spacing */
+@media (max-width: 600px){
+  body.page-id-582 .contact-quick{ padding: 54px 0 !important; }
+  body.page-id-582 .contact-main{ padding: 54px 0 !important; }
+}
+
+
+/* =========================================================
+   Contact Us (page-id-582) — enforce global brand tokens
+   ========================================================= */
+
+body.page-id-582{
+  --osl-navy: #0d1b3e;
+  --osl-navy-2: #1a2a4a;
+  --osl-gold: #C8A961;
+  --osl-cream: #f8f6f0;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: rgba(13,27,62,0.80);
+}
+
+/* Make headings match the rest of the site */
+body.page-id-582 h1,
+body.page-id-582 h2,
+body.page-id-582 h3{
+  font-family: "Playfair Display", serif !important;
+  color: var(--osl-navy) !important;
+}
+
+/* Standardize section rhythm like other pages */
+body.page-id-582 .contact-quick,
+body.page-id-582 .contact-main,
+body.page-id-582 .contact-promise,
+body.page-id-582 .contact-virtual{
+  padding: 70px 0 !important;
+}
+
+/* Standardize container */
+body.page-id-582 .contact-container{
+  max-width: 1200px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+
+/* =========================================================
+   Contact Us hero — match News & Facts hero style
+   ========================================================= */
+
+body.page-id-582 .contact-hero{
+  position: relative;
+  background: radial-gradient(1200px 420px at 50% 25%, rgba(200,169,97,0.25), transparent 60%),
+              linear-gradient(135deg, var(--osl-navy) 0%, var(--osl-navy-2) 100%) !important;
+  text-align: center;
+  overflow: hidden;
+}
+
+body.page-id-582 .contact-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(900px 300px at 50% 10%, rgba(255,255,255,0.10), transparent 55%);
+  pointer-events:none;
+}
+
+body.page-id-582 .contact-hero h1{
+  color: #fff !important;
+  font-size: clamp(34px, 4vw, 46px) !important; /* match N&F scale */
+  line-height: 1.08 !important;
+  margin: 0 0 10px 0 !important;
+  position: relative;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  color: var(--osl-gold) !important; /* match N&F */
+  font-size: 18px !important;
+  position: relative;
+}
+
+body.page-id-582 .contact-hero p.hero-desc{
+  color: rgba(255,255,255,0.80) !important;
+  position: relative;
+}
+
+
+/* =========================================================
+   Contact cards + form — unify with blog-card look
+   ========================================================= */
+
+body.page-id-582 .quick-card,
+body.page-id-582 .contact-form-wrap,
+body.page-id-582 .contact-info-side{
+  background: #fff !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.06) !important;
+}
+
+body.page-id-582 .quick-card:hover{
+  box-shadow: 0 16px 46px rgba(13,27,62,0.12) !important;
+  border-color: rgba(200,169,97,0.45) !important;
+}
+
+/* Make the accent links consistent */
+body.page-id-582 a{
+  color: var(--osl-navy);
+}
+body.page-id-582 a:hover{
+  color: var(--osl-gold);
+}
+
+
+/* =========================================================
+   Contact Us hero tweaks — remove gold + match homepage font feel
+   ========================================================= */
+
+body.page-id-582 .contact-hero h1{
+  /* Swap this to the homepage font once confirmed */
+  font-family: "League Spartan", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  color: rgba(255,255,255,0.88) !important; /* no gold */
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+
+
+/* =========================================================
+   Contact Us — right-side info panel polish
+   ========================================================= */
+
+body.page-id-582 .contact-info-side{
+  background: #fff !important;
+  padding: 0 !important;              /* let rows control spacing */
+  overflow: hidden;
+}
+
+body.page-id-582 .contact-info-side h2{
+  padding: 26px 28px 10px !important;
+  margin: 0 !important;
+  font-family: "League Spartan", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+}
+
+/* Each info row (template usually uses something like .info-item; we’ll target common patterns) */
+body.page-id-582 .contact-info-side > *{
+  box-sizing: border-box;
+}
+
+/* If your rows are divs inside, this makes them consistent without knowing exact class names */
+body.page-id-582 .contact-info-side .info-item,
+body.page-id-582 .contact-info-side .contact-info-item,
+body.page-id-582 .contact-info-side .contact-detail{
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 16px;
+  padding: 22px 28px;
+  border-top: 1px solid rgba(13,27,62,0.08);
+  align-items: start;
+}
+
+/* Icon chip */
+body.page-id-582 .contact-info-side .info-icon,
+body.page-id-582 .contact-info-side .icon,
+body.page-id-582 .contact-info-side .contact-icon{
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(13,27,62,0.06);
+  display: grid;
+  place-items: center;
+}
+
+/* Row headings */
+body.page-id-582 .contact-info-side h3{
+  margin: 0 0 6px 0 !important;
+  font-size: 16px !important;
+  font-family: "League Spartan", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+}
+
+/* Row text */
+body.page-id-582 .contact-info-side p,
+body.page-id-582 .contact-info-side li{
+  margin: 0 !important;
+  color: rgba(13,27,62,0.70) !important;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   Contact Us (page-id-582) — hero font + bottom section polish
+   ========================================================= */
+
+/* HERO: match homepage feel (sans heading), no gold subtitle */
+body.page-id-582 .contact-hero h1{
+  font-family: "League Spartan", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  color: rgba(255,255,255,0.86) !important; /* remove gold */
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+
+/* GET IN TOUCH: make it a clean card with modern rows */
+body.page-id-582 .contact-info-side{
+  background: #fff !important;
+  padding: 18px 0 6px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  box-shadow: 0 14px 40px rgba(13,27,62,0.08) !important;
+  overflow: hidden;
+}
+
+body.page-id-582 .contact-info-side h2{
+  padding: 10px 26px 18px !important;
+  margin: 0 !important;
+  font-family: "Playfair Display", serif !important; /* section headings across site */
+  color: #0d1b3e !important;
+}
+
+body.page-id-582 .contact-info-side .info-item{
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 16px;
+  padding: 18px 26px;
+  border-top: 1px solid rgba(13,27,62,0.08);
+  align-items: start;
+}
+
+body.page-id-582 .contact-info-side .info-icon{
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(13,27,62,0.06);
+  color: #0d1b3e;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+body.page-id-582 .contact-info-side .info-details h4{
+  margin: 0 0 6px 0 !important;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(13,27,62,0.65) !important;
+}
+
+body.page-id-582 .contact-info-side .info-details p{
+  margin: 0 !important;
+  color: rgba(13,27,62,0.78) !important;
+  line-height: 1.6;
+}
+
+body.page-id-582 .contact-info-side .info-details a{
+  color: #0d1b3e !important;
+  font-weight: 800;
+  text-decoration: none;
+}
+body.page-id-582 .contact-info-side .info-details a:hover{
+  color: #C8A961 !important;
+}
+
+/* PROMISE BAR: turn items into consistent cards */
+body.page-id-582 .contact-promise{
+  background: #f8f6f0 !important;
+}
+
+body.page-id-582 .promise-grid{
+  gap: 22px !important;
+}
+
+body.page-id-582 .promise-item{
+  background: #fff !important;
+  border: 1px solid rgba(13,27,62,0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.06) !important;
+  padding: 26px 22px !important;
+}
+
+body.page-id-582 .promise-icon{
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(200,169,97,0.14);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+}
+
+body.page-id-582 .promise-item h3{
+  font-family: "Playfair Display", serif !important;
+  margin: 8px 0 6px !important;
+  color: #0d1b3e !important;
+}
+
+body.page-id-582 .promise-item p{
+  margin: 0 !important;
+  color: rgba(13,27,62,0.72) !important;
+  line-height: 1.6;
+}
+
+/* VIRTUAL CTA: match site CTA button style */
+body.page-id-582 .contact-virtual{
+  background: #ffffff !important;
+}
+
+body.page-id-582 .contact-virtual h2{
+  font-family: "Playfair Display", serif !important;
+  color: #0d1b3e !important;
+}
+
+body.page-id-582 .contact-virtual .btn-primary{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0d1b3e !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.18);
+}
+
+body.page-id-582 .contact-virtual .btn-primary:hover{
+  background: #C8A961 !important;
+  color: #0d1b3e !important;
+}
+
+body.page-id-582 .contact-virtual .btn-icon{
+  display: grid;
+  place-items: center;
+}
+
+
+
+
+
+/* =========================================================
+   LAST-WINS: Contact hero uses same font tokens as homepage
+   ========================================================= */
+body.page-id-582 .contact-hero h1{
+  font-family: var(--el-font-heading) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body.page-id-582 .contact-hero .hero-subtitle{
+  font-family: var(--el-font-heading) !important;
+  color: rgba(255,255,255,0.86) !important; /* no gold */
+  font-style: normal !important;
+  font-weight: 600 !important;
+}
+
+body.page-id-582 .contact-hero p.hero-desc{
+  font-family: var(--el-font-body) !important;
+}
+
+
+/* =========================================================
+   Contact bottom sections — spacing + section separators
+   ========================================================= */
+
+/* Subtle section separation like other pages */
+body.page-id-582 .contact-promise{
+  border-top: 1px solid rgba(13,27,62,0.08);
+}
+
+body.page-id-582 .contact-virtual{
+  border-top: 1px solid rgba(13,27,62,0.08);
+}
+
+/* Make promise cards align nicely */
+body.page-id-582 .promise-item{
+  text-align: left !important;
+}
+
+body.page-id-582 .promise-icon{
+  margin: 0 0 12px 0 !important;
+}
+
+/* Virtual CTA: constrain width and align like homepage CTAs */
+body.page-id-582 .contact-virtual .contact-container{
+  text-align: center;
+  max-width: 900px !important;
+}
+
+body.page-id-582 .contact-virtual p{
+  color: rgba(13,27,62,0.72) !important;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =========================================================
+   CSS REPAIR: close any accidentally unclosed blocks above
+   ========================================================= */
+body.page-id-582 .contact-virtual .btn-icon{
+  display: grid;
+  place-items: center;
+}
+
+
+/* Contact: improve bottom rhythm */
+body.page-id-582 .contact-virtual{
+  padding-bottom: 90px !important;
+}
+
+
+/* =========================================================
+   Contact Us (page-id-582) — bottom alignment with site footer
+   ========================================================= */
+
+/* More breathing room before footer, like other pages */
+body.page-id-582 .contact-virtual{
+  padding-bottom: 110px !important;
+}
+
+/* Add a subtle divider like your other sections */
+body.page-id-582 .contact-virtual{
+  border-bottom: 1px solid rgba(13,27,62,0.08) !important;
+}
+
+
+/* Contact page: do not let page-scoped link rules darken the footer */
+body.page-id-582 footer a,
+body.page-id-582 .site-footer a,
+body.page-id-582 .el-footer a{
+  color: rgba(255,255,255,0.72) !important;
+  text-decoration: none;
+}
+
+body.page-id-582 footer a:hover,
+body.page-id-582 .site-footer a:hover,
+body.page-id-582 .el-footer a:hover{
+  color: #ffffff !important;
+}
+

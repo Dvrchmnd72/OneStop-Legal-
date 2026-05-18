@@ -1,0 +1,454 @@
+/* ============================================
+   OneStop Legal - Global Mobile Responsive
+   ============================================ */
+
+/* ============================================
+   TABLET (max-width: 992px)
+   ============================================ */
+@media (max-width: 992px) {
+
+  /* Global */
+  .os-container,
+  .osl-container {
+    padding: 0 20px !important;
+  }
+
+  /* Service page grids */
+  .svc-types .types-grid,
+  .svc-benefits .benefits-grid,
+  .svc-elements .elements-grid,
+  .svc-process .process-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  /* FAQ sections */
+  .svc-faq .faq-container,
+  .faq-list {
+    max-width: 100% !important;
+  }
+
+  /* Section padding reduce */
+  .svc-hero,
+  .svc-intro,
+  .svc-types,
+  .svc-benefits,
+  .svc-elements,
+  .svc-process,
+  .svc-faq,
+  .svc-cta {
+    padding: 50px 0 !important;
+  }
+
+  /* Section titles */
+  .section-title h2,
+  .svc-hero h1 {
+    font-size: 32px !important;
+  }
+
+  /* Blog cards */
+  .osl-blog-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Related posts on single blog */
+  .osl-related-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* About page */
+  .about-content-grid,
+  .about-values-grid,
+  .about-team-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ============================================
+   MOBILE (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+
+  /* Global typography */
+  body {
+    font-size: 15px !important;
+  }
+
+  h1 { font-size: 28px !important; }
+  h2 { font-size: 24px !important; }
+  h3 { font-size: 20px !important; }
+  h4 { font-size: 18px !important; }
+
+  /* Global containers */
+  .os-container,
+  .osl-container {
+    padding: 0 16px !important;
+  }
+
+  /* ---- SERVICE PAGES ---- */
+  .svc-hero {
+    padding: 50px 0 !important;
+    text-align: center;
+  }
+
+  .svc-hero h1 {
+    font-size: 26px !important;
+    line-height: 1.3 !important;
+  }
+
+  .svc-hero p {
+    font-size: 15px !important;
+  }
+
+  .svc-hero .hero-cta {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .svc-hero .hero-cta a,
+  .svc-hero .hero-cta .osl-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .svc-intro {
+    padding: 40px 0 !important;
+  }
+
+  .svc-intro h2 {
+    font-size: 24px !important;
+  }
+
+  .svc-intro p {
+    font-size: 15px !important;
+  }
+
+  /* Service grids - single column on mobile */
+  .svc-types .types-grid,
+  .svc-benefits .benefits-grid,
+  .svc-elements .elements-grid,
+  .svc-process .process-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .svc-types,
+  .svc-benefits,
+  .svc-elements,
+  .svc-process,
+  .svc-faq {
+    padding: 40px 0 !important;
+  }
+
+  .section-title {
+    margin-bottom: 30px !important;
+  }
+
+  .section-title h2 {
+    font-size: 24px !important;
+  }
+
+  .section-title p {
+    font-size: 14px !important;
+  }
+
+  /* Type/benefit/element cards */
+  .type-card,
+  .benefit-card,
+  .element-card,
+  .process-step {
+    padding: 24px 20px !important;
+  }
+
+  /* FAQ */
+  .faq-question {
+    font-size: 16px !important;
+    padding: 16px 40px 16px 16px !important;
+  }
+
+  .faq-answer {
+    padding: 0 16px 16px !important;
+    font-size: 14px !important;
+  }
+
+  /* CTA sections */
+  .svc-cta {
+    padding: 40px 0 !important;
+    text-align: center;
+  }
+
+  .svc-cta h2 {
+    font-size: 24px !important;
+  }
+
+  .svc-cta p {
+    font-size: 15px !important;
+  }
+
+  .svc-cta .cta-buttons,
+  .svc-cta .osl-cta-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .svc-cta .cta-buttons a,
+  .svc-cta .osl-btn {
+    width: 100% !important;
+    max-width: 320px !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  /* ---- BLOG LISTING ---- */
+  .osl-blog-hero h1 {
+    font-size: 28px !important;
+  }
+
+  .osl-blog-hero p {
+    font-size: 15px !important;
+  }
+
+  .osl-blog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .osl-blog-container {
+    padding: 30px 16px 50px !important;
+  }
+
+  .osl-blog-card-body {
+    padding: 20px !important;
+  }
+
+  .osl-blog-card-title {
+    font-size: 18px !important;
+  }
+
+  /* ---- SINGLE BLOG POST ---- */
+  .osl-post-hero {
+    padding: 40px 0 !important;
+  }
+
+  .osl-post-hero h1 {
+    font-size: 24px !important;
+  }
+
+  .osl-post-hero-meta {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .osl-post-container {
+    padding: 25px 16px 40px !important;
+  }
+
+  .osl-post-content {
+    font-size: 15px !important;
+  }
+
+  .osl-post-content h2 {
+    font-size: 22px !important;
+    margin-top: 30px !important;
+  }
+
+  .osl-post-content h3 {
+    font-size: 19px !important;
+  }
+
+  .osl-post-content blockquote {
+    margin: 20px 0 !important;
+    padding: 15px 18px !important;
+  }
+
+  .osl-post-nav {
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+
+  .osl-post-nav a {
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+
+  .osl-related {
+    padding: 40px 0 !important;
+  }
+
+  .osl-related h2 {
+    font-size: 24px !important;
+  }
+
+  .osl-related-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .osl-post-cta {
+    padding: 35px 0 !important;
+  }
+
+  .osl-post-cta h2 {
+    font-size: 24px !important;
+  }
+
+  /* ---- ABOUT PAGE ---- */
+  .about-content-grid,
+  .about-values-grid,
+  .about-team-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ---- CONTACT PAGE ---- */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ---- SUBURB LANDING PAGES ---- */
+  .suburb-page {
+    padding: 25px 16px 40px !important;
+  }
+
+  .suburb-page h1 {
+    font-size: 26px !important;
+  }
+
+  .suburb-page h2 {
+    font-size: 22px !important;
+  }
+
+  /* ---- GLOBAL BUTTONS ---- */
+  .osl-btn {
+    padding: 14px 24px !important;
+    font-size: 15px !important;
+  }
+
+  /* ---- GLOBAL CTA ---- */
+  .osl-cta {
+    padding: 50px 0 !important;
+  }
+
+  .osl-cta-content h2 {
+    font-size: 26px !important;
+  }
+
+  .osl-cta-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .osl-cta-buttons .osl-btn {
+    width: 100% !important;
+    max-width: 320px !important;
+    justify-content: center !important;
+  }
+
+  /* Social links */
+  .osl-social-links {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  /* ---- IMAGES ---- */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* ---- TABLES (if any in blog content) ---- */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 21px !important; }
+
+  .osl-hero h1,
+  .svc-hero h1 {
+    font-size: 24px !important;
+  }
+
+  .osl-hero {
+    padding: 60px 0 50px !important;
+  }
+
+  .osl-trust-item {
+    font-size: 13px !important;
+  }
+
+  .osl-service-card {
+    padding: 24px 20px !important;
+  }
+
+  .osl-service-card h3 {
+    font-size: 17px !important;
+  }
+
+  .osl-why-card {
+    padding: 24px 16px !important;
+  }
+
+  .osl-blog-card-image {
+    height: 180px !important;
+  }
+
+  .osl-post-featured img {
+    border-radius: 8px !important;
+  }
+
+  /* Touch-friendly tap targets */
+  a, button, input[type="submit"], .osl-btn {
+    min-height: 44px !important;
+  }
+
+  /* Better readability on small screens */
+  .osl-post-content,
+  .suburb-page,
+  .svc-intro p,
+  .type-card p,
+  .benefit-card p {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+  }
+}
+
+/* ============================================
+   LANDSCAPE PHONE FIX
+   ============================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .osl-hero {
+    padding: 40px 0 30px !important;
+  }
+
+  .svc-hero {
+    padding: 30px 0 !important;
+  }
+}
+
+/* ============================================
+   TOUCH DEVICE IMPROVEMENTS
+   ============================================ */
+@media (hover: none) {
+  /* Remove hover effects that feel sluggish on touch */
+  .osl-service-card:hover,
+  .osl-blog-card:hover,
+  .osl-related-card:hover {
+    transform: none !important;
+  }
+
+  /* Make tap targets obvious */
+  .osl-service-card:active,
+  .osl-blog-card:active {
+    opacity: 0.9;
+  }
+}

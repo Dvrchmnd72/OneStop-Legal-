@@ -1,0 +1,1590 @@
+/* ============================================
+   OneStop Legal — Service Pages
+   Envision-matched design system
+   All svc-* classes mapped to el-* style rules
+   ============================================ */
+
+/* ── Container ──────────────────────────────────────────────────────────── */
+.svc-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.svc-hero {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 60%, #2d4070 100%);
+  color: #ffffff;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.svc-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.svc-hero > * { position: relative; z-index: 1; }
+.svc-hero h1 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  line-height: 1.15;
+  max-width: 760px;
+}
+.svc-hero .hero-subtitle {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  font-style: normal;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.svc-hero .hero-description {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.8);
+  max-width: 600px;
+  margin: 0 0 2.5rem 0;
+  line-height: 1.65;
+}
+.svc-hero .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  transition: all 0.25s ease;
+}
+.svc-hero .hero-cta:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.9);
+  color: #ffffff;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* ── Section shared ─────────────────────────────────────────────────────── */
+.svc-intro,
+.svc-types,
+.svc-benefits,
+.svc-elements,
+.svc-legal,
+.svc-process,
+.svc-faq {
+  padding: 4rem 0;
+}
+
+/* Section titles */
+.section-title,
+.svc-intro > .svc-container > .section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.section-title p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Eyebrow above section titles */
+.section-title::before {
+  content: attr(data-eyebrow);
+}
+
+/* ── Intro ──────────────────────────────────────────────────────────────── */
+.svc-intro {
+  background: #ffffff;
+}
+.svc-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.svc-intro h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1.25rem;
+  line-height: 1.25;
+}
+.svc-intro h2 span {
+  color: #111827;
+}
+.svc-intro p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: #6B7280;
+  margin-bottom: 1rem;
+}
+.svc-intro p strong { color: #111827; }
+.svc-intro-image {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  border-radius: 8px;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+}
+.svc-intro-image img {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  object-fit: contain;
+  display: block;
+}
+.svc-intro-image .intro-icon {
+  font-size: 96px;
+  opacity: 0.2;
+}
+
+/* ── Types / Features ───────────────────────────────────────────────────── */
+.svc-types {
+  background: #F9FAFB;
+}
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.type-card {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 2rem 1.75rem;
+  text-align: left;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.type-card:hover {
+  box-shadow: 0 8px 32px rgba(26,39,68,0.1);
+  transform: translateY(-3px);
+}
+.type-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.type-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+}
+.type-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+.type-card p strong { color: #111827; }
+
+/* ── Benefits ───────────────────────────────────────────────────────────── */
+.svc-benefits {
+  background: #ffffff;
+}
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.benefit-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 1.75rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.benefit-card:hover {
+  box-shadow: 0 8px 24px rgba(26,39,68,0.08);
+  transform: translateY(-2px);
+}
+.benefit-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.benefit-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.benefit-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── Key Elements (dark navy band) ─────────────────────────────────────── */
+.svc-elements {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  position: relative;
+  overflow: hidden;
+}
+.svc-elements::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.svc-elements > * { position: relative; z-index: 1; }
+.svc-elements .section-title h2 { color: #ffffff; }
+.svc-elements .section-title p { color: rgba(255,255,255,0.6); }
+.elements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.element-card {
+  text-align: left;
+  padding: 1.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.element-card:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+}
+.element-icon {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.element-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+.element-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+/* ── Legal Requirements ─────────────────────────────────────────────────── */
+.svc-legal {
+  background: #F9FAFB;
+}
+.legal-list {
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.legal-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+.legal-item:last-child { border-bottom: none; }
+.legal-number {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #111827;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.legal-item p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: #6B7280;
+  margin: 0;
+}
+.legal-item p strong { color: #111827; }
+
+/* ── Process ────────────────────────────────────────────────────────────── */
+.svc-process {
+  background: #ffffff;
+}
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.process-card {
+  text-align: left;
+  padding: 1.75rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  background: #F9FAFB;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.process-card:hover {
+  box-shadow: 0 8px 24px rgba(26,39,68,0.08);
+  transform: translateY(-2px);
+}
+.svc-process .process-step {
+  width: 44px;
+  height: 44px;
+  background: #111827;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+.process-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.process-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────── */
+.svc-faq {
+  background: #F9FAFB;
+}
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+}
+.faq-item:hover {
+  box-shadow: 0 4px 16px rgba(26,39,68,0.06);
+}
+.faq-question {
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  transition: background 0.2s ease;
+  gap: 1rem;
+}
+.faq-question:hover { background: #F9FAFB; }
+.faq-toggle {
+  font-size: 1.25rem;
+  color: #6B7280;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.faq-item.active .faq-toggle {
+  transform: rotate(45deg);
+  color: #111827;
+}
+.faq-answer {
+  display: none;
+  padding: 0 1.5rem 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #6B7280;
+  border-top: 1px solid #E5E7EB;
+  padding-top: 1rem;
+}
+.faq-item.active .faq-answer { display: block; }
+
+/* ── CTA Banner ─────────────────────────────────────────────────────────── */
+.svc-cta {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.svc-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.svc-cta > * { position: relative; z-index: 1; }
+.svc-cta h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+.svc-cta p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  margin: 0 auto 2rem;
+  max-width: 600px;
+  line-height: 1.65;
+}
+.svc-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+/* Restyle old btn-primary / btn-secondary inside svc-cta */
+.svc-cta .btn-primary,
+.svc-cta .btn-secondary,
+.svc-cta .osl-btn,
+.svc-cta .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.65);
+  background: transparent;
+  color: #ffffff !important;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.svc-cta .btn-primary:hover,
+.svc-cta .btn-secondary:hover,
+.svc-cta .osl-btn:hover,
+.svc-cta .hero-cta:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.9);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* ── Page header (el-page-header style for svc pages) ───────────────────── */
+.svc-page-header {
+  background: #111827;
+  color: #ffffff;
+  padding: 4rem 0 2rem;
+}
+.svc-page-header h1 { color: #ffffff; }
+.svc-page-header p {
+  color: rgba(255,255,255,0.8);
+  max-width: 600px;
+  margin-top: 0.75rem;
+}
+
+/* ── Suppress old inline styles ─────────────────────────────────────────── */
+/* These rules override any remaining inline style declarations */
+.svc-hero,
+.svc-intro,
+.svc-types,
+.svc-benefits,
+.svc-elements,
+.svc-legal,
+.svc-process,
+.svc-faq,
+.svc-cta {
+  font-family: 'League Spartan', 'Inter', sans-serif !important;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .svc-intro-grid { grid-template-columns: 1fr; }
+  .svc-intro-image { display: none; }
+  .types-grid, .elements-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .svc-hero { padding: 3rem 0; }
+  .svc-hero h1 { font-size: 1.75rem; }
+  .svc-intro,
+  .svc-types,
+  .svc-benefits,
+  .svc-elements,
+  .svc-legal,
+  .svc-process,
+  .svc-faq,
+  .svc-cta { padding: 3rem 0; }
+  .section-title h2 { font-size: 1.5rem; }
+  .svc-cta h2 { font-size: 1.5rem; }
+  .types-grid,
+  .benefits-grid,
+  .elements-grid,
+  .process-grid { grid-template-columns: 1fr; }
+  .benefit-card { flex-direction: column; }
+  .svc-cta-buttons { flex-direction: column; align-items: center; }
+  .svc-cta-buttons a { width: 100%; justify-content: center; }
+}
+
+/* ── Regional Hubs (SEO link block — visible but styled, not a raw dump) ── */
+.svc-regions {
+  padding: 2.5rem 0;
+  background: #F9FAFB;
+  border-top: 1px solid #E5E7EB;
+  border-bottom: 1px solid #E5E7EB;
+}
+.svc-regions .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.svc-regions .section-title {
+  margin-bottom: 1.5rem;
+}
+.svc-regions .section-title h2 {
+  font-size: 1.5rem;
+  color: #111827;
+}
+.svc-regions .section-title p {
+  font-size: 0.9rem;
+  color: #6B7280;
+}
+.regions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  justify-content: center;
+}
+.region-card {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.region-card:hover {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* ── Hide region hub link block from users (SEO links stay in DOM for Google) ── */
+.svc-regions {
+  display: none !important;
+}
+
+/* ============================================
+   ABOUT US PAGE — Envision-matched
+   ============================================ */
+
+/* ── Container ──────────────────────────────────────────────────────────── */
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.about-hero {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 60%, #2d4070 100%);
+  color: #ffffff;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.about-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.about-hero > * { position: relative; z-index: 1; }
+.about-hero h1 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  line-height: 1.15;
+}
+.about-hero .hero-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  font-style: normal;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  margin: 0;
+}
+
+/* ── Our Story ──────────────────────────────────────────────────────────── */
+.about-story {
+  padding: 4rem 0;
+  background: #ffffff;
+}
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.about-story h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.25;
+}
+.about-story h2 span {
+  color: #111827;
+}
+.about-story p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: #6B7280;
+  margin-bottom: 1rem;
+}
+.about-story p strong { color: #111827; }
+.about-story-image {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  border-radius: 8px;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+}
+.about-story-image .story-icon {
+  font-size: 96px;
+  opacity: 0.2;
+}
+
+/* ── Values ─────────────────────────────────────────────────────────────── */
+.about-values {
+  padding: 4rem 0;
+  background: #F9FAFB;
+}
+.about-values .section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.about-values .section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.about-values .section-title p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.value-card {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  text-align: left;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.value-card:hover {
+  box-shadow: 0 8px 32px rgba(26,39,68,0.1);
+  transform: translateY(-3px);
+}
+.value-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.value-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.value-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── Services Overview ──────────────────────────────────────────────────── */
+.about-services {
+  padding: 4rem 0;
+  background: #ffffff;
+}
+.about-services .section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.about-services .section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.about-services .section-title p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.service-card {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 1.75rem;
+  text-align: left;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.service-card:hover {
+  box-shadow: 0 8px 24px rgba(26,39,68,0.08);
+  transform: translateY(-3px);
+}
+.service-icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+.service-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.service-card p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── Why Choose Us (dark navy band) ─────────────────────────────────────── */
+.about-why {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  position: relative;
+  overflow: hidden;
+}
+.about-why::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.about-why > * { position: relative; z-index: 1; }
+.about-why .section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.about-why .section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+.about-why .section-title p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.why-card {
+  text-align: left;
+  padding: 1.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.why-card:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+}
+.why-icon {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.why-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+.why-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+/* ── CTA ────────────────────────────────────────────────────────────────── */
+.about-cta {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.about-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.about-cta > * { position: relative; z-index: 1; }
+.about-cta h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+.about-cta p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  margin: 0 auto 2rem;
+  max-width: 600px;
+  line-height: 1.65;
+}
+.about-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.about-cta .btn-primary,
+.about-cta .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.65);
+  background: transparent;
+  color: #ffffff !important;
+  transition: all 0.25s ease;
+}
+.about-cta .btn-primary:hover,
+.about-cta .btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.9);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* ── Also add about-custom to enqueue template list ─────────────────────── */
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .about-story-grid { grid-template-columns: 1fr; }
+  .about-story-image { display: none; }
+  .values-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .about-hero { padding: 3rem 0; }
+  .about-story, .about-values, .about-services,
+  .about-why, .about-cta { padding: 3rem 0; }
+  .about-story h2, .about-values .section-title h2,
+  .about-services .section-title h2, .about-why .section-title h2,
+  .about-cta h2 { font-size: 1.5rem; }
+  .values-grid, .services-grid, .why-grid { grid-template-columns: 1fr; }
+  .about-cta-buttons { flex-direction: column; align-items: center; }
+  .about-cta-buttons a { width: 100%; justify-content: center; }
+}
+
+/* ============================================
+   SERVICES PAGE — Envision-matched
+   ============================================ */
+
+/* ── Container ──────────────────────────────────────────────────────────── */
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.services-hero {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 60%, #2d4070 100%);
+  color: #ffffff;
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.services-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.services-hero > * { position: relative; z-index: 1; }
+.services-hero h1 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  line-height: 1.15;
+}
+.services-hero .hero-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  margin: 0 0 0.75rem 0;
+}
+.services-hero .hero-desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.65);
+  max-width: 640px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Intro ──────────────────────────────────────────────────────────────── */
+.services-intro {
+  padding: 3.5rem 0 2rem;
+  background: #ffffff;
+  text-align: center;
+}
+.services-intro h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  line-height: 1.25;
+}
+.services-intro h2 span {
+  color: #111827;
+}
+.services-intro p {
+  font-size: 1rem;
+  color: #6B7280;
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ── Services Grid ───────────────────────────────────────────────────���──── */
+.services-main {
+  padding: 2rem 0 4rem;
+  background: #ffffff;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 2rem 1.75rem;
+  text-decoration: none !important;
+  color: inherit;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+.svc-card:hover {
+  box-shadow: 0 8px 32px rgba(26,39,68,0.1);
+  transform: translateY(-3px);
+  border-color: #111827;
+  text-decoration: none !important;
+}
+.svc-icon {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+  display: block;
+  line-height: 1;
+  /* Force emoji to render visibly */
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+.svc-card h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+.svc-card p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0 0 1.25rem 0;
+  flex: 1;
+}
+.svc-link {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: auto;
+  transition: gap 0.2s ease;
+}
+.svc-card:hover .svc-link {
+  gap: 0.5rem;
+}
+
+/* ── Trust Bar ──────────────────────────────────────────────────────────── */
+.services-trust {
+  padding: 3rem 0;
+  background: #111827;
+  position: relative;
+  overflow: hidden;
+}
+.services-trust::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+.trust-item {
+  text-align: left;
+  padding: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.trust-item:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+}
+.trust-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+  line-height: 1;
+}
+.trust-item h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+}
+.trust-item p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── How It Works ──────────��────────────────────────────────────────────── */
+.services-process {
+  padding: 4rem 0;
+  background: #F9FAFB;
+}
+.services-process .section-title {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.services-process .section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.services-process .section-title p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+.services-process .process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.services-process .process-step {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  text-align: left;
+  position: relative;
+}
+.services-process .step-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #111827;
+  color: #ffffff;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.services-process .process-step h3 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+.services-process .process-step p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── CTA ────────────────────────────────────────────────────────────────── */
+.services-cta {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.services-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.services-cta > * { position: relative; z-index: 1; }
+.services-cta h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+}
+.services-cta p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  margin: 0 auto 2rem;
+  max-width: 600px;
+  line-height: 1.65;
+}
+.services-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.services-cta .btn-primary,
+.services-cta .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.65);
+  background: transparent;
+  color: #ffffff !important;
+  transition: all 0.25s ease;
+}
+.services-cta .btn-primary:hover,
+.services-cta .btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.9);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .trust-grid { grid-template-columns: repeat(2, 1fr); }
+  .services-process .process-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .services-hero { padding: 3rem 0; }
+  .services-intro,
+  .services-main,
+  .services-process,
+  .services-cta { padding: 3rem 0; }
+  .services-grid { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .services-process .process-grid { grid-template-columns: 1fr; }
+  .services-intro h2,
+  .services-process .section-title h2,
+  .services-cta h2 { font-size: 1.5rem; }
+  .services-cta-buttons { flex-direction: column; align-items: center; }
+  .services-cta-buttons a { width: 100%; justify-content: center; }
+}
+
+/* ── Hero secondary CTA — match .btn-secondary ghost style ─────────────── */
+.svc-hero .hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.65);
+  background: transparent;
+  color: #ffffff !important;
+  transition: all 0.25s ease;
+}
+.svc-hero .hero-cta-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.9);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
+
+/* ── Quote Section wrapper — Envision-matched ───────────────────────────── */
+.svc-quote {
+  background: #F9FAFB;
+  padding: 4rem 0;
+}
+.svc-quote .section-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.svc-quote .section-title h2 {
+  font-family: 'League Spartan', 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.25;
+}
+.svc-quote .section-title p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── Quote widget — override plugin gold/navy to Envision dark ──────────── */
+
+/* Header band: swap navy gradient to Envision dark */
+.svc-quote .osl-cq-form-header {
+  background: linear-gradient(135deg, #111827 0%, #0B1220 100%) !important;
+}
+
+/* Header title: swap gold to white */
+.svc-quote .osl-cq-header-text h3 {
+  color: #ffffff !important;
+}
+
+/* GET INSTANT QUOTE button: swap gold to Envision dark */
+.svc-quote .osl-cq-wrapper .osl-cq-button:not(.osl-cq-submit-btn) {
+  background: #111827 !important;
+  background-image: none !important;
+  box-shadow: 0 4px 14px rgba(17,24,39,0.35) !important;
+}
+.svc-quote .osl-cq-wrapper .osl-cq-button:not(.osl-cq-submit-btn):hover {
+  background: #1f2937 !important;
+  background-image: none !important;
+  box-shadow: 0 8px 20px rgba(17,24,39,0.45) !important;
+}
+
+/* Radio selected state: swap navy to Envision dark */
+.svc-quote .osl-cq-radio-group input[type="radio"]:checked + label {
+  border-color: #111827 !important;
+  background: #f3f4f6 !important;
+}
+.svc-quote .osl-cq-radio-group input[type="radio"]:checked + label:before {
+  border-color: #111827 !important;
+  background: #111827 !important;
+}
+
+/* Select focus: swap gold ring to neutral */
+.svc-quote .osl-cq-wrapper .osl-cq-form-body select:focus,
+.svc-quote .osl-cq-wrapper .osl-cq-form-body input:focus {
+  border-color: #111827 !important;
+  box-shadow: 0 0 0 3px rgba(17,24,39,0.12) !important;
+}
+
+/* ── Homepage phone button emoji — force white ──────────────────────────── */
+.el-btn.el-btn--outline {
+  color: #ffffff !important;
+}
+.el-btn.el-btn--outline:hover {
+  color: #ffffff !important;
+}
+
+/* ── Phone button icon (SVG) for .btn-secondary ─────────────────────────── */
+.btn-secondary.btn-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-secondary.btn-phone .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important; /* drives svg via currentColor */
+}
+
+/* ── Tel button SVG icon helper (works for hero + btn + outline styles) ─── */
+a.btn-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+a.btn-phone .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor; /* SVG uses currentColor */
+}
+a.btn-phone svg { display: block; }
+
+/* ── Generic inline icon svg inherits text color ────────────────────────── */
+.quick-icon svg,
+.info-icon svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+.element-icon svg { display: block; }
+
+/* ── News & Facts: remove grey placeholder header on blog cards ─────────── */
+.osl-blog-card-image-placeholder {
+  display: none !important;
+}
+
+/* If some posts have a real image element, hide that too (optional). */
+.osl-blog-card-image {
+  display: none !important;
+}
+
+/* Make sure the card still has nice rounding/shadow without the header */
+.osl-blog-card {
+  overflow: hidden;
+}
+
+/* Reduce top padding now that header image is gone */
+.osl-blog-card-body {
+  padding-top: 20px !important;
+}
+
+/* ── News & Facts: remove grey placeholder header on blog cards ─────────── */
+.osl-blog-card-image-placeholder {
+  display: none !important;
+}
+
+/* Keep card corners clean after removing header */
+.osl-blog-card {
+  overflow: hidden;
+}
+
+/* Final override: always hide placeholder header on blog cards */
+.osl-blog-card-image-placeholder { display: none !important; }
+
+/* News & Facts: tighten card body padding */
+.osl-blog-card-body { padding: 20px !important; }
+
+/* =========================================================
+   News & Facts (blog cards) styling
+   ========================================================= */
+
+/* Remove placeholder header (already doing this, keep final override) */
+.osl-blog-card-image-placeholder { display: none !important; }
+
+/* Card */
+.osl-blog-card{
+  background:#fff;
+  border: 1px solid rgba(13,27,62,0.10);
+  border-radius: 14px;
+  overflow:hidden;
+  box-shadow: 0 10px 30px rgba(13,27,62,0.06);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.osl-blog-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 16px 46px rgba(13,27,62,0.12);
+  border-color: rgba(200,169,97,0.45);
+}
+
+/* Body spacing */
+.osl-blog-card-body{
+  padding: 22px !important;
+}
+
+/* Meta row */
+.osl-blog-card-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 12px;
+  align-items:center;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  color: rgba(13,27,62,0.60);
+}
+
+/* Category “pill” */
+.osl-blog-card-meta .category{
+  background: rgba(200,169,97,0.12);
+  color: #0d1b3e;
+  border: 1px solid rgba(200,169,97,0.35);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.osl-blog-card-meta .category:hover{
+  background:#C8A961;
+  border-color:#C8A961;
+  color:#0d1b3e;
+}
+
+/* Title */
+.osl-blog-card-title{
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  line-height: 1.25;
+  margin: 0 0 10px 0;
+  color:#0d1b3e;
+}
+.osl-blog-card-title a{
+  color: inherit;
+  text-decoration: none;
+}
+.osl-blog-card-title a:hover{
+  color:#C8A961;
+}
+
+/* Excerpt */
+.osl-blog-card-excerpt{
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(13,27,62,0.70);
+  margin: 0 0 14px 0;
+}
+
+/* Read more */
+.osl-blog-card-readmore{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight: 700;
+  color:#0d1b3e;
+  text-decoration: none;
+}
+.osl-blog-card-readmore:hover{
+  color:#C8A961;
+  gap: 12px;
+}
+
+/* Optional: make whole card clickable feel */
+.osl-blog-card a:focus{
+  outline: 2px solid rgba(200,169,97,0.55);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+

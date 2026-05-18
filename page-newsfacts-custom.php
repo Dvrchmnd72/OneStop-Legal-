@@ -126,7 +126,7 @@ $categories = get_categories(array(
   gap: 30px;
 }
 .news-card {
-  background: #f8f6f0;
+  background:#ffffff; border:1px solid rgba(17,24,39,0.08); box-shadow:0 10px 30px rgba(17,24,39,0.08); overflow:hidden;
   border-radius: 12px;
   padding: 35px 30px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -274,42 +274,6 @@ $categories = get_categories(array(
   justify-content: center;
   flex-wrap: wrap;
 }
-.news-cta .btn-primary {
-  background: #0d1b3e;
-  color: #ffffff;
-  padding: 16px 40px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
-  transition: background 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.news-cta .btn-primary:hover {
-  background: #1a2a4a;
-  color: #ffffff;
-}
-.news-cta .btn-secondary {
-  background: transparent;
-  color: #0d1b3e;
-  padding: 16px 40px;
-  border-radius: 8px;
-  border: 2px solid #0d1b3e;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.news-cta .btn-secondary:hover {
-  background: #0d1b3e;
-  color: #ffffff;
-}
-
 /* ============================================
    RESPONSIVE
    ============================================ */
@@ -415,8 +379,8 @@ $categories = get_categories(array(
     <h2>Need Legal Advice?</h2>
     <p>Our team is ready to help with your legal matters. Get in touch today.</p>
     <div class="news-cta-buttons">
-      <a href="/contact-us/" class="btn-primary">Book a Free Consultation</a>
-      <a href="tel:0417274441" class="btn-secondary">📞 0417 274 441</a>
+      <a href="/book/" class="btn-primary">Book a Consultation</a>
+      <a href="tel:+61731561216" class="btn-secondary btn-phone"><span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" focusable="false" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1C10.07 21.81 2.19 13.93 2.19 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.24 1.01l-2.4 2.2z" fill="currentColor"/></svg></span><span class="btn-text">+61 7 3156 1216</span></a>
     </div>
   </div>
 </section>

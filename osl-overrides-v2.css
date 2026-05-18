@@ -1,0 +1,15 @@
+/* OSL Overrides v2 (PROOF) */
+.main-header-w,
+.main-header-w .main-header-i,
+.main-header-w .main-header,
+.mobile-header-w,
+.mobile-header{
+  background: #ff00ff !important;
+  background-color: #ff00ff !important;
+  background-image: none !important;
+}
+
+/* PROOF 2: whole page background */
+html, body{
+  background: #ff00ff !important;
+}

@@ -1,0 +1,132 @@
+/* OSL Overrides v6 - Liquid Glass header + remove gold accents */
+
+:root{
+  --osl-accent: #2F6BFF;
+  --osl-ink: #0B1220;
+}
+
+/* ===== Liquid Glass Header ===== */
+.main-header-w.main-header-version1{
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  width: 100% !important;
+  z-index: 9999;
+}
+
+/* wrapper width */
+.main-header-w .main-header-i{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* glass bar */
+.main-header-w .main-header{
+  background: rgba(255,255,255,0.78) !important;
+  backdrop-filter: blur(22px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
+
+  border-bottom: 1px solid rgba(15, 23, 42, 0.10) !important;
+  box-shadow:
+    0 12px 30px rgba(2, 6, 23, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.60) !important;
+
+  padding: 0 48px !important;
+  min-height: 76px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  position: relative;
+}
+
+/* remove theme overlays that tint */
+.main-header-w::before,
+.main-header-w::after,
+.main-header-w .main-header::before,
+.main-header-w .main-header::after{
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* spacing so hero doesn't sit under fixed header */
+body{ padding-top: 76px; }
+@media (max-width: 767px){ body{ padding-top: 64px; } }
+
+/* ===== Nav typography ===== */
+.main-header #header-menu > li > a{
+  color: rgba(11,18,32,0.88) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1px;
+}
+.main-header #header-menu > li > a:hover,
+.main-header #header-menu > li.current-menu-item > a{
+  color: #1B2E4A !important; backdrop-filter: blur(12px) saturate(180%) !important; -webkit-backdrop-filter: blur(12px) saturate(180%) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.80) !important; font-weight: 600 !important; text-shadow: 0 1px 2px rgba(255,255,255,0.6) !important;
+}
+
+/* remove gold underline/after if theme uses it */
+.main-header #header-menu > li > a::after{
+  background: var(--osl-accent) !important;
+  opacity: 0.9 !important;
+}
+
+/* ===== CTA (last menu item) as liquid glass silver pill ===== */
+.menu-last-item-button .main-header #header-menu > li:last-child > a{
+  background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(220,225,235,0.35) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.70) !important;
+  color: #1B2E4A !important; backdrop-filter: blur(12px) saturate(180%) !important; -webkit-backdrop-filter: blur(12px) saturate(180%) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.80) !important; font-weight: 600 !important; text-shadow: 0 1px 2px rgba(255,255,255,0.6) !important;
+  border-radius: 999px !important;
+  padding: 10px 16px !important;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease !important;
+}
+.menu-last-item-button .main-header #header-menu > li:last-child > a:hover{
+  background: linear-gradient(135deg, rgba(255,255,255,0.70) 0%, rgba(200,210,225,0.50) 100%) !important;
+  border-color: rgba(255,255,255,0.90) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.90) !important;
+  transform: translateY(-1px);
+}
+
+/* ===== Mobile header (keep readable) ===== */
+.mobile-header{
+  background: rgba(255,255,255,0.86) !important;
+  backdrop-filter: blur(18px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(15,23,42,0.10) !important;
+}
+
+/* ===== Remove gold from hero heading + strip ===== */
+/* Gold heading in your screenshot appears to be h1 span or a styled element; target common candidates */
+.osl-section-header h1,
+.osl-section-header h2,
+.osl-section-header .osl-section-title,
+.osl-hero h1,
+.osl-hero h2{
+  color: #ffffff !important;
+}
+
+/* If theme uses a specific gold class on headings, neutralize it */
+.has-text-color[style*="#bd9250"],
+.has-text-color[style*="#BD9250"]{
+  color: #ffffff !important;
+}
+
+/* The gold feature strip */
+.osl-features-strip,
+.osl-features,
+.osl-features-bar,
+.osl-hero-features,
+.home .styled-header{
+  background: rgba(255,255,255,0.12) !important;
+  border-top: 1px solid rgba(255,255,255,0.14) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.14) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Make icons/text in the strip readable */
+.osl-features-strip,
+.osl-features-strip *{
+  color: rgba(255,255,255,0.92) !important;
+}

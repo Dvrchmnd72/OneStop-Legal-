@@ -1,0 +1,154 @@
+/* OSL Overrides v8 - Professional palette (no gold) + liquid glass header */
+
+:root{
+  --osl-accent: #2F6BFF;  /* pro blue */
+  --osl-ink: #0B1220;
+  --osl-ink-2: rgba(11,18,32,0.80);
+}
+
+/* =========================
+   HEADER (liquid glass)
+   ========================= */
+.top-bar-links-box-container,
+.fixed-header-w{ display:none !important; }
+
+.main-header-w.main-header-version1{
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  width: 100% !important;
+  z-index: 9999;
+}
+
+.main-header-w .main-header-i{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.main-header-w .main-header{
+  background: rgba(255,255,255,0.80) !important;
+  backdrop-filter: blur(22px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.10) !important;
+  box-shadow:
+    0 14px 34px rgba(2, 6, 23, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  padding: 0 48px !important;
+  min-height: 76px;
+  width: 100% !important;
+  max-width: 100% !important;
+  position: relative;
+}
+
+/* ensure content clears fixed header */
+body{ padding-top: 76px; }
+@media (max-width: 1100px){
+  body{ padding-top: 62px; }
+}
+
+/* nav links */
+.main-header #header-menu > li > a{
+  color: var(--osl-ink-2) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1px;
+}
+.main-header #header-menu > li > a:hover,
+.main-header #header-menu > li.current-menu-item > a{
+  color: var(--osl-ink) !important;
+}
+
+/* CTA = last menu item (Contact Us) */
+.menu-last-item-button .main-header #header-menu > li:last-child > a{
+  background: linear-gradient(135deg, rgba(47,107,255,0.98), rgba(47,107,255,0.68)) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 14px 30px rgba(47,107,255,0.28) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+}
+.menu-last-item-button .main-header #header-menu > li:last-child > a:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+.menu-last-item-button .main-header #header-menu > li:last-child > a::after{
+  display:none !important;
+}
+
+/* mobile header readability */
+.mobile-header{
+  background: rgba(255,255,255,0.88) !important;
+  backdrop-filter: blur(18px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(15,23,42,0.10) !important;
+}
+
+/* =========================
+   HERO (remove gold, add pop)
+   ========================= */
+
+/* overlay: subtle cool dark gradient (no brown) */
+.osl-hero-overlay{
+  background: linear-gradient(180deg, rgba(11,18,32,0.62) 0%, rgba(11,18,32,0.50) 55%, rgba(11,18,32,0.40) 100%) !important;
+  opacity: 1 !important;
+}
+
+/* headline + highlight */
+.osl-hero h1{
+  color: #ffffff !important;
+  letter-spacing: -0.3px;
+}
+.osl-highlight{
+  color: var(--osl-accent) !important;
+  text-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+/* subtitle */
+.osl-hero-subtitle{
+  color: rgba(255,255,255,0.86) !important;
+}
+
+/* hero buttons */
+.osl-btn{
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+  padding: 14px 18px !important;
+}
+.osl-btn-primary{
+  background: linear-gradient(135deg, rgba(47,107,255,1), rgba(47,107,255,0.72)) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 18px 36px rgba(47,107,255,0.30) !important;
+}
+.osl-btn-primary:hover{ filter: brightness(1.05); transform: translateY(-1px); }
+
+.osl-btn-secondary{
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.24) !important;
+  color: #fff !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+}
+.osl-btn-secondary:hover{
+  background: rgba(255,255,255,0.18) !important;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   TRUST BAR (remove gold strip)
+   ========================= */
+.osl-trust-bar{
+  background: rgba(255,255,255,0.10) !important;
+  border-top: 1px solid rgba(255,255,255,0.14) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.14) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+}
+.osl-trust-bar .osl-trust-item,
+.osl-trust-bar span{
+  color: rgba(255,255,255,0.92) !important;
+}
+.osl-trust-icon{
+  color: rgba(255,255,255,0.95) !important;
+  opacity: 0.95;
+}

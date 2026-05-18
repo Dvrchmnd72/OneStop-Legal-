@@ -1,14 +1,12 @@
-jQuery(document).ready(function($) {
-  // Mobile menu toggle
-  $('.osl-mobile-toggle').on('click', function() {
-    $('.osl-mobile-nav').addClass('active');
-    $('.osl-mobile-overlay').addClass('active');
-    $('body').css('overflow', 'hidden');
-  });
-
-  $('.osl-mobile-nav-close, .osl-mobile-overlay').on('click', function() {
-    $('.osl-mobile-nav').removeClass('active');
-    $('.osl-mobile-overlay').removeClass('active');
-    $('body').css('overflow', '');
-  });
-});
+/* OneStop Legal — Custom JS */
+(function(){
+  var toggle = document.getElementById('osl-nav-toggle');
+  var nav = document.getElementById('osl-nav');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function(){
+      nav.classList.toggle('is-open');
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !expanded);
+    });
+  }
+})();

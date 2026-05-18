@@ -20,3 +20,130 @@ Updated: 2024-04-15 17:51:10
     background-color: rgba(0,0,0,0.4);
 }
 
+
+
+
+/* === OSL FIX: stop theme's version1 header gradient overlay === */
+.main-header-w.main-header-version1 .main-header{
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.82) !important; /* frosted */
+}
+
+/* Also remove any pseudo-element overlay the theme may use */
+.main-header-w.main-header-version1 .main-header::before{
+  background: transparent !important;
+}
+
+/* Make the scroll (fixed) header match so it doesn't "change colour" */
+.fixed-header-w{
+  background-color: rgba(255,255,255,0.82) !important;
+}
+
+/* === OSL FIX: force top bar + header wrappers to frosted === */
+.top-bar-links-box-w,
+.main-header-w,
+.main-header-w .main-header-i{
+  background: rgba(255,255,255,0.82) !important;
+  background-color: rgba(255,255,255,0.82) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Optional: if the nav "last item button" is gold and you want it not-gold */
+.main-header .top-menu > ul > li:last-child:not(.menu-item-has-children) a{
+  background-color: rgba(255,255,255,0.82) !important;
+  border: 1px solid rgba(0,0,0,0.18) !important;
+  color: #111 !important;
+}
+
+
+/* === OSL FINAL: header frosted (normal + fixed) and remove any overlay tint layers === */
+.main-header-w,
+.main-header-w .main-header-i,
+.main-header-w .main-header,
+.fixed-header-w,
+.fixed-header-w .fixed-header-i{
+  background: rgba(255,255,255,0.82) !important;
+  background-color: rgba(255,255,255,0.82) !important;
+  background-image: none !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.main-header-w::before,
+.main-header-w::after,
+.main-header-w .main-header::before,
+.main-header-w .main-header::after,
+.fixed-header-w::before,
+.fixed-header-w::after,
+.fixed-header-w .fixed-header-i::before,
+.fixed-header-w .fixed-header-i::after{
+  background: transparent !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* === OSL DEBUG: if the "brown" is the last menu item, it will turn GREEN === */
+#header-menu > li:last-child > a{
+  background: #00ff00 !important;
+  background-color: #00ff00 !important;
+  color: #000 !important;
+}
+
+/* === OSL DEBUG: header containers should be BLUE === */
+.main-header-w,
+.main-header-i,
+.main-header{
+  background: #0000ff !important;
+  background-color: #0000ff !important;
+  background-image: none !important;
+}
+
+/* === Force full width for custom page templates === */
+.page-template-page-home-custom .os-container,
+.page-template-page-home-custom .all-wrapper-i {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+/* === Force full width for ALL custom page templates === */
+.page-template-page-about-custom .os-container,
+.page-template-page-about-custom .all-wrapper-i,
+.page-template-page-services-custom .os-container,
+.page-template-page-services-custom .all-wrapper-i,
+.page-template-page-newsfacts-custom .os-container,
+.page-template-page-newsfacts-custom .all-wrapper-i,
+.page-template-page-contact-custom .os-container,
+.page-template-page-contact-custom .all-wrapper-i,
+.page-template-page-bfa-custom .os-container,
+.page-template-page-bfa-custom .all-wrapper-i,
+.page-template-page-commercial-custom .os-container,
+.page-template-page-commercial-custom .all-wrapper-i,
+.page-template-page-compensation-custom .os-container,
+.page-template-page-compensation-custom .all-wrapper-i,
+.page-template-page-compensation-sub-custom .os-container,
+.page-template-page-compensation-sub-custom .all-wrapper-i,
+.page-template-page-contract-reviews-custom .os-container,
+.page-template-page-contract-reviews-custom .all-wrapper-i,
+.page-template-page-conveyancing-custom .os-container,
+.page-template-page-conveyancing-custom .all-wrapper-i,
+.page-template-page-immigration-custom .os-container,
+.page-template-page-immigration-custom .all-wrapper-i,
+.page-template-page-litigation-custom .os-container,
+.page-template-page-litigation-custom .all-wrapper-i,
+.page-template-page-property-settlement-custom .os-container,
+.page-template-page-property-settlement-custom .all-wrapper-i,
+.page-template-page-wills-estate-custom .os-container,
+.page-template-page-wills-estate-custom .all-wrapper-i {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+/* === Force full width for News & Facts (blog index) === */
+.blog .all-wrapper-i {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}

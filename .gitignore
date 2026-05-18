@@ -1,0 +1,31 @@
+# Logs
+error_log
+*.log
+
+# Backups and temporary files
+*.bak
+*.bak.*
+*.backup
+*.backup.*
+*.old
+*.orig
+*.tmp
+*~
+*.zip
+*.tar
+*.tar.gz
+*.gz
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Extra backup naming patterns found on this server
+*.bak*
+*.resetbak*

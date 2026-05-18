@@ -1,0 +1,28 @@
+/* OSL Overrides v3 (PROOF) */
+
+/* Whole page proof */
+html, body{
+  background: #ff00ff !important;
+}
+
+/* Header proof */
+.main-header-w,
+.main-header-w .main-header-i,
+.main-header-w .main-header,
+.mobile-header-w,
+.mobile-header{
+  background: #ff00ff !important;
+  background-color: #ff00ff !important;
+  background-image: none !important;
+}
+
+/* PROOF 4: common wrapper backgrounds */
+.all-wrapper,
+.content-w,
+.all-content-wrapper,
+body.home .all-wrapper,
+body.home{
+  background: #ff00ff !important;
+  background-color: #ff00ff !important;
+  background-image: none !important;
+}

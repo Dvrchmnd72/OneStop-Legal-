@@ -8,296 +8,6 @@
 get_header();
 ?>
 
-<style>
-/* ============================================
-   SERVICES PAGE STYLES
-   ============================================ */
-
-/* Hero Section */
-.services-hero {
-  background: linear-gradient(135deg, #0d1b3e 0%, #1a2a4a 100%);
-  padding: 80px 0;
-  text-align: center;
-}
-.services-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px;
-  color: #ffffff;
-  margin-bottom: 15px;
-}
-.services-hero .hero-subtitle {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  color: #c9a84c;
-  font-style: italic;
-  margin-bottom: 0;
-}
-.services-hero p.hero-desc {
-  font-size: 18px;
-  color: rgba(255,255,255,0.8);
-  max-width: 700px;
-  margin: 20px auto 0;
-  line-height: 1.7;
-}
-
-/* Container */
-.services-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Intro Section */
-.services-intro {
-  padding: 70px 0;
-  background: #ffffff;
-  text-align: center;
-}
-.services-intro h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 36px;
-  color: #0d1b3e;
-  margin-bottom: 15px;
-}
-.services-intro h2 span {
-  color: #c9a84c;
-}
-.services-intro p {
-  font-size: 18px;
-  color: #555;
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.8;
-}
-
-/* Services Grid */
-.services-main {
-  padding: 0 0 80px;
-  background: #ffffff;
-}
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-}
-.svc-card {
-  background: #f8f6f0;
-  border-radius: 12px;
-  padding: 45px 35px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-bottom: 4px solid transparent;
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-.svc-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-  border-bottom-color: #c9a84c;
-  color: inherit;
-  text-decoration: none;
-}
-.svc-icon {
-  font-size: 50px;
-  margin-bottom: 20px;
-}
-.svc-card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: #0d1b3e;
-  margin-bottom: 15px;
-}
-.svc-card p {
-  font-size: 15px;
-  line-height: 1.8;
-  color: #555;
-  margin-bottom: 20px;
-}
-.svc-link {
-  display: inline-block;
-  color: #c9a84c;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.svc-card:hover .svc-link {
-  color: #0d1b3e;
-}
-
-/* Trust Bar */
-.services-trust {
-  padding: 60px 0;
-  background: #f8f6f0;
-}
-.trust-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  text-align: center;
-}
-.trust-item {
-  padding: 20px;
-}
-.trust-icon {
-  font-size: 40px;
-  margin-bottom: 15px;
-  color: #c9a84c;
-}
-.trust-item h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  color: #0d1b3e;
-  margin-bottom: 8px;
-}
-.trust-item p {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* Process Section */
-.services-process {
-  padding: 80px 0;
-  background: linear-gradient(135deg, #0d1b3e 0%, #1a2a4a 100%);
-}
-.services-process .section-title {
-  text-align: center;
-  margin-bottom: 60px;
-}
-.services-process .section-title h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 38px;
-  color: #ffffff;
-  margin-bottom: 10px;
-}
-.services-process .section-title p {
-  font-size: 18px;
-  color: #c9a84c;
-}
-.process-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-}
-.process-step {
-  text-align: center;
-  padding: 30px 20px;
-  position: relative;
-}
-.step-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  background: #c9a84c;
-  color: #0d1b3e;
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 700;
-  border-radius: 50%;
-  margin-bottom: 20px;
-}
-.process-step h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  color: #ffffff;
-  margin-bottom: 12px;
-}
-.process-step p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.75);
-}
-
-/* CTA Section */
-.services-cta {
-  padding: 70px 0;
-  background: #c9a84c;
-  text-align: center;
-}
-.services-cta h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 38px;
-  color: #0d1b3e;
-  margin-bottom: 15px;
-}
-.services-cta p {
-  font-size: 18px;
-  color: #0d1b3e;
-  margin-bottom: 35px;
-  opacity: 0.85;
-}
-.services-cta-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.services-cta .btn-primary {
-  background: #0d1b3e;
-  color: #ffffff;
-  padding: 16px 40px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
-  transition: background 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.services-cta .btn-primary:hover {
-  background: #1a2a4a;
-  color: #ffffff;
-}
-.services-cta .btn-secondary {
-  background: transparent;
-  color: #0d1b3e;
-  padding: 16px 40px;
-  border-radius: 8px;
-  border: 2px solid #0d1b3e;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.services-cta .btn-secondary:hover {
-  background: #0d1b3e;
-  color: #ffffff;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 992px) {
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .process-grid,
-  .trust-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .services-hero h1 { font-size: 40px; }
-}
-
-@media (max-width: 600px) {
-  .services-hero { padding: 50px 0; }
-  .services-hero h1 { font-size: 32px; }
-  .services-hero .hero-subtitle { font-size: 18px; }
-  .services-intro, .services-main, .services-process { padding: 50px 0; }
-  .services-intro h2, .services-process .section-title h2,
-  .services-cta h2 { font-size: 30px; }
-  .services-grid, .process-grid, .trust-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
 
 <!-- HERO SECTION -->
 <section class="services-hero">
@@ -321,7 +31,7 @@ get_header();
   <div class="services-container">
     <div class="services-grid">
 
-      <a href="/conv/" class="svc-card">
+      <a href="/conveyancing/" class="svc-card">
         <div class="svc-icon">🏠</div>
         <h3>Conveyancing</h3>
         <p>Our experienced team handles all aspects of property transactions, ensuring a smooth and stress-free process from start to finish. Whether you're buying, selling, or leasing property, we're here to assist you.</p>
@@ -349,7 +59,7 @@ get_header();
         <span class="svc-link">Learn More →</span>
       </a>
 
-      <a href="/i/" class="svc-card">
+      <a href="/immigration/" class="svc-card">
         <div class="svc-icon">✈️</div>
         <h3>Immigration</h3>
         <p>Navigating immigration laws can be complex, but our services make the process easier. Whether you're seeking a substantive visa, residency, or citizenship, our team will guide you through every step.</p>
@@ -452,10 +162,10 @@ get_header();
 <section class="services-cta">
   <div class="services-container">
     <h2>Ready to Get Started?</h2>
-    <p>Book a free consultation today and let us handle the legal details.</p>
+    <p>Book a consultation today and let us handle the legal details.</p>
     <div class="services-cta-buttons">
-      <a href="/contact-us/" class="btn-primary">Book a Free Consultation</a>
-      <a href="tel:0417274441" class="btn-secondary">📞 0417 274 441</a>
+      <a href="/book/" class="btn-primary">Book a Consultation</a>
+      <a href="tel:+61731561216" class="btn-secondary btn-phone" btn-phone><span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" focusable="false" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1C10.07 21.81 2.19 13.93 2.19 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.24 1.01l-2.4 2.2z" fill="currentColor"/></svg></span><span class="btn-text">+61 7 3156 1216</span></a>
     </div>
   </div>
 </section>

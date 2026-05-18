@@ -1,0 +1,105 @@
+/* ==========================================================================
+   OSL Home Page Styles
+   Single source of truth for all hero and home page layout styles.
+   Loaded only on the front page via functions.php.
+   ========================================================================== */
+
+/* ==========================================================================
+   HERO — Base
+   ========================================================================== */
+.osl-hero {
+  position: relative;
+  background-color: #0c1b33 !important;
+  background-image: none !important;
+  padding: 120px 0 100px;
+  overflow: hidden;
+  border-top: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Subtle gold shimmer — top-right decorative gradient */
+.osl-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(201,168,76,0.1) 100%);
+  pointer-events: none;
+}
+
+/* Overlay (depth/vignette) */
+.osl-hero .osl-hero-overlay {
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06), rgba(0,0,0,0.38)) !important;
+}
+
+/* ==========================================================================
+   HERO — Content
+   ========================================================================== */
+.osl-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.osl-hero h1 {
+  font-family: var(--osl-font-heading);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--osl-white);
+  line-height: 1.2;
+  margin: 0 0 24px 0;
+}
+
+.osl-highlight {
+  color: var(--osl-gold);
+}
+
+.osl-hero-subtitle {
+  font-family: var(--osl-font-body);
+  font-size: 18px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin: 0 0 40px 0;
+  max-width: 600px;
+}
+
+.osl-hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   HERO — Primary Button
+   ========================================================================== */
+/* ==========================================================================
+   HERO — Responsive
+   ========================================================================== */
+@media (max-width: 992px) {
+  .osl-hero h1 {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 768px) {
+  .osl-hero {
+    padding: 80px 0 60px;
+  }
+  .osl-hero h1 {
+    font-size: 32px;
+  }
+  .osl-hero-subtitle {
+    font-size: 16px;
+  }
+  .osl-hero-cta {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .osl-hero h1 {
+    font-size: 28px;
+  }
+}
