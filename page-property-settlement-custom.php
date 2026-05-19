@@ -17,7 +17,6 @@ get_header();
     <p class="hero-description">SettleX by OneStop Legal is your trusted property settlement partner. We provide specialised settlement agent services designed to support conveyancers and lawyers in managing property transactions efficiently, accurately, and securely.</p>
     <div class="hero-badges">
       <span class="hero-badge">&#x2705; PEXA Certified</span>
-      <span class="hero-badge">&#x2705; QLD Titles Office</span>
       <span class="hero-badge">&#x2705; Trust Account Available</span>
     </div>
     <div class="hero-buttons">
@@ -74,8 +73,8 @@ get_header();
       </div>
       <div class="type-card">
         <div class="type-icon">&#x1F3DB;</div>
-        <h3>QLD Titles Office Lodgements</h3>
-        <p>Handling lodgements with the Queensland Titles Office to ensure all documents are correctly filed and registered in accordance with state regulations.</p>
+        <h3>Titles Office Lodgements</h3>
+        <p>Handling lodgements with the relevant Titles Office to ensure all documents are correctly filed and registered in accordance with applicable state and territory regulations.</p>
       </div>
       <div class="type-card">
         <div class="type-icon">&#x1F512;</div>
@@ -155,7 +154,7 @@ get_header();
         <div class="benefit-icon">&#x1F393;</div>
         <div>
           <h3>Expertise and Experience</h3>
-          <p>With years of experience in property law and conveyancing, our team has the expertise to manage even the most complex property settlements across Queensland.</p>
+          <p>With years of experience in property law and conveyancing, our team has the expertise to manage even the most complex property settlements across Australia.</p>
         </div>
       </div>
       <div class="benefit-card">
@@ -214,7 +213,7 @@ get_header();
       <div class="process-card">
         <div class="process-step">5</div>
         <h3>Titles Office Lodgement</h3>
-        <p>We handle all lodgements with the QLD Titles Office to ensure documents are correctly filed and registered.</p>
+        <p>We handle lodgements with the relevant Titles Office to ensure documents are correctly filed and registered.</p>
       </div>
       <div class="process-card">
         <div class="process-step">6</div>
@@ -238,7 +237,7 @@ get_header();
           <span>What is SettleX?</span>
           <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">SettleX is the property settlement platform by OneStop Legal, designed specifically to support conveyancers and lawyers with efficient, accurate, and secure property settlement services across Queensland.</div>
+        <div class="faq-answer">SettleX is the property settlement platform by OneStop Legal, designed specifically to support conveyancers and lawyers with efficient, accurate, and secure property settlement services across Australia.</div>
       </div>
       <div class="faq-item">
         <div class="faq-question">
@@ -266,7 +265,7 @@ get_header();
           <span>What areas do you cover?</span>
           <span class="faq-toggle">+</span>
         </div>
-        <div class="faq-answer">SettleX currently handles property settlements across Queensland, including lodgements with the Queensland Titles Office and coordination with all major financial institutions.</div>
+        <div class="faq-answer">SettleX supports property settlements across Australia, including lodgements with the relevant Titles Office and coordination with major financial institutions.</div>
       </div>
       <div class="faq-item">
         <div class="faq-question">
