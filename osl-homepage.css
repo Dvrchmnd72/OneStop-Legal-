@@ -1145,7 +1145,20 @@ body.blog .osl-blog-pagination .nav-links span{
 /* Conveyancing conversion-first updates */
 .svc-hero--quote-first .hero-cta{display:inline-block;margin-top:12px;background:#c5a267;color:#fff;padding:14px 24px;border-radius:10px;font-weight:700;text-decoration:none}
 .svc-trust-bar{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;font-size:14px}
-.svc-trust-bar span{background:#f7f2e8;border:1px solid #e7dcc4;padding:6px 10px;border-radius:20px}
+.svc-trust-bar span{
+  background:#1b2e4a;
+  border:1px solid #1b2e4a;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:20px;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease;
+}
+.svc-trust-bar span:hover,
+.svc-trust-bar span:focus-visible{
+  background:#244267;
+  border-color:#244267;
+  color:#fff;
+}
 .svc-testimonial{margin-top:10px;font-style:italic}
 .osl-sticky-quote-cta{display:none}
 @media (max-width: 768px){

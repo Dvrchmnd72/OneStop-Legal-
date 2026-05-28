@@ -16,6 +16,7 @@
       window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
     }
   };
+  window.QUOTE_EMAIL_GATE_STRICT = (typeof window.QUOTE_EMAIL_GATE_STRICT === 'boolean') ? window.QUOTE_EMAIL_GATE_STRICT : false;
 
   function getUTMs(){
     var url = new URL(window.location.href);
@@ -53,6 +54,19 @@
 
   var quoteForm = document.querySelector('#quote-section form, form[action*="quote"]');
   if (quoteForm) {
+    var quoteEventsFired = {};
+    var pageMeta = getUTMs();
+    function trackQuoteEvent(name, extra){
+      if (quoteEventsFired[name]) return;
+      quoteEventsFired[name] = true;
+      OSLTracking.pushEvent(name, Object.assign({
+        page_path: window.location.pathname,
+        utm_source: pageMeta.utm_source,
+        utm_medium: pageMeta.utm_medium,
+        utm_campaign: pageMeta.utm_campaign,
+        device_type: pageMeta.device_type
+      }, extra || {}));
+    }
     var started = false;
     quoteForm.addEventListener('focusin', function(){
       if (started) return;
@@ -61,6 +75,52 @@
     });
     quoteForm.addEventListener('submit', function(){
       OSLTracking.pushEvent('quote_submission', { page: window.location.pathname });
+    });
+
+    quoteForm.addEventListener('submit', function(){
+      trackQuoteEvent('quote_calculated');
+      trackQuoteEvent('quote_completed');
+    });
+
+    quoteForm.addEventListener('change', function(e){
+      var t = e.target;
+      if (t && t.matches('input[type="email"], input[name*="email" i]')) {
+        trackQuoteEvent('email_submitted_after_quote', { email_capture_mode: window.QUOTE_EMAIL_GATE_STRICT ? 'strict' : 'soft' });
+      }
+    });
+
+    quoteForm.querySelectorAll('a,button').forEach(function(el){
+      el.addEventListener('click', function(){
+        var label = ((el.textContent || '') + ' ' + (el.getAttribute('href') || '')).toLowerCase();
+        if (label.indexOf('pdf') !== -1 || label.indexOf('download') !== -1) {
+          trackQuoteEvent('quote_pdf_download');
+        }
+      });
+    });
+
+    setTimeout(function(){ trackQuoteEvent('quote_viewed'); }, 250);
+
+    if (!window.QUOTE_EMAIL_GATE_STRICT) {
+      var emailField = quoteForm.querySelector('input[type="email"], input[name*="email" i]');
+      if (emailField) {
+        emailField.required = false;
+        emailField.setAttribute('data-soft-gate', 'true');
+        if (!quoteForm.querySelector('.osl-quote-email-helper')) {
+          var helper = document.createElement('p');
+          helper.className = 'osl-quote-email-helper';
+          helper.textContent = 'Where should we send your detailed quote summary? (Optional)';
+          emailField.parentNode.insertBefore(helper, emailField);
+        }
+      }
+    }
+  }
+
+  if (window.location.pathname.indexOf('/conveyancing') !== -1) {
+    document.querySelectorAll('section,div,article,li').forEach(function(node){
+      var text = (node.textContent || '').trim().toLowerCase();
+      if (text === 'no unconditional contract, no fee policy') {
+        node.remove();
+      }
     });
   }
 
