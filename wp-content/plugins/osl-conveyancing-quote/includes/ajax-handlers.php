@@ -11,8 +11,11 @@ function osl_cq_calculate() {
     $council_key = sanitize_text_field($_POST['council'] ?? '');
     $property_type = sanitize_text_field($_POST['property_type'] ?? 'house');
 
-    $councils = get_option('osl_cq_councils', array());
-    $council_name = $councils[$council_key] ?? $council_key;
+    if (osl_cq_get_pricing_data($council_key, osl_cq_get_default_council_state()) === false) {
+        wp_send_json_error(array('message' => 'Pricing is not available for this state.'));
+    }
+
+    $council_name = osl_cq_get_council_name($council_key);
     $property_types = osl_cq_get_property_types();
     $property_label = $property_types[$property_type] ?? $property_type;
     $type_label = ($type === 'purchasing') ? 'Purchase' : 'Selling';
@@ -106,8 +109,11 @@ function osl_cq_unlock() {
     osl_cq_save_lead($email, $type, $council_key, $property_type);
 
     // Build and send the quote email
-    $councils = get_option('osl_cq_councils', array());
-    $council_name = $councils[$council_key] ?? $council_key;
+    if (osl_cq_get_pricing_data($council_key, osl_cq_get_default_council_state()) === false) {
+        wp_send_json_error(array('message' => 'Pricing is not available for this state.'));
+    }
+
+    $council_name = osl_cq_get_council_name($council_key);
     $property_types = osl_cq_get_property_types();
     $property_label = $property_types[$property_type] ?? $property_type;
     $type_label = ($type === 'purchasing') ? 'Purchase' : 'Selling';
