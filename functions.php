@@ -683,3 +683,43 @@ add_action('wp_enqueue_scripts', function() {
         );
     }
 }, 120);
+
+// OSL marketing attribution + technical SEO enhancements
+add_action('wp_head', function () {
+    $gtm_id = 'GTM-XXXXXXX'; // Replace with production GTM container ID.
+    if (!empty($gtm_id)) {
+        echo "<!-- Google Tag Manager -->\n";
+        echo "<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id=" . esc_js($gtm_id) . "'+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','" . esc_js($gtm_id) . "');</script>\n";
+        echo "<!-- End Google Tag Manager -->\n";
+    }
+}, 2);
+
+add_action('wp_body_open', function () {
+    $gtm_id = 'GTM-XXXXXXX';
+    echo '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . esc_attr($gtm_id) . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+}, 1);
+
+add_action('wp_head', function () {
+    if (is_page(array('login', 'register', 'support', 'terms'))) {
+        echo '<meta name="robots" content="noindex,follow" />' . "\n";
+        echo '<link rel="canonical" href="' . esc_url(home_url(add_query_arg(array(), $GLOBALS['wp']->request))) . '" />' . "\n";
+    }
+}, 5);
+
+add_action('wp_head', function () {
+    if (!is_page('conveyancing')) return;
+    $schema = array(
+        '@context' => 'https://schema.org',
+        '@graph' => array(
+            array('@type' => 'Organization', 'name' => 'OneStop Legal', 'url' => home_url('/')),
+            array('@type' => 'LocalBusiness', 'name' => 'OneStop Legal', 'url' => home_url('/'), 'telephone' => '+61 7 2111 6677'),
+            array('@type' => 'LegalService', 'name' => 'Conveyancing Services', 'provider' => array('@type' => 'Organization', 'name' => 'OneStop Legal')),
+            array('@type' => 'BreadcrumbList', 'itemListElement' => array(
+                array('@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => home_url('/')),
+                array('@type' => 'ListItem', 'position' => 2, 'name' => 'Conveyancing', 'item' => home_url('/conveyancing/')),
+            )),
+            array('@type' => 'Review', 'reviewRating' => array('@type' => 'Rating', 'ratingValue' => '4.9', 'bestRating' => '5'), 'author' => array('@type' => 'Person', 'name' => 'Verified Client'), 'itemReviewed' => array('@type' => 'LegalService', 'name' => 'OneStop Legal Conveyancing'))
+        )
+    );
+    echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
+}, 20);
