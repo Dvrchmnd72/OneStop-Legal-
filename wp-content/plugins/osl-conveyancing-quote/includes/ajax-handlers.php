@@ -33,19 +33,16 @@ function osl_cq_calculate() {
         }
     }
 
-    $hs = 'color:transparent;user-select:none;-webkit-user-select:none;';
-    $ds = 'color:#C5A267;font-weight:bold;letter-spacing:2px;';
-
     $prof_html = '';
     if ($has_discount) {
         $prof_html .= '<tr><td>' . $type_label . ' ' . $property_label . '</td>';
-        $prof_html .= '<td><span class="osl-cq-real-price" style="' . $hs . '"><del>$' . number_format($professional_fee, 2) . '</del></span> <span class="osl-cq-dots" style="' . $ds . '">&bull; &bull; &bull;</span></td></tr>';
+        $prof_html .= '<td><del>$' . number_format($professional_fee, 2) . '</del></td></tr>';
         $dl = ($discount_type === 'fixed') ? '$' . number_format($discount_amount, 2) : $discount_amount . '%';
         $prof_html .= '<tr><td>*' . $dl . ' website discount</td>';
-        $prof_html .= '<td><span class="osl-cq-real-price" style="' . $hs . '">$' . number_format($discounted_fee, 2) . '</span> <span class="osl-cq-dots" style="' . $ds . '">&bull; &bull; &bull;</span></td></tr>';
+        $prof_html .= '<td>$' . number_format($discounted_fee, 2) . '</td></tr>';
     } else {
         $prof_html .= '<tr><td>' . $type_label . ' ' . $property_label . '</td>';
-        $prof_html .= '<td><span class="osl-cq-real-price" style="' . $hs . '">$' . number_format($professional_fee, 2) . '</span> <span class="osl-cq-dots" style="' . $ds . '">&bull; &bull; &bull;</span></td></tr>';
+        $prof_html .= '<td>$' . number_format($professional_fee, 2) . '</td></tr>';
     }
 
     $disb_html = '';
@@ -57,7 +54,7 @@ function osl_cq_calculate() {
         if ($val > 0) {
             $disb_total += $val;
             $disb_html .= '<tr><td>' . esc_html($flabel) . '</td>';
-            $disb_html .= '<td><span class="osl-cq-real-price" style="' . $hs . '">$' . number_format($val, 2) . '</span> <span class="osl-cq-dots" style="' . $ds . '">&bull; &bull; &bull;</span></td></tr>';
+            $disb_html .= '<td>$' . number_format($val, 2) . '</td></tr>';
         }
     }
 
@@ -73,27 +70,17 @@ function osl_cq_calculate() {
     $html .= '<table class="osl-cq-summary-table">' . $disb_html . '</table>';
     if ($type === 'selling' && $sd_fee > 0) {
         $html .= '<div class="osl-cq-disclosure-notice" style="background:#fff8e1;border-left:4px solid #C5A267;padding:14px 18px;margin:16px 0;border-radius:6px;">';
-        $html .= '<strong>&#9432; Seller Disclosure Statement &mdash; <span class="osl-cq-real-price" style="' . $hs . '">$' . number_format($sd_fee, 2) . '</span> <span class="osl-cq-dots" style="' . $ds . '">&bull; &bull; &bull;</span></strong>';
+        $html .= '<strong>&#9432; Seller Disclosure Statement &mdash; $' . number_format($sd_fee, 2) . '</strong>';
         $html .= '<p style="margin:6px 0 0;font-size:0.88em;color:#555;">As of 1 August 2025, Queensland law requires all sellers to provide a Disclosure Statement to the buyer prior to signing a contract. This fee covers preparation of the statement and all required property searches. Failure to provide this can give the buyer the right to terminate the contract.</p>';
         $html .= '</div>';
     }
-    $html .= '<div class="osl-cq-hidden-total" style="display:none;"><div class="osl-cq-summary-total"><table><tr><td><h3>TOTAL</h3></td><td><h3>$' . number_format($total, 2) . '</h3></td></tr></table></div></div>';
-    $html .= '<div class="osl-cq-gate-box-wrap" id="osl-cq-gate"><div class="osl-cq-gate-box">';
-    $html .= '<div class="osl-cq-gate-lock">&#x1F512;</div>';
-    $html .= '<h3>Unlock Your Full Quote</h3>';
-    $html .= '<p>Enter your email to reveal all prices and receive a copy of your quote</p>';
-    $html .= '<div class="osl-cq-gate-form">';
-    $html .= '<input type="email" id="osl-cq-gate-email" placeholder="Your email address" class="osl-cq-gate-input">';
-    $html .= '<button type="button" id="osl-cq-unlock-btn" class="osl-cq-button">UNLOCK QUOTE</button>';
-    $html .= '</div><small>No spam. We respect your privacy.</small>';
-    $html .= '</div></div>';
+    $html .= '<div class="osl-cq-summary-total"><table><tr><td><h3>TOTAL</h3></td><td><h3>$' . number_format($total, 2) . '</h3></td></tr></table></div>';
     $html .= '</div>';
     $html .= '<div class="osl-cq-summary-right"><div class="osl-cq-summary-header"><h4>OPTIONAL SERVICES</h4></div>';
     $html .= '<table class="osl-cq-summary-table osl-cq-optional">';
     $html .= '<tr><td>Pre-signing contract review for standard REIQ contract</td></tr>';
     $html .= '<tr><td>Pre-signing contract review for "Off the Plan" contracts<br><small><em>(Comprehensive review of the contract and letter to client summarising key terms)</em></small></td></tr>';
     $html .= '<tr><td>Preparation of the contract for sale<br><small><em>(If you do not have an agent we can prepare the contract of sale)</em></small></td></tr>';
-    $html .= '<tr><td>No unconditional contract, no fee policy<br><small><em>If your contract does not go unconditional and is terminated early, no professional fees will be charged. You will however be liable for any search costs incurred.</em></small></td></tr>';
     $html .= '</table></div>';
     $html .= '</div></div>';
     $html .= '</div>';
