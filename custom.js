@@ -144,13 +144,6 @@
       }
     }
 
-    function unlockQuoteFormEmail() {
-      quoteForm.querySelectorAll('input[type="email"], input[name*="email" i]').forEach(function(field) {
-        field.required = false;
-        field.removeAttribute('aria-required');
-      });
-    }
-
     var started = false;
     quoteForm.addEventListener('focusin', function() {
       if (started) return;
@@ -160,7 +153,6 @@
 
     quoteForm.addEventListener('submit', function() {
       OSLTracking.pushEvent('quote_submission', { page: window.location.pathname });
-      unlockQuoteFormEmail();
       var calculatedTotal = (window.calculatedTotal || window.quoteTotal || '').toString();
       trackQuoteEvent('quote_calculated', calculatedTotal ? { quote_value: calculatedTotal } : {});
       setTimeout(function() {
@@ -172,7 +164,6 @@
       }, 200);
     });
 
-    unlockQuoteFormEmail();
 
     var observer = new MutationObserver(function() {
       if (quoteResultViewed) return;
