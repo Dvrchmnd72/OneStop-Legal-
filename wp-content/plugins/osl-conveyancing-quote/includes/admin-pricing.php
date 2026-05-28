@@ -67,7 +67,7 @@ add_action('admin_head', function() {
     </style>';
 });
 
-function osl_cq_build_pricing_from_post($source, &$has_value = null) {
+function osl_cq_build_pricing_from_post($source, &$has_value = null, $fallback_pricing = null) {
     $pricing = array();
     $has_value = false;
 
@@ -80,18 +80,23 @@ function osl_cq_build_pricing_from_post($source, &$has_value = null) {
                 'disbursements' => array(),
             );
 
+            $fallback_flat = is_array($fallback_pricing) ? osl_cq_flatten_property_pricing($fallback_pricing[$type][$pkey] ?? array()) : array();
+
             foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel) {
                 $raw = $source[$type][$pkey][$fkey] ?? '';
+                $use_fallback = $fkey !== 'professional_fee_discount' && ($raw === '' || $raw === null) && array_key_exists($fkey, $fallback_flat);
+                $value = $use_fallback ? $fallback_flat[$fkey] : $raw;
+
                 if ($raw !== '' && $raw !== null) {
                     $has_value = true;
                 }
 
                 if ($fkey === 'professional_fee_discount') {
-                    $pricing[$type][$pkey][$fkey] = sanitize_text_field($raw);
+                    $pricing[$type][$pkey][$fkey] = sanitize_text_field($value);
                 } elseif (in_array($fkey, array('professional_fee', 'discount_amount'), true)) {
-                    $pricing[$type][$pkey][$fkey] = floatval($raw);
+                    $pricing[$type][$pkey][$fkey] = floatval($value);
                 } else {
-                    $pricing[$type][$pkey]['disbursements'][$fkey] = floatval($raw);
+                    $pricing[$type][$pkey]['disbursements'][$fkey] = floatval($value);
                 }
             }
         }
@@ -191,7 +196,10 @@ function osl_cq_overrides_page() {
 
     if (isset($_POST['osl_cq_save_council_pricing']) && check_admin_referer('osl_cq_council_pricing')) {
         $selected_council = sanitize_text_field($_POST['council_key'] ?? '');
-        $posted_pricing = osl_cq_build_pricing_from_post($_POST['pricing'] ?? array(), $has_value);
+        $fallback_pricing = $all_pricing['states'][$state]['councils'][$selected_council]
+            ?? $all_pricing['states'][$state]['default']
+            ?? array();
+        $posted_pricing = osl_cq_build_pricing_from_post($_POST['pricing'] ?? array(), $has_value, $fallback_pricing);
 
         if ($selected_council !== '') {
             if ($has_value) {
@@ -215,9 +223,11 @@ function osl_cq_overrides_page() {
         echo '<div class="osl-cq-success">✓ Council pricing removed. It now uses QLD default pricing.</div>';
     }
 
+    $default_pricing = $all_pricing['states'][$state]['default'] ?? osl_cq_convert_flat_pricing_to_nested(osl_cq_get_default_pricing());
     $council_pricing = ($selected_council !== '' && isset($all_pricing['states'][$state]['councils'][$selected_council]))
         ? $all_pricing['states'][$state]['councils'][$selected_council]
         : null;
+    $form_pricing = $council_pricing ?? $default_pricing;
     ?>
     <div class="wrap osl-cq-wrap">
         <h1>⚖️ Council Pricing</h1>
@@ -251,7 +261,7 @@ function osl_cq_overrides_page() {
                         <?php endif; ?>
                     </h2>
                     <?php if ($council_pricing === null): ?>
-                        <p class="osl-cq-muted">No council-specific pricing exists yet. Enter values below and save to create a full independent pricing block.</p>
+                        <p class="osl-cq-muted">No council-specific pricing exists yet. The form is prefilled with QLD defaults; save to create a full independent pricing block for this council.</p>
                     <?php endif; ?>
 
                     <div class="osl-cq-tabs">
@@ -266,7 +276,7 @@ function osl_cq_overrides_page() {
                             <h3><?php echo esc_html($plabel); ?></h3>
                             <div class="osl-cq-grid">
                                 <?php foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel):
-                                    $flat = $council_pricing ? osl_cq_flatten_property_pricing($council_pricing[$type][$pkey] ?? array()) : array();
+                                    $flat = osl_cq_flatten_property_pricing($form_pricing[$type][$pkey] ?? array());
                                     $val = $flat[$fkey] ?? '';
                                 ?>
                                     <div class="osl-cq-field">
