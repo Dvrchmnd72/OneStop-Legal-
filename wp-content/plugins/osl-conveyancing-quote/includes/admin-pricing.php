@@ -22,8 +22,8 @@ add_action('admin_menu', function() {
     );
     add_submenu_page(
         'osl-cq-pricing',
-        'Council Overrides',
-        'Council Overrides',
+        'Council Pricing',
+        'Council Pricing',
         'manage_options',
         'osl-cq-overrides',
         'osl_cq_overrides_page'
@@ -59,72 +59,99 @@ add_action('admin_head', function() {
         .osl-cq-tab-content { display: none; }
         .osl-cq-tab-content.active { display: block; }
         .osl-cq-success { background: #d4edda; color: #155724; padding: 12px 20px; border-radius: 4px; margin: 10px 0; }
-        .osl-cq-override-row { display: grid; grid-template-columns: 200px 1fr 80px; gap: 10px; align-items: start; padding: 15px; background: #f9f9f9; border-radius: 4px; margin: 10px 0; }
-        .osl-cq-override-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .osl-cq-override-field { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; }
-        .osl-cq-override-field input { width: 100px; }
         .button-gold { background: #C5A267 !important; border-color: #B08C4A !important; color: #fff !important; }
         .button-gold:hover { background: #B08C4A !important; }
         .osl-cq-council-list { column-count: 3; column-gap: 20px; }
         .osl-cq-council-item { break-inside: avoid; padding: 6px 10px; margin: 4px 0; background: #f9f9f9; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .osl-cq-muted { color: #666; }
     </style>';
 });
+
+function osl_cq_build_pricing_from_post($source, &$has_value = null) {
+    $pricing = array();
+    $has_value = false;
+
+    foreach (array_keys(osl_cq_get_transaction_types()) as $type) {
+        foreach (osl_cq_get_property_types() as $pkey => $plabel) {
+            $pricing[$type][$pkey] = array(
+                'professional_fee' => 0,
+                'professional_fee_discount' => '',
+                'discount_amount' => 0,
+                'disbursements' => array(),
+            );
+
+            foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel) {
+                $raw = $source[$type][$pkey][$fkey] ?? '';
+                if ($raw !== '' && $raw !== null) {
+                    $has_value = true;
+                }
+
+                if ($fkey === 'professional_fee_discount') {
+                    $pricing[$type][$pkey][$fkey] = sanitize_text_field($raw);
+                } elseif (in_array($fkey, array('professional_fee', 'discount_amount'), true)) {
+                    $pricing[$type][$pkey][$fkey] = floatval($raw);
+                } else {
+                    $pricing[$type][$pkey]['disbursements'][$fkey] = floatval($raw);
+                }
+            }
+        }
+    }
+
+    return $pricing;
+}
 
 // ============================================
 // DEFAULT PRICING PAGE
 // ============================================
 function osl_cq_pricing_page() {
+    $state = osl_cq_get_default_council_state();
+    $all_pricing = osl_cq_get_pricing();
+
     if (isset($_POST['osl_cq_save_defaults']) && check_admin_referer('osl_cq_defaults')) {
-        $pricing = array();
-        foreach (array('purchasing', 'selling') as $type) {
-            foreach (osl_cq_get_property_types() as $pkey => $plabel) {
-                foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel) {
-                    if ($fkey === 'professional_fee_discount') {
-                        $pricing[$type][$pkey][$fkey] = sanitize_text_field($_POST[$type][$pkey][$fkey] ?? '');
-                    } else {
-                        $pricing[$type][$pkey][$fkey] = floatval($_POST[$type][$pkey][$fkey] ?? 0);
-                    }
-                }
-            }
+        $all_pricing['states'][$state]['default'] = osl_cq_build_pricing_from_post($_POST);
+        if (!isset($all_pricing['states'][$state]['councils'])) {
+            $all_pricing['states'][$state]['councils'] = array();
         }
-        update_option('osl_cq_default_pricing', $pricing);
-        echo '<div class="osl-cq-success">✓ Default pricing saved successfully!</div>';
+        osl_cq_update_pricing($all_pricing);
+        echo '<div class="osl-cq-success">✓ QLD default pricing saved successfully!</div>';
     }
 
-    $pricing = get_option('osl_cq_default_pricing', osl_cq_get_default_pricing());
+    $pricing = $all_pricing['states'][$state]['default'] ?? osl_cq_convert_flat_pricing_to_nested(osl_cq_get_default_pricing());
     ?>
     <div class="wrap osl-cq-wrap">
-        <h1>⚖️ Conveyancing Pricing — Default Rates</h1>
-        <p>These prices apply to <strong>ALL councils</strong> unless overridden. Change a price here and it updates everywhere instantly.</p>
+        <h1>⚖️ Conveyancing Pricing — QLD Default Rates</h1>
+        <p>These prices apply only when a QLD council has no independent pricing block.</p>
 
         <form method="post">
             <?php wp_nonce_field('osl_cq_defaults'); ?>
 
             <div class="osl-cq-tabs">
-                <div class="osl-cq-tab active" data-tab="purchasing">Purchasing</div>
-                <div class="osl-cq-tab" data-tab="selling">Selling</div>
+                <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
+                    <div class="osl-cq-tab <?php echo $type === 'purchase' ? 'active' : ''; ?>" data-tab="<?php echo esc_attr($type); ?>"><?php echo esc_html($type_label); ?></div>
+                <?php endforeach; ?>
             </div>
 
-            <?php foreach (array('purchasing' => 'Purchasing a Property', 'selling' => 'Selling a Property') as $type => $type_label): ?>
-            <div class="osl-cq-tab-content <?php echo $type === 'purchasing' ? 'active' : ''; ?>" id="tab-<?php echo $type; ?>">
+            <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
+            <div class="osl-cq-tab-content <?php echo $type === 'purchase' ? 'active' : ''; ?>" id="tab-<?php echo esc_attr($type); ?>">
                 <div class="osl-cq-section">
-                    <h2><?php echo $type_label; ?></h2>
+                    <h2><?php echo esc_html($type_label); ?></h2>
                     <?php foreach (osl_cq_get_property_types() as $pkey => $plabel): ?>
-                        <h3><?php echo $plabel; ?></h3>
+                        <h3><?php echo esc_html($plabel); ?></h3>
                         <div class="osl-cq-grid">
                             <?php foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel):
-                                $val = $pricing[$type][$pkey][$fkey] ?? 0;
+                                $flat = osl_cq_flatten_property_pricing($pricing[$type][$pkey] ?? array());
+                                $val = $flat[$fkey] ?? 0;
                             ?>
                                 <div class="osl-cq-field">
-                                    <label><?php echo $flabel; ?></label>
+                                    <label><?php echo esc_html($flabel); ?></label>
                                     <?php if ($fkey === 'professional_fee_discount'): ?>
-                                        <select name="<?php echo "{$type}[{$pkey}][{$fkey}]"; ?>">
+                                        <select name="<?php echo esc_attr("{$type}[{$pkey}][{$fkey}]"); ?>">
                                             <option value="" <?php selected($val, ''); ?>>None</option>
                                             <option value="fixed" <?php selected($val, 'fixed'); ?>>Fixed ($)</option>
                                             <option value="percentage" <?php selected($val, 'percentage'); ?>>Percentage (%)</option>
                                         </select>
                                     <?php else: ?>
-                                        <input type="number" step="0.01" name="<?php echo "{$type}[{$pkey}][{$fkey}]"; ?>" value="<?php echo esc_attr($val); ?>">
+                                        <input type="number" step="0.01" name="<?php echo esc_attr("{$type}[{$pkey}][{$fkey}]"); ?>" value="<?php echo esc_attr($val); ?>">
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
@@ -134,7 +161,7 @@ function osl_cq_pricing_page() {
             </div>
             <?php endforeach; ?>
 
-            <p><input type="submit" name="osl_cq_save_defaults" class="button button-primary button-gold" value="💾 Save Default Pricing"></p>
+            <p><input type="submit" name="osl_cq_save_defaults" class="button button-primary button-gold" value="💾 Save QLD Default Pricing"></p>
         </form>
     </div>
 
@@ -153,113 +180,127 @@ function osl_cq_pricing_page() {
 }
 
 // ============================================
-// COUNCIL OVERRIDES PAGE
+// COUNCIL PRICING PAGE
 // ============================================
 function osl_cq_overrides_page() {
-    $councils = get_option('osl_cq_councils', array());
-    $overrides = get_option('osl_cq_council_overrides', array());
-    $defaults = get_option('osl_cq_default_pricing', osl_cq_get_default_pricing());
+    $state = osl_cq_get_default_council_state();
+    $councils = osl_cq_get_council_choices();
+    $all_pricing = osl_cq_get_pricing();
+    $all_pricing['states'][$state]['councils'] = $all_pricing['states'][$state]['councils'] ?? array();
+    $selected_council = sanitize_text_field($_GET['council'] ?? ($_POST['council_key'] ?? ''));
 
-    // Save overrides
-    if (isset($_POST['osl_cq_save_overrides']) && check_admin_referer('osl_cq_overrides')) {
-        $new_overrides = array();
-        if (!empty($_POST['override'])) {
-            foreach ($_POST['override'] as $council_key => $types) {
-                foreach ($types as $type => $ptypes) {
-                    foreach ($ptypes as $ptype => $fields) {
-                        foreach ($fields as $fkey => $fval) {
-                            if ($fval !== '' && $fval !== null) {
-                                if ($fkey === 'professional_fee_discount') {
-                                    $new_overrides[$council_key][$type][$ptype][$fkey] = sanitize_text_field($fval);
-                                } else {
-                                    $clean = floatval($fval);
-                                    $default_val = $defaults[$type][$ptype][$fkey] ?? 0;
-                                    if ($clean != $default_val) {
-                                        $new_overrides[$council_key][$type][$ptype][$fkey] = $clean;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+    if (isset($_POST['osl_cq_save_council_pricing']) && check_admin_referer('osl_cq_council_pricing')) {
+        $selected_council = sanitize_text_field($_POST['council_key'] ?? '');
+        $posted_pricing = osl_cq_build_pricing_from_post($_POST['pricing'] ?? array(), $has_value);
+
+        if ($selected_council !== '') {
+            if ($has_value) {
+                $all_pricing['states'][$state]['councils'][$selected_council] = $posted_pricing;
+                echo '<div class="osl-cq-success">✓ Council pricing saved!</div>';
+            } else {
+                unset($all_pricing['states'][$state]['councils'][$selected_council]);
+                echo '<div class="osl-cq-success">✓ Blank council pricing removed. This council now uses QLD default pricing.</div>';
             }
+            osl_cq_update_pricing($all_pricing);
         }
-        update_option('osl_cq_council_overrides', $new_overrides);
-        $overrides = $new_overrides;
-        echo '<div class="osl-cq-success">✓ Council overrides saved!</div>';
     }
 
+    if (isset($_GET['remove_council_pricing']) && check_admin_referer('remove_council_pricing_' . $_GET['remove_council_pricing'])) {
+        $remove_key = sanitize_text_field($_GET['remove_council_pricing']);
+        unset($all_pricing['states'][$state]['councils'][$remove_key]);
+        osl_cq_update_pricing($all_pricing);
+        if ($selected_council === $remove_key) {
+            $selected_council = '';
+        }
+        echo '<div class="osl-cq-success">✓ Council pricing removed. It now uses QLD default pricing.</div>';
+    }
+
+    $council_pricing = ($selected_council !== '' && isset($all_pricing['states'][$state]['councils'][$selected_council]))
+        ? $all_pricing['states'][$state]['councils'][$selected_council]
+        : null;
     ?>
     <div class="wrap osl-cq-wrap">
-        <h1>⚖️ Council Price Overrides</h1>
-        <p>Only add overrides where a council's pricing <strong>differs from the defaults</strong>. Leave blank = uses default price.</p>
+        <h1>⚖️ Council Pricing</h1>
+        <p>Each council pricing block is independent. Saving a council overwrites that entire council block; deleting it makes the council fall back to QLD default pricing.</p>
 
-        <form method="post">
-            <?php wp_nonce_field('osl_cq_overrides'); ?>
-
-            <div style="margin-bottom:15px;">
-                <label><strong>Add override for council:</strong></label>
-                <select id="osl-add-council">
+        <div class="osl-cq-section">
+            <h2>Select Council</h2>
+            <form method="get">
+                <input type="hidden" name="page" value="osl-cq-overrides">
+                <select name="council">
                     <option value="">— Select Council —</option>
-                    <?php foreach ($councils as $key => $name): ?>
-                        <option value="<?php echo esc_attr($key); ?>" <?php echo isset($overrides[$key]) ? 'disabled' : ''; ?>>
-                            <?php echo esc_html($name); ?> <?php echo isset($overrides[$key]) ? '(already added)' : ''; ?>
+                    <?php foreach ($councils as $key => $council): ?>
+                        <option value="<?php echo esc_attr($key); ?>" <?php selected($selected_council, $key); ?>>
+                            <?php echo esc_html($council['name']); ?> (<?php echo esc_html($council['state']); ?>)<?php echo isset($all_pricing['states'][$state]['councils'][$key]) ? ' — custom pricing' : ' — default'; ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <button type="button" id="osl-add-override-btn" class="button">+ Add Override</button>
-            </div>
+                <button type="submit" class="button">Load Council</button>
+            </form>
+        </div>
 
-            <div id="osl-overrides-container">
-            <?php foreach ($overrides as $council_key => $council_data):
-                $council_name = $councils[$council_key] ?? $council_key;
-            ?>
-                <div class="osl-cq-section osl-override-block" data-council="<?php echo esc_attr($council_key); ?>">
-                    <h2><?php echo esc_html($council_name); ?> <button type="button" class="button osl-remove-override" style="float:right;color:red;">✕ Remove</button></h2>
-                    <?php foreach (array('purchasing', 'selling') as $type): ?>
-                        <h3><?php echo ucfirst($type); ?></h3>
+        <?php if ($selected_council !== ''): ?>
+            <form method="post">
+                <?php wp_nonce_field('osl_cq_council_pricing'); ?>
+                <input type="hidden" name="council_key" value="<?php echo esc_attr($selected_council); ?>">
+                <div class="osl-cq-section">
+                    <h2>
+                        <?php echo esc_html($councils[$selected_council]['name'] ?? $selected_council); ?>
+                        <?php if ($council_pricing !== null): ?>
+                            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin.php?page=osl-cq-overrides&council=' . $selected_council . '&remove_council_pricing=' . $selected_council), 'remove_council_pricing_' . $selected_council)); ?>" class="button" style="float:right;color:red;" onclick="return confirm('Remove this council pricing block?')">✕ Remove Council Pricing</a>
+                        <?php endif; ?>
+                    </h2>
+                    <?php if ($council_pricing === null): ?>
+                        <p class="osl-cq-muted">No council-specific pricing exists yet. Enter values below and save to create a full independent pricing block.</p>
+                    <?php endif; ?>
+
+                    <div class="osl-cq-tabs">
+                        <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
+                            <div class="osl-cq-tab <?php echo $type === 'purchase' ? 'active' : ''; ?>" data-tab="council-<?php echo esc_attr($type); ?>"><?php echo esc_html($type_label); ?></div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
+                    <div class="osl-cq-tab-content <?php echo $type === 'purchase' ? 'active' : ''; ?>" id="tab-council-<?php echo esc_attr($type); ?>">
                         <?php foreach (osl_cq_get_property_types() as $pkey => $plabel): ?>
-                            <h4 style="color:#666;margin:10px 0 5px;"><?php echo $plabel; ?></h4>
+                            <h3><?php echo esc_html($plabel); ?></h3>
                             <div class="osl-cq-grid">
-                            <?php foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel):
-                                $override_val = $council_data[$type][$pkey][$fkey] ?? '';
-                                $default_val = $defaults[$type][$pkey][$fkey] ?? 0;
-                            ?>
-                                <div class="osl-cq-field">
-                                    <label><?php echo $flabel; ?> <small style="color:#999;">(default: <?php echo is_numeric($default_val) ? '$'.number_format($default_val,2) : $default_val; ?>)</small></label>
-                                    <?php if ($fkey === 'professional_fee_discount'): ?>
-                                        <select name="override[<?php echo $council_key; ?>][<?php echo $type; ?>][<?php echo $pkey; ?>][<?php echo $fkey; ?>]">
-                                            <option value="">Use default</option>
-                                            <option value="fixed" <?php selected($override_val, 'fixed'); ?>>Fixed ($)</option>
-                                            <option value="percentage" <?php selected($override_val, 'percentage'); ?>>Percentage (%)</option>
-                                        </select>
-                                    <?php else: ?>
-                                        <input type="number" step="0.01" name="override[<?php echo $council_key; ?>][<?php echo $type; ?>][<?php echo $pkey; ?>][<?php echo $fkey; ?>]" value="<?php echo esc_attr($override_val); ?>" placeholder="<?php echo esc_attr($default_val); ?>">
-                                    <?php endif; ?>
-                                </div>
-                            <?php endforeach; ?>
+                                <?php foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel):
+                                    $flat = $council_pricing ? osl_cq_flatten_property_pricing($council_pricing[$type][$pkey] ?? array()) : array();
+                                    $val = $flat[$fkey] ?? '';
+                                ?>
+                                    <div class="osl-cq-field">
+                                        <label><?php echo esc_html($flabel); ?></label>
+                                        <?php if ($fkey === 'professional_fee_discount'): ?>
+                                            <select name="pricing[<?php echo esc_attr($type); ?>][<?php echo esc_attr($pkey); ?>][<?php echo esc_attr($fkey); ?>]">
+                                                <option value="" <?php selected($val, ''); ?>>None</option>
+                                                <option value="fixed" <?php selected($val, 'fixed'); ?>>Fixed ($)</option>
+                                                <option value="percentage" <?php selected($val, 'percentage'); ?>>Percentage (%)</option>
+                                            </select>
+                                        <?php else: ?>
+                                            <input type="number" step="0.01" name="pricing[<?php echo esc_attr($type); ?>][<?php echo esc_attr($pkey); ?>][<?php echo esc_attr($fkey); ?>]" value="<?php echo esc_attr($val); ?>">
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         <?php endforeach; ?>
+                    </div>
                     <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-            </div>
 
-            <p><input type="submit" name="osl_cq_save_overrides" class="button button-primary button-gold" value="💾 Save Council Overrides"></p>
-        </form>
+                <p><input type="submit" name="osl_cq_save_council_pricing" class="button button-primary button-gold" value="💾 Save Council Pricing"></p>
+            </form>
+        <?php endif; ?>
     </div>
 
     <script>
     jQuery(function($){
-        $('#osl-add-override-btn').on('click', function(){
-            var council = $('#osl-add-council').val();
-            if(!council) return alert('Please select a council');
-            location.href = location.href + '&add_council=' + council;
-        });
-        $('.osl-remove-override').on('click', function(){
-            if(confirm('Remove this council override? It will revert to default pricing.')){
-                $(this).closest('.osl-override-block').remove();
-            }
+        $('.osl-cq-tab').on('click', function(){
+            var tab = $(this).data('tab');
+            $(this).closest('.osl-cq-section').find('.osl-cq-tab').removeClass('active');
+            $(this).addClass('active');
+            $(this).closest('.osl-cq-section').find('.osl-cq-tab-content').removeClass('active');
+            $('#tab-'+tab).addClass('active');
         });
     });
     </script>
@@ -270,26 +311,35 @@ function osl_cq_overrides_page() {
 // MANAGE COUNCILS PAGE
 // ============================================
 function osl_cq_councils_page() {
-    $councils = get_option('osl_cq_councils', array());
+    $councils = osl_cq_get_council_choices();
+    $state = osl_cq_get_default_council_state();
 
     if (isset($_POST['osl_cq_save_councils']) && check_admin_referer('osl_cq_councils')) {
         if (!empty($_POST['new_council_name'])) {
             $name = sanitize_text_field($_POST['new_council_name']);
-            $key = sanitize_title($name);
-            $councils[$key] = $name;
-            asort($councils);
-            update_option('osl_cq_councils', $councils);
+            $new_state = sanitize_text_field($_POST['new_council_state'] ?? $state);
+            $existing = get_option('osl_cq_councils', array());
+            $existing = osl_cq_normalize_councils($existing);
+            $existing[] = array('key' => sanitize_title($name), 'name' => $name, 'state' => $new_state ?: $state);
+            $existing = osl_cq_normalize_councils($existing);
+            update_option('osl_cq_councils', $existing);
+            $councils = osl_cq_get_council_choices();
             echo '<div class="osl-cq-success">✓ Added: ' . esc_html($name) . '</div>';
         }
     }
 
     if (isset($_GET['remove_council']) && check_admin_referer('remove_council_' . $_GET['remove_council'])) {
         $key = sanitize_text_field($_GET['remove_council']);
-        unset($councils[$key]);
-        update_option('osl_cq_councils', $councils);
-        $overrides = get_option('osl_cq_council_overrides', array());
-        unset($overrides[$key]);
-        update_option('osl_cq_council_overrides', $overrides);
+        $existing = array_values(array_filter(get_option('osl_cq_councils', array()), function($council) use ($key) {
+            return osl_cq_get_council_key($council) !== $key;
+        }));
+        update_option('osl_cq_councils', osl_cq_normalize_councils($existing));
+
+        $pricing = osl_cq_get_pricing();
+        unset($pricing['states'][$state]['councils'][$key]);
+        osl_cq_update_pricing($pricing);
+
+        $councils = osl_cq_get_council_choices();
         echo '<div class="osl-cq-success">✓ Council removed</div>';
     }
 
@@ -303,6 +353,7 @@ function osl_cq_councils_page() {
             <form method="post">
                 <?php wp_nonce_field('osl_cq_councils'); ?>
                 <input type="text" name="new_council_name" placeholder="e.g. Gold Coast" style="padding:8px;width:300px;">
+                <input type="hidden" name="new_council_state" value="<?php echo esc_attr($state); ?>">
                 <input type="submit" name="osl_cq_save_councils" class="button button-gold" value="+ Add Council">
             </form>
         </div>
@@ -310,11 +361,11 @@ function osl_cq_councils_page() {
         <div class="osl-cq-section">
             <h2>Current Councils</h2>
             <div class="osl-cq-council-list">
-                <?php foreach ($councils as $key => $name): ?>
+                <?php foreach ($councils as $key => $council): ?>
                     <div class="osl-cq-council-item">
-                        <span><?php echo esc_html($name); ?></span>
-                        <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=osl-cq-councils&remove_council=' . $key), 'remove_council_' . $key); ?>" 
-                           onclick="return confirm('Remove <?php echo esc_js($name); ?>?')"
+                        <span><?php echo esc_html($council['name']); ?> <small class="osl-cq-muted"><?php echo esc_html($council['state']); ?></small></span>
+                        <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin.php?page=osl-cq-councils&remove_council=' . $key), 'remove_council_' . $key)); ?>"
+                           onclick="return confirm('Remove <?php echo esc_js($council['name']); ?>?')"
                            style="color:red;text-decoration:none;">✕</a>
                     </div>
                 <?php endforeach; ?>
@@ -336,11 +387,15 @@ function osl_cq_get_property_types() {
 }
 
 function osl_cq_get_fee_fields($type, $property_type) {
+    $type = osl_cq_normalize_transaction_type($type);
+
     $fields = array(
         'professional_fee' => 'Professional Fee',
+        'professional_fee_discount' => 'Professional Fee Discount',
+        'discount_amount' => 'Discount Amount',
     );
 
-    if ($type === 'purchasing') {
+    if ($type === 'purchase') {
         $fields['title_search'] = 'Title Search';
         $fields['registered_plan'] = 'Registered Plan';
         $fields['rates_search'] = 'Rates Search';
@@ -353,6 +408,10 @@ function osl_cq_get_fee_fields($type, $property_type) {
         } elseif ($property_type === 'unit_townhouse_duplex') {
             $fields['water_meter_reading'] = 'Water Meter Reading';
             $fields['information_certificate'] = 'Body Corporate Levies Certificate';
+            $fields['body_corporate_insurance'] = 'Body Corporate Insurance';
+            $fields['community_title_cms'] = 'Community Title CMS';
+            $fields['cms'] = 'CMS';
+            $fields['bc_insurance_cert'] = 'BC Insurance Certificate';
             $fields['land_tax'] = 'Land Tax';
             $fields['final_title_search'] = 'Final Title Search';
             $fields['identity_check'] = 'Identity Check';
@@ -360,21 +419,14 @@ function osl_cq_get_fee_fields($type, $property_type) {
             $fields['water_meter_reading'] = 'Water Meter Reading';
             $fields['land_tax'] = 'Land Tax';
             $fields['identity_check'] = 'Identity Check';
+            $fields['agent_fee'] = 'Agent Fee';
         }
     } else {
-        // Selling
         $fields['title_search'] = 'Title Search';
         $fields['identity_check'] = 'Identity Check';
+        $fields['agent_fee'] = 'Agent Fee';
+        $fields['seller_disclosure'] = 'Seller Disclosure';
     }
 
     return $fields;
-}
-
-function osl_cq_get_price($council_key, $type, $property_type, $fee_key) {
-    $overrides = get_option('osl_cq_council_overrides', array());
-    if (isset($overrides[$council_key][$type][$property_type][$fee_key])) {
-        return $overrides[$council_key][$type][$property_type][$fee_key];
-    }
-    $defaults = get_option('osl_cq_default_pricing', array());
-    return $defaults[$type][$property_type][$fee_key] ?? 0;
 }

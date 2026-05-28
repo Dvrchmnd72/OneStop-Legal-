@@ -8,7 +8,7 @@ function osl_cq_render_form($atts) {
         'heading' => '',
     ), $atts);
 
-    $councils = get_option('osl_cq_councils', array());
+    $councils = osl_cq_get_council_choices();
     $property_types = osl_cq_get_property_types();
     $suburb_name = $atts['suburb'] ? ucwords(str_replace('-', ' ', $atts['suburb'])) : '';
     $heading = $atts['heading'] ? $atts['heading'] : ($suburb_name ? $suburb_name . ' Conveyancing Quote' : 'Get an Instant Conveyancing Quote');
@@ -43,9 +43,9 @@ function osl_cq_render_form($atts) {
                     <div class="osl-cq-col">
                         <label class="osl-cq-label">Local Council / Shire</label>
                         <select name="osl_council" id="osl_council">
-                            <?php foreach ($councils as $key => $name): ?>
+                            <?php foreach ($councils as $key => $council): ?>
                                 <option value="<?php echo esc_attr($key); ?>" <?php echo ($atts['council'] === $key) ? 'selected' : ''; ?>>
-                                    <?php echo esc_html($name); ?>
+                                    <?php echo esc_html($council['name']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
