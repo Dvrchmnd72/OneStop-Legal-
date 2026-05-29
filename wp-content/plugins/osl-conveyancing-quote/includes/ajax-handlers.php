@@ -18,41 +18,19 @@ function osl_cq_calculate() {
     $council_name = osl_cq_get_council_name($council_key);
     $property_types = osl_cq_get_property_types();
     $property_label = $property_types[$property_type] ?? $property_type;
-    $type_label = ($type === 'purchasing') ? 'Purchase' : 'Selling';
-
-    $fee_fields = osl_cq_get_fee_fields($type, $property_type);
+    $type_label = (osl_cq_normalize_transaction_type($type) === 'purchase') ? 'Purchase' : 'Selling';
 
     $professional_fee = floatval(osl_cq_get_price($council_key, $type, $property_type, 'professional_fee'));
-    $discount_type = osl_cq_get_price($council_key, $type, $property_type, 'professional_fee_discount');
-    $discount_amount = floatval(osl_cq_get_price($council_key, $type, $property_type, 'discount_amount'));
 
-    $has_discount = !empty($discount_type) && $discount_amount > 0;
-    $discounted_fee = $professional_fee;
-    if ($has_discount) {
-        if ($discount_type === 'fixed') {
-            $discounted_fee = $professional_fee - $discount_amount;
-        } else {
-            $discounted_fee = $professional_fee - ($professional_fee * ($discount_amount / 100));
-        }
-    }
-
-    $prof_html = '';
-    if ($has_discount) {
-        $prof_html .= '<tr><td>' . $type_label . ' ' . $property_label . '</td>';
-        $prof_html .= '<td><del>$' . number_format($professional_fee, 2) . '</del></td></tr>';
-        $dl = ($discount_type === 'fixed') ? '$' . number_format($discount_amount, 2) : $discount_amount . '%';
-        $prof_html .= '<tr><td>*' . $dl . ' website discount</td>';
-        $prof_html .= '<td>$' . number_format($discounted_fee, 2) . '</td></tr>';
-    } else {
-        $prof_html .= '<tr><td>' . $type_label . ' ' . $property_label . '</td>';
-        $prof_html .= '<td>$' . number_format($professional_fee, 2) . '</td></tr>';
-    }
+    $prof_html = '<tr><td>' . $type_label . ' ' . $property_label . '</td>';
+    $prof_html .= '<td>$' . number_format($professional_fee, 2) . '</td></tr>';
 
     $disb_html = '';
     $disb_total = 0;
-    $skip_fields = array('professional_fee', 'professional_fee_discount', 'discount_amount', 'seller_disclosure');
-    foreach ($fee_fields as $fkey => $flabel) {
-        if (in_array($fkey, $skip_fields)) continue;
+    foreach (osl_cq_get_default_fee_fields($type, $property_type) as $fkey => $flabel) {
+        if ($fkey === 'professional_fee') {
+            continue;
+        }
         $val = floatval(osl_cq_get_price($council_key, $type, $property_type, $fkey));
         if ($val > 0) {
             $disb_total += $val;
@@ -61,8 +39,17 @@ function osl_cq_calculate() {
         }
     }
 
-    $sd_fee = ($type === 'selling') ? floatval(osl_cq_get_price($council_key, $type, $property_type, 'seller_disclosure')) : 0;
-    $total = $discounted_fee + $disb_total + $sd_fee;
+    $council_html = '';
+    if (osl_cq_normalize_transaction_type($type) === 'purchase') {
+        foreach (osl_cq_get_council_fee_fields($type, $property_type) as $fkey => $flabel) {
+            $val = floatval(osl_cq_get_price($council_key, $type, $property_type, $fkey));
+            $disb_total += $val;
+            $council_html .= '<tr><td>' . esc_html($flabel) . '</td>';
+            $council_html .= '<td>$' . number_format($val, 2) . '</td></tr>';
+        }
+    }
+
+    $total = $professional_fee + $disb_total;
 
     $html = '<div class="osl-cq-result-inner">';
     $html .= '<h2>Your Conveyancing Quote — ' . esc_html($council_name) . '</h2>';
@@ -70,13 +57,7 @@ function osl_cq_calculate() {
     $html .= '<div class="osl-cq-summary-header"><h4>PROFESSIONAL FEE</h4></div>';
     $html .= '<table class="osl-cq-summary-table">' . $prof_html . '</table>';
     $html .= '<div class="osl-cq-summary-header"><h4>DISBURSEMENTS</h4></div>';
-    $html .= '<table class="osl-cq-summary-table">' . $disb_html . '</table>';
-    if ($type === 'selling' && $sd_fee > 0) {
-        $html .= '<div class="osl-cq-disclosure-notice" style="background:#fff8e1;border-left:4px solid #C5A267;padding:14px 18px;margin:16px 0;border-radius:6px;">';
-        $html .= '<strong>&#9432; Seller Disclosure Statement &mdash; $' . number_format($sd_fee, 2) . '</strong>';
-        $html .= '<p style="margin:6px 0 0;font-size:0.88em;color:#555;">As of 1 August 2025, Queensland law requires all sellers to provide a Disclosure Statement to the buyer prior to signing a contract. This fee covers preparation of the statement and all required property searches. Failure to provide this can give the buyer the right to terminate the contract.</p>';
-        $html .= '</div>';
-    }
+    $html .= '<table class="osl-cq-summary-table">' . $disb_html . $council_html . '</table>';
     $html .= '<div class="osl-cq-summary-total"><table><tr><td><h3>TOTAL</h3></td><td><h3>$' . number_format($total, 2) . '</h3></td></tr></table></div>';
     $html .= '</div>';
     $html .= '<div class="osl-cq-summary-right"><div class="osl-cq-summary-header"><h4>OPTIONAL SERVICES</h4></div>';
@@ -116,53 +97,35 @@ function osl_cq_unlock() {
     $council_name = osl_cq_get_council_name($council_key);
     $property_types = osl_cq_get_property_types();
     $property_label = $property_types[$property_type] ?? $property_type;
-    $type_label = ($type === 'purchasing') ? 'Purchase' : 'Selling';
+    $type_label = (osl_cq_normalize_transaction_type($type) === 'purchase') ? 'Purchase' : 'Selling';
 
-    $fee_fields = osl_cq_get_fee_fields($type, $property_type);
     $professional_fee = floatval(osl_cq_get_price($council_key, $type, $property_type, 'professional_fee'));
-    $discount_type = osl_cq_get_price($council_key, $type, $property_type, 'professional_fee_discount');
-    $discount_amount = floatval(osl_cq_get_price($council_key, $type, $property_type, 'discount_amount'));
 
-    $has_discount = !empty($discount_type) && $discount_amount > 0;
-    $discounted_fee = $professional_fee;
-    if ($has_discount) {
-        if ($discount_type === 'fixed') {
-            $discounted_fee = $professional_fee - $discount_amount;
-        } else {
-            $discounted_fee = $professional_fee - ($professional_fee * ($discount_amount / 100));
-        }
-    }
+    $prof_rows = '<tr><td style="padding:10px;">' . $type_label . ' ' . $property_label . ' (' . $council_name . ')</td><td style="padding:10px;text-align:right;">$' . number_format($professional_fee, 2) . '</td></tr>';
 
-    $prof_rows = '';
-    if ($has_discount) {
-        $prof_rows .= '<tr><td style="padding:10px;">' . $type_label . ' ' . $property_label . ' (' . $council_name . ')</td><td style="padding:10px;text-align:right;"><del>$' . number_format($professional_fee, 2) . '</del></td></tr>';
-        $dl = ($discount_type === 'fixed') ? '$' . number_format($discount_amount, 2) : $discount_amount . '%';
-        $prof_rows .= '<tr><td style="padding:10px;">*' . $dl . ' website discount applied</td><td style="padding:10px;text-align:right;">$' . number_format($discounted_fee, 2) . '</td></tr>';
-    } else {
-        $prof_rows .= '<tr><td style="padding:10px;">' . $type_label . ' ' . $property_label . ' (' . $council_name . ')</td><td style="padding:10px;text-align:right;">$' . number_format($professional_fee, 2) . '</td></tr>';
-    }
-
-    $skip_fields = array('professional_fee', 'professional_fee_discount', 'discount_amount', 'seller_disclosure');
     $disb_rows = '';
     $disb_total = 0;
-    foreach ($fee_fields as $fkey => $flabel) {
-        if (in_array($fkey, $skip_fields)) continue;
+    foreach (osl_cq_get_default_fee_fields($type, $property_type) as $fkey => $flabel) {
+        if ($fkey === 'professional_fee') {
+            continue;
+        }
         $val = floatval(osl_cq_get_price($council_key, $type, $property_type, $fkey));
         if ($val > 0) {
             $disb_total += $val;
-            $disb_rows .= '<tr><td style="padding:10px;">' . $flabel . '</td><td style="padding:10px;text-align:right;">$' . number_format($val, 2) . '</td></tr>';
+            $disb_rows .= '<tr><td style="padding:10px;">' . esc_html($flabel) . '</td><td style="padding:10px;text-align:right;">$' . number_format($val, 2) . '</td></tr>';
         }
     }
-    $sd_fee = ($type === 'selling') ? floatval(osl_cq_get_price($council_key, $type, $property_type, 'seller_disclosure')) : 0;
-    $total = $discounted_fee + $disb_total + $sd_fee;
 
-    $disclosure_rows = '';
-    if ($type === 'selling' && $sd_fee > 0) {
-        $disclosure_rows .= '<tr><td colspan="2" style="padding:0;"><div style="background:#fff8e1;border-left:4px solid #C5A267;padding:14px 18px;margin:8px 0;border-radius:6px;">';
-        $disclosure_rows .= '<strong>&#9432; Seller Disclosure Statement &mdash; $' . number_format($sd_fee, 2) . '</strong>';
-        $disclosure_rows .= '<p style="margin:6px 0 0;font-size:0.88em;color:#555;">As of 1 August 2025, Queensland law requires all sellers to provide a Disclosure Statement to the buyer prior to signing a contract. This fee covers preparation of the statement and all required property searches. Failure to provide this can give the buyer the right to terminate the contract.</p>';
-        $disclosure_rows .= '</div></td></tr>';
+    if (osl_cq_normalize_transaction_type($type) === 'purchase') {
+        foreach (osl_cq_get_council_fee_fields($type, $property_type) as $fkey => $flabel) {
+            $val = floatval(osl_cq_get_price($council_key, $type, $property_type, $fkey));
+            $disb_total += $val;
+            $disb_rows .= '<tr><td style="padding:10px;">' . esc_html($flabel) . '</td><td style="padding:10px;text-align:right;">$' . number_format($val, 2) . '</td></tr>';
+        }
     }
+
+    $total = $professional_fee + $disb_total;
+    $disclosure_rows = '';
 
     $site_url = get_option('siteurl');
     $admin_email = get_option('admin_email', 'info@onestoplegal.com.au');

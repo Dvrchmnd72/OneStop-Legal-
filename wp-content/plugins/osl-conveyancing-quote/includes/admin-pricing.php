@@ -67,7 +67,7 @@ add_action('admin_head', function() {
     </style>';
 });
 
-function osl_cq_build_pricing_from_post($source, &$has_value = null, $fallback_pricing = null) {
+function osl_cq_build_pricing_from_post($source, &$has_value = null, $fallback_pricing = null, $field_callback = 'osl_cq_get_default_fee_fields') {
     $pricing = array();
     $has_value = false;
 
@@ -75,30 +75,47 @@ function osl_cq_build_pricing_from_post($source, &$has_value = null, $fallback_p
         foreach (osl_cq_get_property_types() as $pkey => $plabel) {
             $pricing[$type][$pkey] = array(
                 'professional_fee' => 0,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'disbursements' => array(),
             );
 
             $fallback_flat = is_array($fallback_pricing) ? osl_cq_flatten_property_pricing($fallback_pricing[$type][$pkey] ?? array()) : array();
 
-            foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel) {
+            foreach (call_user_func($field_callback, $type, $pkey) as $fkey => $flabel) {
                 $raw = $source[$type][$pkey][$fkey] ?? '';
-                $use_fallback = $fkey !== 'professional_fee_discount' && ($raw === '' || $raw === null) && array_key_exists($fkey, $fallback_flat);
+                $use_fallback = ($raw === '' || $raw === null) && array_key_exists($fkey, $fallback_flat);
                 $value = $use_fallback ? $fallback_flat[$fkey] : $raw;
 
                 if ($raw !== '' && $raw !== null) {
                     $has_value = true;
                 }
 
-                if ($fkey === 'professional_fee_discount') {
-                    $pricing[$type][$pkey][$fkey] = sanitize_text_field($value);
-                } elseif (in_array($fkey, array('professional_fee', 'discount_amount'), true)) {
+                if ($fkey === 'professional_fee') {
                     $pricing[$type][$pkey][$fkey] = floatval($value);
                 } else {
                     $pricing[$type][$pkey]['disbursements'][$fkey] = floatval($value);
                 }
             }
+        }
+    }
+
+    return $pricing;
+}
+
+function osl_cq_build_council_pricing_from_post($source, &$has_value = null) {
+    $pricing = array();
+    $has_value = false;
+
+    foreach (osl_cq_get_property_types() as $pkey => $plabel) {
+        $pricing['purchase'][$pkey] = array(
+            'disbursements' => array(),
+        );
+
+        foreach (osl_cq_get_council_fee_fields('purchase', $pkey) as $fkey => $flabel) {
+            $raw = $source['purchase'][$pkey][$fkey] ?? '';
+            if ($raw !== '' && $raw !== null) {
+                $has_value = true;
+            }
+            $pricing['purchase'][$pkey]['disbursements'][$fkey] = floatval($raw);
         }
     }
 
@@ -125,7 +142,7 @@ function osl_cq_pricing_page() {
     ?>
     <div class="wrap osl-cq-wrap">
         <h1>⚖️ Conveyancing Pricing — QLD Default Rates</h1>
-        <p>These prices apply only when a QLD council has no independent pricing block.</p>
+        <p>These state-level prices apply to all QLD conveyancing quotes. Council-specific rates search and water meter reading fees are managed separately.</p>
 
         <form method="post">
             <?php wp_nonce_field('osl_cq_defaults'); ?>
@@ -149,15 +166,7 @@ function osl_cq_pricing_page() {
                             ?>
                                 <div class="osl-cq-field">
                                     <label><?php echo esc_html($flabel); ?></label>
-                                    <?php if ($fkey === 'professional_fee_discount'): ?>
-                                        <select name="<?php echo esc_attr("{$type}[{$pkey}][{$fkey}]"); ?>">
-                                            <option value="" <?php selected($val, ''); ?>>None</option>
-                                            <option value="fixed" <?php selected($val, 'fixed'); ?>>Fixed ($)</option>
-                                            <option value="percentage" <?php selected($val, 'percentage'); ?>>Percentage (%)</option>
-                                        </select>
-                                    <?php else: ?>
-                                        <input type="number" step="0.01" name="<?php echo esc_attr("{$type}[{$pkey}][{$fkey}]"); ?>" value="<?php echo esc_attr($val); ?>">
-                                    <?php endif; ?>
+                                    <input type="number" step="0.01" name="<?php echo esc_attr("{$type}[{$pkey}][{$fkey}]"); ?>" value="<?php echo esc_attr($val); ?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -196,10 +205,7 @@ function osl_cq_overrides_page() {
 
     if (isset($_POST['osl_cq_save_council_pricing']) && check_admin_referer('osl_cq_council_pricing')) {
         $selected_council = sanitize_text_field($_POST['council_key'] ?? '');
-        $fallback_pricing = $all_pricing['states'][$state]['councils'][$selected_council]
-            ?? $all_pricing['states'][$state]['default']
-            ?? array();
-        $posted_pricing = osl_cq_build_pricing_from_post($_POST['pricing'] ?? array(), $has_value, $fallback_pricing);
+        $posted_pricing = osl_cq_build_council_pricing_from_post($_POST['pricing'] ?? array(), $has_value);
 
         if ($selected_council !== '') {
             if ($has_value) {
@@ -207,7 +213,7 @@ function osl_cq_overrides_page() {
                 echo '<div class="osl-cq-success">✓ Council pricing saved!</div>';
             } else {
                 unset($all_pricing['states'][$state]['councils'][$selected_council]);
-                echo '<div class="osl-cq-success">✓ Blank council pricing removed. This council now uses QLD default pricing.</div>';
+                echo '<div class="osl-cq-success">✓ Blank council pricing removed. Council rates search and water meter reading now default to $0 for this council.</div>';
             }
             osl_cq_update_pricing($all_pricing);
         }
@@ -220,18 +226,17 @@ function osl_cq_overrides_page() {
         if ($selected_council === $remove_key) {
             $selected_council = '';
         }
-        echo '<div class="osl-cq-success">✓ Council pricing removed. It now uses QLD default pricing.</div>';
+        echo '<div class="osl-cq-success">✓ Council pricing removed. Council rates search and water meter reading now default to $0.</div>';
     }
 
-    $default_pricing = $all_pricing['states'][$state]['default'] ?? osl_cq_convert_flat_pricing_to_nested(osl_cq_get_default_pricing());
     $council_pricing = ($selected_council !== '' && isset($all_pricing['states'][$state]['councils'][$selected_council]))
         ? $all_pricing['states'][$state]['councils'][$selected_council]
         : null;
-    $form_pricing = $council_pricing ?? $default_pricing;
+    $form_pricing = $council_pricing ?? array();
     ?>
     <div class="wrap osl-cq-wrap">
         <h1>⚖️ Council Pricing</h1>
-        <p>Each council pricing block is independent. Saving a council overwrites that entire council block; deleting it makes the council fall back to QLD default pricing.</p>
+        <p>Council pricing is limited to purchase disbursements that vary by council. If a council has no saved values, rates search and water meter reading default to $0.</p>
 
         <div class="osl-cq-section">
             <h2>Select Council</h2>
@@ -261,40 +266,24 @@ function osl_cq_overrides_page() {
                         <?php endif; ?>
                     </h2>
                     <?php if ($council_pricing === null): ?>
-                        <p class="osl-cq-muted">No council-specific pricing exists yet. The form is prefilled with QLD defaults; save to create a full independent pricing block for this council.</p>
+                        <p class="osl-cq-muted">No council-specific pricing exists yet. Blank values are treated as $0 until saved.</p>
                     <?php endif; ?>
 
-                    <div class="osl-cq-tabs">
-                        <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
-                            <div class="osl-cq-tab <?php echo $type === 'purchase' ? 'active' : ''; ?>" data-tab="council-<?php echo esc_attr($type); ?>"><?php echo esc_html($type_label); ?></div>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <?php foreach (osl_cq_get_transaction_types() as $type => $type_label): ?>
-                    <div class="osl-cq-tab-content <?php echo $type === 'purchase' ? 'active' : ''; ?>" id="tab-council-<?php echo esc_attr($type); ?>">
-                        <?php foreach (osl_cq_get_property_types() as $pkey => $plabel): ?>
-                            <h3><?php echo esc_html($plabel); ?></h3>
-                            <div class="osl-cq-grid">
-                                <?php foreach (osl_cq_get_fee_fields($type, $pkey) as $fkey => $flabel):
-                                    $flat = osl_cq_flatten_property_pricing($form_pricing[$type][$pkey] ?? array());
-                                    $val = $flat[$fkey] ?? '';
-                                ?>
-                                    <div class="osl-cq-field">
-                                        <label><?php echo esc_html($flabel); ?></label>
-                                        <?php if ($fkey === 'professional_fee_discount'): ?>
-                                            <select name="pricing[<?php echo esc_attr($type); ?>][<?php echo esc_attr($pkey); ?>][<?php echo esc_attr($fkey); ?>]">
-                                                <option value="" <?php selected($val, ''); ?>>None</option>
-                                                <option value="fixed" <?php selected($val, 'fixed'); ?>>Fixed ($)</option>
-                                                <option value="percentage" <?php selected($val, 'percentage'); ?>>Percentage (%)</option>
-                                            </select>
-                                        <?php else: ?>
-                                            <input type="number" step="0.01" name="pricing[<?php echo esc_attr($type); ?>][<?php echo esc_attr($pkey); ?>][<?php echo esc_attr($fkey); ?>]" value="<?php echo esc_attr($val); ?>">
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php $type = 'purchase'; ?>
+                    <h3>Purchasing Council Disbursements</h3>
+                    <?php foreach (osl_cq_get_property_types() as $pkey => $plabel): ?>
+                        <h3><?php echo esc_html($plabel); ?></h3>
+                        <div class="osl-cq-grid">
+                            <?php foreach (osl_cq_get_council_fee_fields($type, $pkey) as $fkey => $flabel):
+                                $flat = osl_cq_flatten_property_pricing($form_pricing[$type][$pkey] ?? array());
+                                $val = $flat[$fkey] ?? '';
+                            ?>
+                                <div class="osl-cq-field">
+                                    <label><?php echo esc_html($flabel); ?></label>
+                                    <input type="number" step="0.01" name="pricing[<?php echo esc_attr($type); ?>][<?php echo esc_attr($pkey); ?>][<?php echo esc_attr($fkey); ?>]" value="<?php echo esc_attr($val); ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
 
@@ -396,47 +385,50 @@ function osl_cq_get_property_types() {
     );
 }
 
-function osl_cq_get_fee_fields($type, $property_type) {
+function osl_cq_get_default_fee_fields($type, $property_type) {
     $type = osl_cq_normalize_transaction_type($type);
 
-    $fields = array(
+    if ($type === 'purchase') {
+        return array(
+            'professional_fee' => 'Professional Fee',
+            'title_search' => 'Title Search',
+            'registered_plan' => 'Registered Plan',
+            'land_tax' => 'Land Tax',
+            'identity_check' => 'Identity Check',
+        );
+    }
+
+    return array(
         'professional_fee' => 'Professional Fee',
-        'professional_fee_discount' => 'Professional Fee Discount',
-        'discount_amount' => 'Discount Amount',
+        'title_search' => 'Title Search',
+        'identity_check' => 'Identity Check',
     );
+}
+
+function osl_cq_get_council_fee_fields($type, $property_type) {
+    $type = osl_cq_normalize_transaction_type($type);
+
+    if ($type !== 'purchase') {
+        return array();
+    }
+
+    return array(
+        'rates_search' => 'Council Rates Search',
+        'water_meter_reading' => 'Council Water Meter Reading',
+    );
+}
+
+function osl_cq_get_quote_fee_fields($type, $property_type) {
+    $type = osl_cq_normalize_transaction_type($type);
+    $fields = osl_cq_get_default_fee_fields($type, $property_type);
 
     if ($type === 'purchase') {
-        $fields['title_search'] = 'Title Search';
-        $fields['registered_plan'] = 'Registered Plan';
-        $fields['rates_search'] = 'Rates Search';
-
-        if ($property_type === 'house') {
-            $fields['water_meter_reading'] = 'Water Meter Reading';
-            $fields['land_tax'] = 'Land Tax';
-            $fields['final_title_search'] = 'Final Title Search';
-            $fields['identity_check'] = 'Identity Check';
-        } elseif ($property_type === 'unit_townhouse_duplex') {
-            $fields['water_meter_reading'] = 'Water Meter Reading';
-            $fields['information_certificate'] = 'Body Corporate Levies Certificate';
-            $fields['body_corporate_insurance'] = 'Body Corporate Insurance';
-            $fields['community_title_cms'] = 'Community Title CMS';
-            $fields['cms'] = 'CMS';
-            $fields['bc_insurance_cert'] = 'BC Insurance Certificate';
-            $fields['land_tax'] = 'Land Tax';
-            $fields['final_title_search'] = 'Final Title Search';
-            $fields['identity_check'] = 'Identity Check';
-        } elseif ($property_type === 'land') {
-            $fields['water_meter_reading'] = 'Water Meter Reading';
-            $fields['land_tax'] = 'Land Tax';
-            $fields['identity_check'] = 'Identity Check';
-            $fields['agent_fee'] = 'Agent Fee';
-        }
-    } else {
-        $fields['title_search'] = 'Title Search';
-        $fields['identity_check'] = 'Identity Check';
-        $fields['agent_fee'] = 'Agent Fee';
-        $fields['seller_disclosure'] = 'Seller Disclosure';
+        $fields = array_merge($fields, osl_cq_get_council_fee_fields($type, $property_type));
     }
 
     return $fields;
+}
+
+function osl_cq_get_fee_fields($type, $property_type) {
+    return osl_cq_get_default_fee_fields($type, $property_type);
 }

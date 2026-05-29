@@ -52,73 +52,41 @@ function osl_cq_get_default_pricing() {
         'purchasing' => array(
             'house' => array(
                 'professional_fee' => 1210,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'registered_plan' => 45.78,
-                'rates_search' => 212.55,
-                'water_meter_reading' => 0,
                 'land_tax' => 41.90,
-                'final_title_search' => 43.47,
                 'identity_check' => 19.90,
             ),
             'unit_townhouse_duplex' => array(
                 'professional_fee' => 1210,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'registered_plan' => 45.78,
-                'rates_search' => 212.55,
-                'water_meter_reading' => 0,
-                'information_certificate' => 71.75,
-                'body_corporate_insurance' => 45.00,
-                'community_title_cms' => 73.00,
-                'cms' => 8.19,
-                'bc_insurance_cert' => 56.78,
                 'land_tax' => 41.90,
-                'final_title_search' => 43.47,
                 'identity_check' => 19.90,
             ),
             'land' => array(
                 'professional_fee' => 1210,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'registered_plan' => 45.78,
-                'rates_search' => 212.55,
-                'water_meter_reading' => 0,
                 'land_tax' => 41.90,
                 'identity_check' => 19.90,
-                'agent_fee' => 80.00,
             ),
         ),
         'selling' => array(
             'house' => array(
                 'professional_fee' => 1089,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'identity_check' => 19.90,
-                'agent_fee' => 80.00,
-                'seller_disclosure' => 650.00,
             ),
             'unit_townhouse_duplex' => array(
                 'professional_fee' => 1089,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'identity_check' => 19.90,
-                'agent_fee' => 80.00,
-                'seller_disclosure' => 650.00,
             ),
             'land' => array(
                 'professional_fee' => 1089,
-                'professional_fee_discount' => '',
-                'discount_amount' => 0,
                 'title_search' => 43.47,
                 'identity_check' => 19.90,
-                'agent_fee' => 80.00,
-                'seller_disclosure' => 650.00,
             ),
         ),
     );
@@ -158,8 +126,6 @@ function osl_cq_legacy_transaction_type($type) {
 function osl_cq_normalize_property_pricing($fields) {
     $normalized = array(
         'professional_fee' => isset($fields['professional_fee']) ? floatval($fields['professional_fee']) : 0,
-        'professional_fee_discount' => isset($fields['professional_fee_discount']) ? sanitize_text_field($fields['professional_fee_discount']) : '',
-        'discount_amount' => isset($fields['discount_amount']) ? floatval($fields['discount_amount']) : 0,
         'disbursements' => array(),
     );
 
@@ -179,11 +145,25 @@ function osl_cq_normalize_property_pricing($fields) {
     return $normalized;
 }
 
+function osl_cq_normalize_council_property_pricing($fields) {
+    $normalized = array(
+        'disbursements' => array(),
+    );
+
+    foreach (array('rates_search', 'water_meter_reading') as $field_key) {
+        if (isset($fields['disbursements']) && is_array($fields['disbursements']) && array_key_exists($field_key, $fields['disbursements'])) {
+            $normalized['disbursements'][$field_key] = floatval($fields['disbursements'][$field_key]);
+        } elseif (array_key_exists($field_key, (array) $fields)) {
+            $normalized['disbursements'][$field_key] = floatval($fields[$field_key]);
+        }
+    }
+
+    return $normalized;
+}
+
 function osl_cq_flatten_property_pricing($fields) {
     $flat = array(
         'professional_fee' => $fields['professional_fee'] ?? 0,
-        'professional_fee_discount' => $fields['professional_fee_discount'] ?? '',
-        'discount_amount' => $fields['discount_amount'] ?? 0,
     );
 
     if (!empty($fields['disbursements']) && is_array($fields['disbursements'])) {
@@ -202,39 +182,43 @@ function osl_cq_convert_flat_pricing_to_nested($flat_pricing) {
             continue;
         }
         foreach ($flat_pricing[$source_type] as $property_type => $fields) {
-            $nested[$target_type][$property_type] = osl_cq_normalize_property_pricing($fields);
+            $nested[$target_type][$property_type] = array(
+                'professional_fee' => 0,
+                'disbursements' => array(),
+            );
+            foreach (osl_cq_get_default_fee_fields($target_type, $property_type) as $field_key => $field_label) {
+                if ($field_key === 'professional_fee') {
+                    $nested[$target_type][$property_type]['professional_fee'] = isset($fields['professional_fee']) ? floatval($fields['professional_fee']) : 0;
+                    continue;
+                }
+                if (isset($fields['disbursements']) && is_array($fields['disbursements']) && array_key_exists($field_key, $fields['disbursements'])) {
+                    $nested[$target_type][$property_type]['disbursements'][$field_key] = floatval($fields['disbursements'][$field_key]);
+                } elseif (array_key_exists($field_key, (array) $fields)) {
+                    $nested[$target_type][$property_type]['disbursements'][$field_key] = floatval($fields[$field_key]);
+                } else {
+                    $nested[$target_type][$property_type]['disbursements'][$field_key] = 0;
+                }
+            }
+        }
+    }
+    return $nested;
+}
+
+function osl_cq_convert_flat_council_pricing_to_nested($flat_pricing) {
+    $nested = array();
+    foreach (array('purchasing' => 'purchase', 'purchase' => 'purchase') as $source_type => $target_type) {
+        if (empty($flat_pricing[$source_type]) || !is_array($flat_pricing[$source_type])) {
+            continue;
+        }
+        foreach ($flat_pricing[$source_type] as $property_type => $fields) {
+            $nested[$target_type][$property_type] = osl_cq_normalize_council_property_pricing($fields);
         }
     }
     return $nested;
 }
 
 function osl_cq_merge_legacy_override_into_default($default_pricing, $override_pricing) {
-    $merged = $default_pricing;
-    foreach ((array) $override_pricing as $type => $property_types) {
-        $target_type = osl_cq_normalize_transaction_type($type);
-        foreach ((array) $property_types as $property_type => $fields) {
-            if (empty($merged[$target_type][$property_type])) {
-                $merged[$target_type][$property_type] = array(
-                    'professional_fee' => 0,
-                    'professional_fee_discount' => '',
-                    'discount_amount' => 0,
-                    'disbursements' => array(),
-                );
-            }
-            foreach ((array) $fields as $field_key => $field_value) {
-                if (in_array($field_key, array('professional_fee', 'professional_fee_discount', 'discount_amount'), true)) {
-                    $merged[$target_type][$property_type][$field_key] = $field_key === 'professional_fee_discount' ? sanitize_text_field($field_value) : floatval($field_value);
-                } elseif ($field_key === 'disbursements' && is_array($field_value)) {
-                    foreach ($field_value as $disbursement_key => $disbursement_value) {
-                        $merged[$target_type][$property_type]['disbursements'][$disbursement_key] = floatval($disbursement_value);
-                    }
-                } else {
-                    $merged[$target_type][$property_type]['disbursements'][$field_key] = floatval($field_value);
-                }
-            }
-        }
-    }
-    return $merged;
+    return osl_cq_convert_flat_council_pricing_to_nested($override_pricing);
 }
 
 function osl_cq_get_default_pricing_structure() {
@@ -377,16 +361,22 @@ function osl_cq_get_pricing_data($council_key, $state = 'QLD') {
 }
 
 function osl_cq_get_price($council_key, $type, $property_type, $fee_key) {
-    $data = osl_cq_get_pricing_data($council_key, osl_cq_get_default_council_state());
-    if ($data === false) {
+    $pricing = osl_cq_get_pricing();
+    $state = osl_cq_get_default_council_state();
+    if (empty($pricing['states'][$state])) {
         return 0;
     }
 
     $type = osl_cq_normalize_transaction_type($type);
-    $property_pricing = $data[$type][$property_type] ?? array();
+    $is_council_field = ($type === 'purchase' && in_array($fee_key, array('rates_search', 'water_meter_reading'), true));
+    $source = $is_council_field
+        ? ($pricing['states'][$state]['councils'][$council_key] ?? array())
+        : ($pricing['states'][$state]['default'] ?? array());
 
-    if (in_array($fee_key, array('professional_fee', 'professional_fee_discount', 'discount_amount'), true)) {
-        return $property_pricing[$fee_key] ?? ($fee_key === 'professional_fee_discount' ? '' : 0);
+    $property_pricing = $source[$type][$property_type] ?? array();
+
+    if ($fee_key === 'professional_fee') {
+        return $property_pricing['professional_fee'] ?? 0;
     }
 
     return $property_pricing['disbursements'][$fee_key] ?? 0;
