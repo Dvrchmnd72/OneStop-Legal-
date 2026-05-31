@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onestoplegal.com.au/sitemap.xml
+Sitemap: https://onestoplegal.com.au/conveyancing-sitemap.xml

@@ -1,0 +1,51 @@
+
+# OneStop SEO: redirect quote URL to conveyancing quote page
+Redirect 301 /quotes/ https://onestoplegal.com.au/conveyancing/
+
+<IfModule mod_headers.c>
+  <FilesMatch "conveyancing-sitemap\.xml$">
+    Header set Content-Type "application/xml"
+  </FilesMatch>
+</IfModule>
+
+
+RewriteRule ^conveyancing-sitemap\.xml$ - [L,T=application/xml]
+
+
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+# BEGIN Cache Busting
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+  Header set Pragma "no-cache"
+  Header set Expires 0
+</IfModule>
+# END Cache Busting
+
+# 301 Redirects for 404 fixes - March 2026
+Redirect 301 /glossary/arbitration/ https://onestoplegal.com.au/newsfacts/
+Redirect 301 /glossary/forfeiture-of-the-deposit/ https://onestoplegal.com.au/newsfacts/
+Redirect 301 /glossary/affirmation-of-a-contract/ https://onestoplegal.com.au/newsfacts/
+Redirect 301 /blog/testimonial/john-mayers-work-accident/ https://onestoplegal.com.au/newsfacts/
+Redirect 301 /blog/slide/slide-1/ https://onestoplegal.com.au/
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “alt-php83” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-alt-php83 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
