@@ -52,12 +52,61 @@ jQuery(document).ready(function($) {
         } catch (e) {}
     }
 
-    function oslCqLogEvent(eventName, params) {
+    function oslCqEncodePayload(payload) {
+        var pairs = [];
+
+        $.each(payload || {}, function(key, value) {
+            if (value === undefined || value === null) {
+                return;
+            }
+
+            if (typeof value === 'object') {
+                value = JSON.stringify(value);
+            }
+
+            pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+        });
+
+        return pairs.join('&');
+    }
+
+    function oslCqLogEvent(eventName, params, preserveDuringNavigation) {
         var payload = $.extend({}, oslCqFormContext(), lastQuoteData, params || {}, {
             action: 'osl_cq_log_event',
             nonce: OslCQ.nonce,
             event_name: eventName
         });
+
+        if (preserveDuringNavigation) {
+            var encodedPayload = oslCqEncodePayload(payload);
+
+            try {
+                if (window.navigator && typeof window.navigator.sendBeacon === 'function') {
+                    var beaconPayload = new Blob([encodedPayload], {
+                        type: 'application/x-www-form-urlencoded;charset=UTF-8'
+                    });
+
+                    if (window.navigator.sendBeacon(OslCQ.ajaxurl, beaconPayload)) {
+                        return;
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                if (window.fetch) {
+                    window.fetch(OslCQ.ajaxurl, {
+                        method: 'POST',
+                        body: encodedPayload,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        credentials: 'same-origin',
+                        keepalive: true
+                    }).catch(function() {});
+                    return;
+                }
+            } catch (e) {}
+        }
 
         $.ajax({
             type: 'POST',
@@ -219,7 +268,7 @@ jQuery(document).ready(function($) {
             link_url: this.href || ''
         }));
         oslCqTrack('quote_contact_clicked', payload);
-        oslCqLogEvent('quote_contact_clicked', payload);
+        oslCqLogEvent('quote_contact_clicked', payload, true);
     });
 
     $(document).on('click', '.osl-cq-result-email, #osl-cq-result a[href^="mailto:"]', function() {
@@ -230,7 +279,7 @@ jQuery(document).ready(function($) {
             email: email
         }));
         oslCqTrack('quote_email_clicked', payload);
-        oslCqLogEvent('quote_email_clicked', payload);
+        oslCqLogEvent('quote_email_clicked', payload, true);
     });
 
     $(document).on('click', '.osl-cq-result-phone, #osl-cq-result a[href^="tel:"]', function() {
@@ -241,7 +290,7 @@ jQuery(document).ready(function($) {
             phone: phone
         }));
         oslCqTrack('quote_phone_clicked', payload);
-        oslCqLogEvent('quote_phone_clicked', payload);
+        oslCqLogEvent('quote_phone_clicked', payload, true);
     });
 
     $(document).on('click', '.osl-cq-print-quote', function(e) {
