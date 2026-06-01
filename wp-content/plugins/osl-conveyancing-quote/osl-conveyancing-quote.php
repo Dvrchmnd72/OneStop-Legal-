@@ -8,11 +8,12 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('OSL_CQ_VERSION', '1.2.2-osl-labels2');
+define('OSL_CQ_VERSION', '1.2.3-tracking');
 define('OSL_CQ_PATH', plugin_dir_path(__FILE__));
 define('OSL_CQ_URL', plugin_dir_url(__FILE__));
 
 // Include files
+require_once OSL_CQ_PATH . 'includes/activity-logger.php';
 require_once OSL_CQ_PATH . 'includes/admin-pricing.php';
 require_once OSL_CQ_PATH . 'includes/quote-engine.php';
 require_once OSL_CQ_PATH . 'includes/ajax-handlers.php';
@@ -27,6 +28,8 @@ add_action('wp_enqueue_scripts', function() {
         wp_localize_script('osl-cq-script', 'OslCQ', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce'   => wp_create_nonce('osl_cq_nonce'),
+            'pageUrl' => get_permalink(get_queried_object_id()) ?: home_url(add_query_arg(array(), $GLOBALS['wp']->request ?? '')),
+            'pagePath' => wp_parse_url(get_permalink(get_queried_object_id()) ?: home_url(add_query_arg(array(), $GLOBALS['wp']->request ?? '')), PHP_URL_PATH),
         ));
     }
 });
@@ -37,6 +40,7 @@ add_shortcode('osl_quote_form', 'osl_cq_render_form');
 // Activation/load: ensure default state/council pricing exists and migrate legacy options.
 register_activation_hook(__FILE__, 'osl_cq_activate');
 function osl_cq_activate() {
+    osl_cq_install_events_table();
     osl_cq_migrate_pricing_options();
     if (!get_option('osl_cq_councils')) {
         update_option('osl_cq_councils', osl_cq_get_default_councils());

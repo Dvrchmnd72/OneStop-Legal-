@@ -3,6 +3,44 @@ if (!defined('ABSPATH')) exit;
 
 add_action('wp_ajax_osl_cq_calculate', 'osl_cq_calculate');
 add_action('wp_ajax_nopriv_osl_cq_calculate', 'osl_cq_calculate');
+add_action('wp_ajax_osl_cq_log_event', 'osl_cq_log_event_ajax');
+add_action('wp_ajax_nopriv_osl_cq_log_event', 'osl_cq_log_event_ajax');
+
+
+function osl_cq_log_event_ajax() {
+    check_ajax_referer('osl_cq_nonce', 'nonce');
+
+    $event_name = sanitize_key($_POST['event_name'] ?? '');
+    $allowed_events = array(
+        'quote_page_cta_clicked',
+        'quote_email_clicked',
+        'quote_contact_clicked',
+        'quote_phone_clicked',
+        'quote_download_clicked',
+    );
+
+    if (!in_array($event_name, $allowed_events, true)) {
+        wp_send_json_error(array('message' => 'Invalid event.'));
+    }
+
+    $context = osl_cq_collect_tracking_context($_POST);
+    $data = array_merge($context, array(
+        'transaction_type' => sanitize_text_field($_POST['transaction_type'] ?? ''),
+        'property_type' => sanitize_text_field($_POST['property_type'] ?? ''),
+        'council' => sanitize_text_field($_POST['council'] ?? ''),
+        'quote_total' => isset($_POST['quote_total']) ? floatval($_POST['quote_total']) : null,
+        'quote_total_band' => sanitize_text_field($_POST['quote_total_band'] ?? ''),
+        'email' => sanitize_email($_POST['email'] ?? ''),
+        'phone' => sanitize_text_field($_POST['phone'] ?? ''),
+        'extra' => array(
+            'cta_location' => sanitize_text_field($_POST['cta_location'] ?? ''),
+            'link_url' => esc_url_raw($_POST['link_url'] ?? ''),
+        ),
+    ));
+
+    osl_cq_log_quote_event($event_name, $data);
+    wp_send_json_success(array('message' => 'logged'));
+}
 
 function osl_cq_calculate() {
     check_ajax_referer('osl_cq_nonce', 'nonce');
@@ -10,6 +48,7 @@ function osl_cq_calculate() {
     $type = sanitize_text_field($_POST['property_for'] ?? 'purchasing');
     $council_key = sanitize_text_field($_POST['council'] ?? '');
     $property_type = sanitize_text_field($_POST['property_type'] ?? 'house');
+    $tracking_context = osl_cq_collect_tracking_context($_POST);
 
     if (osl_cq_get_pricing_data($council_key, osl_cq_get_default_council_state()) === false) {
         wp_send_json_error(array('message' => 'Pricing is not available for this state.'));
@@ -59,6 +98,12 @@ function osl_cq_calculate() {
     $html .= '<div class="osl-cq-summary-header"><h4>DISBURSEMENTS</h4></div>';
     $html .= '<table class="osl-cq-summary-table">' . $disb_html . $council_html . '</table>';
     $html .= '<div class="osl-cq-summary-total"><table><tr><td><h3>TOTAL</h3></td><td><h3>$' . number_format($total, 2) . '</h3></td></tr></table></div>';
+    $html .= '<div class="osl-cq-result-actions" data-cta-location="quote_result">';
+    $html .= '<a class="osl-cq-contact-btn osl-cq-result-contact" href="/contact/">Contact OneStop Legal</a>';
+    $html .= '<a class="osl-cq-contact-btn osl-cq-result-email" href="mailto:info@onestoplegal.com.au">Email Us</a>';
+    $html .= '<a class="osl-cq-contact-btn osl-cq-result-phone" href="tel:+61755129827">Call 07 5512 9827</a>';
+    $html .= '<button type="button" class="osl-cq-contact-btn osl-cq-print-quote">Print / Save Quote</button>';
+    $html .= '</div>';
     $html .= '</div>';
     $html .= '<div class="osl-cq-summary-right"><div class="osl-cq-summary-header"><h4>OPTIONAL SERVICES</h4></div>';
     $html .= '<table class="osl-cq-summary-table osl-cq-optional">';
@@ -69,7 +114,23 @@ function osl_cq_calculate() {
     $html .= '</div></div>';
     $html .= '</div>';
 
-    wp_send_json_success(array('html' => $html));
+    osl_cq_log_quote_event('quote_generated', array_merge($tracking_context, array(
+        'transaction_type' => osl_cq_normalize_transaction_type($type),
+        'property_type' => $property_type,
+        'council' => $council_name,
+        'quote_total' => $total,
+        'quote_total_band' => osl_cq_quote_total_band($total),
+    )));
+
+    wp_send_json_success(array(
+        'html' => $html,
+        'quote_total' => round($total, 2),
+        'quote_total_band' => osl_cq_quote_total_band($total),
+        'transaction_type' => osl_cq_normalize_transaction_type($type),
+        'property_type' => $property_type,
+        'council' => $council_name,
+        'suburb' => $tracking_context['suburb'] ?? '',
+    ));
 }
 
 add_action('wp_ajax_osl_cq_unlock', 'osl_cq_unlock');
@@ -88,6 +149,13 @@ function osl_cq_unlock() {
 
     // Save the lead
     osl_cq_save_lead($email, $type, $council_key, $property_type);
+    $unlock_tracking_context = osl_cq_collect_tracking_context($_POST);
+    osl_cq_log_quote_event('quote_email_clicked', array_merge($unlock_tracking_context, array(
+        'transaction_type' => osl_cq_normalize_transaction_type($type),
+        'property_type' => $property_type,
+        'council' => osl_cq_get_council_name($council_key),
+        'email' => $email,
+    )));
 
     // Build and send the quote email
     if (osl_cq_get_pricing_data($council_key, osl_cq_get_default_council_state()) === false) {

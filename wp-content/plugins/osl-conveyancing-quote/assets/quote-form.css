@@ -637,3 +637,19 @@ body #top .osl-cq-wrapper .osl-cq-summary-total td + td,
 body .osl-cq-wrapper .osl-cq-summary-total td + td {
     text-align: right !important;
 }
+
+/* Quote result actions */
+.osl-cq-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.osl-cq-result-actions .osl-cq-contact-btn {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.2;
+}
