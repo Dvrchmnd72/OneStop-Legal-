@@ -40,6 +40,14 @@ get_header();
 .gc-suburbs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1000px;margin:0 auto}
 .gc-suburb-link{display:block;padding:12px 18px;background:#fff;border-radius:8px;text-decoration:none;color:#0d1b3e;font-family:'League Spartan',sans-serif;font-size:14px;font-weight:600;text-align:center;transition:all .3s;border:1px solid #e0ddd5}
 .gc-suburb-link:hover{background:#a6842e;color:#0d1b3e;border-color:#a6842e;text-decoration:none;transform:translateY(-2px)}
+.gc-local{padding:65px 0;background:#fff}
+.gc-local .section-title{text-align:center;margin-bottom:30px}
+.gc-local .section-title h2{font-family:'League Spartan',sans-serif;font-size:32px;font-weight:800;color:#0d1b3e;margin-bottom:10px}
+.gc-local .section-title p{font-size:17px;color:#555;max-width:760px;margin:0 auto;line-height:1.7}
+.gc-local-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:980px;margin:0 auto}
+.gc-local-card{background:#f8f6f0;border-radius:12px;padding:28px;border:1px solid #e8e1d2}
+.gc-local-card h3{font-family:'League Spartan',sans-serif;font-size:21px;font-weight:800;color:#0d1b3e;margin:0 0 10px}
+.gc-local-card p{font-size:16px;line-height:1.7;color:#555;margin:0}
 .gc-cta{padding:70px 0;background:linear-gradient(135deg,#0d1b3e 0%,#1a2a4a 100%);text-align:center}
 .gc-cta h2{font-family:'League Spartan',sans-serif;font-size:36px;font-weight:800;color:#fff;margin-bottom:15px}
 .gc-cta p{font-size:18px;color:rgba(255,255,255,.85);margin-bottom:35px;max-width:600px;margin-left:auto;margin-right:auto}
@@ -49,7 +57,7 @@ get_header();
 .gc-cta .btn-outline{background:transparent;color:#fff;padding:18px 44px;border-radius:8px;border:2px solid rgba(255,255,255,.4);text-decoration:none;font-size:18px;font-weight:700;font-family:'League Spartan',sans-serif;transition:all .3s;display:inline-flex;align-items:center;gap:10px}
 .gc-cta .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1);color:#fff;text-decoration:none}
 @media(max-width:992px){.gc-hero h1{font-size:40px}.gc-why-grid{grid-template-columns:1fr 1fr}.gc-suburbs-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.gc-hero{padding:55px 0}.gc-hero h1{font-size:30px}.gc-hero .hero-buttons{flex-direction:column;align-items:center}.gc-hero .hero-cta,.gc-hero .hero-cta-secondary{width:100%;max-width:320px;justify-content:center}.gc-trust-items{gap:12px}.gc-trust-item{font-size:13px}.gc-why,.gc-suburbs{padding:50px 0}.gc-why .section-title h2,.gc-suburbs .section-title h2,.gc-cta h2{font-size:26px}.gc-why-grid{grid-template-columns:1fr}.gc-suburbs-grid{grid-template-columns:repeat(2,1fr)}.gc-suburb-link{font-size:13px;padding:10px 12px}.gc-cta-buttons{flex-direction:column;align-items:center}.gc-cta .btn-gold,.gc-cta .btn-outline{width:100%;max-width:320px;justify-content:center}}
+@media(max-width:600px){.gc-hero{padding:55px 0}.gc-hero h1{font-size:30px}.gc-hero .hero-buttons{flex-direction:column;align-items:center}.gc-hero .hero-cta,.gc-hero .hero-cta-secondary{width:100%;max-width:320px;justify-content:center}.gc-trust-items{gap:12px}.gc-trust-item{font-size:13px}.gc-why,.gc-suburbs,.gc-local{padding:50px 0}.gc-why .section-title h2,.gc-suburbs .section-title h2,.gc-local .section-title h2,.gc-cta h2{font-size:26px}.gc-why-grid,.gc-local-grid{grid-template-columns:1fr}.gc-suburbs-grid{grid-template-columns:repeat(2,1fr)}.gc-suburb-link{font-size:13px;padding:10px 12px}.gc-cta-buttons{flex-direction:column;align-items:center}.gc-cta .btn-gold,.gc-cta .btn-outline{width:100%;max-width:320px;justify-content:center}}
 </style>
 
 <!-- HERO -->
@@ -96,6 +104,35 @@ get_header();
         <div class="gc-why-icon">⚡</div>
         <h3>Fast Turnaround</h3>
         <p>We respond quickly, keep you updated, and coordinate settlement efficiently via PEXA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- LOCAL PROCESS -->
+<section class="gc-local">
+  <div class="gc-container">
+    <div class="section-title">
+      <h2>Gold Coast conveyancing for buyers and sellers</h2>
+      <p>We support Gold Coast property transactions with solicitor-led conveyancing, fixed-fee pricing, and electronic settlement coordination for suburbs from Coomera and Hope Island through to Southport, Broadbeach, Burleigh Heads, Palm Beach, and Coolangatta.</p>
+    </div>
+    <div class="gc-local-grid">
+      <div class="gc-local-card">
+        <h3>Buying on the Gold Coast</h3>
+        <p>For purchasers, our team helps with contract review, key dates, searches, transfer documents, lender coordination, and PEXA settlement steps so you know what needs to happen before settlement day.</p>
+      </div>
+      <div class="gc-local-card">
+        <h3>Selling Gold Coast property</h3>
+        <p>For sellers, we assist with contract and disclosure requirements, discharge of mortgage coordination, buyer solicitor queries, settlement adjustments, and electronic settlement through PEXA.</p>
+      </div>
+      <div class="gc-local-card">
+        <h3>Transparent fixed-fee quotes</h3>
+        <p>Start with an instant quote to understand your conveyancing costs upfront. We keep pricing clear for common buying and selling scenarios, with no hidden hourly billing surprises.</p>
+      </div>
+      <div class="gc-local-card">
+        <h3>Local suburbs serviced</h3>
+        <p>OneStop Legal services clients across the Gold Coast, including Robina, Varsity Lakes, Mermaid Beach, Miami, Nerang, Helensvale, Pacific Pines, Carrara, Elanora, Tugun, and surrounding suburbs.</p>
       </div>
     </div>
   </div>

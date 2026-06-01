@@ -134,7 +134,15 @@ $region_phone = '+61 7 3156 1216';
 
 <section class="rc-content">
   <div class="rc-container" style="max-width:900px">
-    <?php while (have_posts()) : the_post(); the_content(); endwhile; ?>
+    <?php
+    while (have_posts()) :
+        the_post();
+        $region_content = apply_filters('the_content', get_the_content());
+        $region_content = preg_replace('/<h1(\s[^>]*)?>/i', '<h2$1>', $region_content);
+        $region_content = preg_replace('/<\/h1>/i', '</h2>', $region_content);
+        echo $region_content;
+    endwhile;
+    ?>
   </div>
 </section>
 
