@@ -75,6 +75,9 @@ function osl_custom_seo_meta() {
         if (empty($description)) {
             $description = get_post_meta($post_id, '_aioseo_description', true);
         }
+        if (empty($description) && is_page('conveyancing-quote')) {
+            $description = 'Get an instant fixed-fee conveyancing quote from OneStop Legal. Transparent pricing for buying or selling property in Queensland, with solicitor-led support and no hidden costs.';
+        }
         
         $seo_title = get_post_meta($post_id, '_osl_seo_title', true);
         if (empty($seo_title)) {
