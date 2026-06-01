@@ -36,6 +36,14 @@ add_action('admin_menu', function() {
         'osl-cq-councils',
         'osl_cq_councils_page'
     );
+    add_submenu_page(
+        'osl-cq-pricing',
+        'Quote Activity',
+        'Quote Activity',
+        'manage_options',
+        'osl-cq-activity',
+        'osl_cq_activity_page'
+    );
 });
 
 // Admin styles
@@ -435,4 +443,95 @@ function osl_cq_get_quote_fee_fields($type, $property_type) {
 
 function osl_cq_get_fee_fields($type, $property_type) {
     return osl_cq_get_default_fee_fields($type, $property_type);
+}
+
+
+// ============================================
+// QUOTE ACTIVITY PAGE
+// ============================================
+function osl_cq_activity_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    osl_cq_maybe_install_events_table();
+
+    $per_page = 100;
+    $paged = max(1, absint($_GET['paged'] ?? 1));
+    $offset = ($paged - 1) * $per_page;
+    $events = osl_cq_get_recent_quote_events($per_page, $offset);
+    $total = osl_cq_count_quote_events();
+    $total_pages = max(1, (int) ceil($total / $per_page));
+    ?>
+    <div class="wrap osl-cq-wrap">
+        <h1>Quote Activity</h1>
+        <p>Recent conveyancing quote generation and quote-result CTA events. Showing up to <?php echo esc_html($per_page); ?> records per page.</p>
+
+        <table class="widefat striped">
+            <thead>
+                <tr>
+                    <th>Date/time</th>
+                    <th>Event</th>
+                    <th>Transaction type</th>
+                    <th>Property type</th>
+                    <th>Council</th>
+                    <th>Suburb / page path</th>
+                    <th>Quote total / band</th>
+                    <th>Source / medium / campaign</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($events)): ?>
+                    <tr><td colspan="8">No quote activity has been logged yet.</td></tr>
+                <?php else: ?>
+                    <?php foreach ($events as $event): ?>
+                        <tr>
+                            <td><?php echo esc_html($event['created_at']); ?></td>
+                            <td><?php echo esc_html($event['event_name']); ?></td>
+                            <td><?php echo esc_html($event['transaction_type']); ?></td>
+                            <td><?php echo esc_html($event['property_type']); ?></td>
+                            <td><?php echo esc_html($event['council']); ?></td>
+                            <td>
+                                <?php if (!empty($event['suburb'])): ?>
+                                    <strong><?php echo esc_html($event['suburb']); ?></strong><br>
+                                <?php endif; ?>
+                                <span class="osl-cq-muted"><?php echo esc_html($event['page_path']); ?></span>
+                            </td>
+                            <td>
+                                <?php
+                                if ($event['quote_total'] !== null && $event['quote_total'] !== '') {
+                                    echo esc_html('$' . number_format((float) $event['quote_total'], 2));
+                                }
+                                if (!empty($event['quote_total_band'])) {
+                                    echo '<br><span class="osl-cq-muted">' . esc_html($event['quote_total_band']) . '</span>';
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo esc_html(trim(($event['utm_source'] ?: '—') . ' / ' . ($event['utm_medium'] ?: '—') . ' / ' . ($event['utm_campaign'] ?: '—'))); ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+        <?php if ($total_pages > 1): ?>
+            <div class="tablenav bottom">
+                <div class="tablenav-pages">
+                    <?php
+                    echo paginate_links(array(
+                        'base' => add_query_arg('paged', '%#%'),
+                        'format' => '',
+                        'prev_text' => '&laquo;',
+                        'next_text' => '&raquo;',
+                        'total' => $total_pages,
+                        'current' => $paged,
+                    ));
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
 }

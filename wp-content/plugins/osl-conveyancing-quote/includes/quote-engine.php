@@ -15,7 +15,7 @@ function osl_cq_render_form($atts) {
 
     ob_start();
     ?>
-    <div class="osl-cq-wrapper" id="osl-cq-wrapper">
+    <div class="osl-cq-wrapper" id="osl-cq-wrapper" data-suburb="<?php echo esc_attr($suburb_name); ?>" data-page-path="<?php echo esc_attr(wp_parse_url(get_permalink(), PHP_URL_PATH)); ?>">
         <div class="osl-cq-form-container">
             <div class="osl-cq-form-header">
                 <div class="osl-cq-logo">

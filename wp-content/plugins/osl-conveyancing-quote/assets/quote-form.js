@@ -1,20 +1,101 @@
 jQuery(document).ready(function($) {
 
     var quoteRequest = null;
+    var quoteStarted = false;
+    var lastQuoteData = {};
+
+    function oslCqGetUrlParam(name) {
+        try {
+            return new URLSearchParams(window.location.search).get(name) || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function oslCqPageContext() {
+        var wrapper = $('#osl-cq-wrapper');
+        return {
+            page_path: (window.location && window.location.pathname) || (OslCQ.pagePath || ''),
+            page_url: (window.location && window.location.href) || (OslCQ.pageUrl || ''),
+            suburb: wrapper.data('suburb') || '',
+            utm_source: oslCqGetUrlParam('utm_source'),
+            utm_medium: oslCqGetUrlParam('utm_medium'),
+            utm_campaign: oslCqGetUrlParam('utm_campaign'),
+            utm_term: oslCqGetUrlParam('utm_term'),
+            utm_content: oslCqGetUrlParam('utm_content'),
+            gclid: oslCqGetUrlParam('gclid'),
+            fbclid: oslCqGetUrlParam('fbclid')
+        };
+    }
+
+    function oslCqFormContext(extra) {
+        return $.extend({}, oslCqPageContext(), {
+            transaction_type: $("input[name='osl_property_for']:checked").val() || '',
+            property_type: $('#osl_property_type').val() || '',
+            council: $('#osl_council option:selected').text().trim() || $('#osl_council').val() || ''
+        }, extra || {});
+    }
+
+    function oslCqTrack(eventName, params) {
+        var payload = $.extend({}, oslCqPageContext(), params || {});
+
+        try {
+            if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+                window.dataLayer.push($.extend({ event: eventName }, payload));
+            }
+        } catch (e) {}
+
+        try {
+            if (window.OSLTracking && typeof window.OSLTracking.pushEvent === 'function') {
+                window.OSLTracking.pushEvent(eventName, payload);
+            }
+        } catch (e) {}
+    }
+
+    function oslCqLogEvent(eventName, params) {
+        var payload = $.extend({}, oslCqFormContext(), lastQuoteData, params || {}, {
+            action: 'osl_cq_log_event',
+            nonce: OslCQ.nonce,
+            event_name: eventName
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: OslCQ.ajaxurl,
+            data: payload,
+            dataType: 'json'
+        }).fail(function() {});
+    }
+
+    function oslCqMarkStarted(ctaLocation) {
+        if (quoteStarted) return;
+        quoteStarted = true;
+        oslCqTrack('quote_started', oslCqFormContext({ cta_location: ctaLocation || 'quote_form' }));
+    }
+
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    }
+
+    // Quote field interaction start tracking.
+    $(document).on('focus change click', "#osl-cq-wrapper input, #osl-cq-wrapper select", function() {
+        oslCqMarkStarted('quote_field');
+    });
 
     // GET QUOTE
     $(document).on('click', '#osl-cq-get-quote', function(e) {
         e.preventDefault();
+        oslCqMarkStarted('get_instant_quote_button');
         if (quoteRequest !== null) quoteRequest.abort();
 
         var btn = $(this);
-        var data = {
+        var data = $.extend({}, oslCqPageContext(), {
             action: 'osl_cq_calculate',
             nonce: OslCQ.nonce,
             property_for: $("input[name='osl_property_for']:checked").val(),
-            council: $("#osl_council").val(),
-            property_type: $("#osl_property_type").val()
-        };
+            council: $('#osl_council').val(),
+            property_type: $('#osl_property_type').val()
+        });
 
         quoteRequest = $.ajax({
             type: 'POST', url: OslCQ.ajaxurl, data: data, dataType: 'json',
@@ -26,6 +107,15 @@ jQuery(document).ready(function($) {
                 btn.html('GET INSTANT QUOTE').prop('disabled', false);
                 if (response.success) {
                     $('#osl-cq-result').html(response.data.html);
+                    lastQuoteData = {
+                        transaction_type: response.data.transaction_type || data.property_for || '',
+                        property_type: response.data.property_type || data.property_type || '',
+                        council: response.data.council || $('#osl_council option:selected').text().trim() || '',
+                        suburb: response.data.suburb || oslCqPageContext().suburb || '',
+                        quote_total: response.data.quote_total || '',
+                        quote_total_band: response.data.quote_total_band || ''
+                    };
+                    oslCqTrack('quote_generated', oslCqFormContext(lastQuoteData));
                     $('html, body').animate({ scrollTop: $('#osl-cq-result').offset().top - ($(window).width() > 767 ? 100 : 10) }, 800);
                 } else {
                     $('#osl-cq-result').html('<div style="color:red;padding:20px;">Error loading quote. Please try again.</div>');
@@ -38,7 +128,7 @@ jQuery(document).ready(function($) {
         });
     });
 
-    // UNLOCK GATE
+    // Optional legacy email quote flow if the email gate markup is present anywhere.
     $(document).on('click', '#osl-cq-unlock-btn', function(e) {
         e.preventDefault();
         var btn = $(this);
@@ -51,14 +141,14 @@ jQuery(document).ready(function($) {
         }
         emailInput.removeClass('osl-cq-error');
 
-        var data = {
+        var data = $.extend({}, oslCqPageContext(), {
             action: 'osl_cq_unlock',
             nonce: OslCQ.nonce,
             email: email,
             property_for: $("input[name='osl_property_for']:checked").val(),
-            council: $("#osl_council").val(),
-            property_type: $("#osl_property_type").val()
-        };
+            council: $('#osl_council').val(),
+            property_type: $('#osl_property_type').val()
+        });
 
         $.ajax({
             type: 'POST', url: OslCQ.ajaxurl, data: data, dataType: 'json',
@@ -67,6 +157,8 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
+                    oslCqTrack('quote_email_clicked', oslCqFormContext($.extend({}, lastQuoteData, { cta_location: 'email_quote_gate', email: email })));
+
                     // 1. Reveal all hidden prices
                     $('.osl-cq-real-price').each(function() {
                         $(this).removeAttr('style');
@@ -85,7 +177,7 @@ jQuery(document).ready(function($) {
                             '<h3 style="color:#2e7d32;margin:0 0 10px 0;">&#10003; Quote Unlocked!</h3>' +
                             '<p style="color:#555;margin:0 0 15px 0;">A copy of this quote has been sent to <strong>' + email + '</strong></p>' +
                             '<p style="color:#555;margin:0 0 15px 0;">One of our conveyancing specialists will be in touch shortly.</p>' +
-                            '<a href="/contact/" class="osl-cq-button" style="display:inline-block;">CONTACT US NOW</a>' +
+                            '<a href="/contact/" class="osl-cq-button osl-cq-result-contact" style="display:inline-block;">CONTACT US NOW</a>' +
                             '</div>'
                         );
                     });
@@ -114,11 +206,49 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.osl-cq-action-box', function(e) {
         e.preventDefault();
         var target = $(this).data('for');
+        var ctaLocation = $(this).data('cta-location') || 'quote_page_action_box';
+        oslCqTrack('quote_page_cta_clicked', oslCqFormContext({ cta_location: ctaLocation, transaction_type: target || '' }));
+        oslCqLogEvent('quote_page_cta_clicked', { cta_location: ctaLocation, transaction_type: target || '' });
         if (target) $("input[name='osl_property_for'][value='" + target + "']").prop('checked', true);
         $('html, body').animate({ scrollTop: $('.osl-cq-form-body').offset().top - ($(window).width() > 767 ? 200 : 10) }, 800);
     });
 
-    function validateEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-    }
+    $(document).on('click', '.osl-cq-result-contact, #osl-cq-result a[href*="/contact"]', function() {
+        var payload = oslCqFormContext($.extend({}, lastQuoteData, {
+            cta_location: 'quote_result',
+            link_url: this.href || ''
+        }));
+        oslCqTrack('quote_contact_clicked', payload);
+        oslCqLogEvent('quote_contact_clicked', payload);
+    });
+
+    $(document).on('click', '.osl-cq-result-email, #osl-cq-result a[href^="mailto:"]', function() {
+        var email = (this.href || '').replace(/^mailto:/i, '').split('?')[0];
+        var payload = oslCqFormContext($.extend({}, lastQuoteData, {
+            cta_location: 'quote_result',
+            link_url: this.href || '',
+            email: email
+        }));
+        oslCqTrack('quote_email_clicked', payload);
+        oslCqLogEvent('quote_email_clicked', payload);
+    });
+
+    $(document).on('click', '.osl-cq-result-phone, #osl-cq-result a[href^="tel:"]', function() {
+        var phone = (this.href || '').replace(/^tel:/i, '');
+        var payload = oslCqFormContext($.extend({}, lastQuoteData, {
+            cta_location: 'quote_result',
+            link_url: this.href || '',
+            phone: phone
+        }));
+        oslCqTrack('quote_phone_clicked', payload);
+        oslCqLogEvent('quote_phone_clicked', payload);
+    });
+
+    $(document).on('click', '.osl-cq-print-quote', function(e) {
+        e.preventDefault();
+        var payload = oslCqFormContext($.extend({}, lastQuoteData, { cta_location: 'quote_result_print_save' }));
+        oslCqTrack('quote_download_clicked', payload);
+        oslCqLogEvent('quote_download_clicked', payload);
+        window.print();
+    });
 });
