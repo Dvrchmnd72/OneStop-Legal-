@@ -219,3 +219,301 @@ function osl_cq_count_quote_events() {
 
     return absint($wpdb->get_var('SELECT COUNT(*) FROM ' . osl_cq_events_table_name()));
 }
+
+
+/**
+ * ONE STOP QUOTE ACTIVITY EXPORT DELETE RETENTION HELPERS
+ */
+
+function osl_cq_quote_activity_allowed_events() {
+    return array(
+        'quote_generated',
+        'quote_email_clicked',
+        'quote_contact_clicked',
+        'quote_phone_clicked',
+        'quote_download_clicked',
+        'quote_page_cta_clicked',
+    );
+}
+
+function osl_cq_sanitize_quote_activity_event_filter($event_name) {
+    $event_name = sanitize_key($event_name);
+    return in_array($event_name, osl_cq_quote_activity_allowed_events(), true) ? $event_name : '';
+}
+
+function osl_cq_quote_activity_retention_options() {
+    return array(
+        'forever' => 'Keep forever',
+        '90'      => '90 days',
+        '180'     => '180 days',
+        '365'     => '365 days',
+    );
+}
+
+function osl_cq_get_quote_activity_retention() {
+    $value = get_option('osl_cq_quote_activity_retention_days', 'forever');
+    return array_key_exists($value, osl_cq_quote_activity_retention_options()) ? $value : 'forever';
+}
+
+function osl_cq_quote_activity_where_sql($event_filter = '') {
+    $event_filter = osl_cq_sanitize_quote_activity_event_filter($event_filter);
+    $where = 'WHERE 1=1';
+    $params = array();
+
+    if ($event_filter !== '') {
+        $where .= ' AND event_name = %s';
+        $params[] = $event_filter;
+    }
+
+    return array($where, $params);
+}
+
+function osl_cq_get_recent_quote_events_filtered($limit = 100, $offset = 0, $event_filter = '') {
+    global $wpdb;
+
+    if (!osl_cq_events_table_exists()) {
+        return array();
+    }
+
+    $limit = min(100, max(1, absint($limit)));
+    $offset = max(0, absint($offset));
+
+    list($where, $params) = osl_cq_quote_activity_where_sql($event_filter);
+
+    $sql = 'SELECT * FROM ' . osl_cq_events_table_name() . ' ' . $where . ' ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d';
+    $params[] = $limit;
+    $params[] = $offset;
+
+    return $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A);
+}
+
+function osl_cq_count_quote_events_filtered($event_filter = '') {
+    global $wpdb;
+
+    if (!osl_cq_events_table_exists()) {
+        return 0;
+    }
+
+    list($where, $params) = osl_cq_quote_activity_where_sql($event_filter);
+    $sql = 'SELECT COUNT(*) FROM ' . osl_cq_events_table_name() . ' ' . $where;
+
+    if (!empty($params)) {
+        $sql = $wpdb->prepare($sql, $params);
+    }
+
+    return absint($wpdb->get_var($sql));
+}
+
+function osl_cq_quote_activity_extra_value($event, $key) {
+    if (empty($event['extra'])) {
+        return '';
+    }
+
+    $extra = json_decode($event['extra'], true);
+    if (!is_array($extra) || !isset($extra[$key])) {
+        return '';
+    }
+
+    return sanitize_text_field($extra[$key]);
+}
+
+function osl_cq_quote_activity_admin_url($args = array()) {
+    return add_query_arg(array_merge(array('page' => 'osl-cq-activity'), $args), admin_url('admin.php'));
+}
+
+function osl_cq_redirect_quote_activity($args = array()) {
+    wp_safe_redirect(osl_cq_quote_activity_admin_url($args));
+    exit;
+}
+
+function osl_cq_export_quote_activity_csv($event_filter = '') {
+    if (!current_user_can('manage_options')) {
+        wp_die('Insufficient permissions.');
+    }
+
+    check_admin_referer('osl_cq_export_activity');
+
+    $event_filter = osl_cq_sanitize_quote_activity_event_filter($event_filter);
+    $events = osl_cq_get_recent_quote_events_filtered(100, 0, $event_filter);
+
+    nocache_headers();
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename=onestop-quote-activity-' . gmdate('Ymd-His') . '.csv');
+
+    $out = fopen('php://output', 'w');
+
+    fputcsv($out, array(
+        'Date/time',
+        'Event',
+        'Transaction type',
+        'Property type',
+        'Council',
+        'Suburb',
+        'Page path',
+        'Quote total',
+        'Quote band',
+        'CTA/link URL',
+        'Email',
+        'Phone',
+        'UTM source',
+        'UTM medium',
+        'UTM campaign',
+        'UTM term',
+        'UTM content',
+        'GCLID',
+        'FBCLID',
+    ));
+
+    foreach ($events as $event) {
+        fputcsv($out, array(
+            $event['created_at'] ?? '',
+            $event['event_name'] ?? '',
+            $event['transaction_type'] ?? '',
+            $event['property_type'] ?? '',
+            $event['council'] ?? '',
+            $event['suburb'] ?? '',
+            $event['page_path'] ?? '',
+            $event['quote_total'] ?? '',
+            $event['quote_total_band'] ?? '',
+            osl_cq_quote_activity_extra_value($event, 'link_url'),
+            $event['email'] ?? '',
+            $event['phone'] ?? '',
+            $event['utm_source'] ?? '',
+            $event['utm_medium'] ?? '',
+            $event['utm_campaign'] ?? '',
+            $event['utm_term'] ?? '',
+            $event['utm_content'] ?? '',
+            $event['gclid'] ?? '',
+            $event['fbclid'] ?? '',
+        ));
+    }
+
+    fclose($out);
+    exit;
+}
+
+function osl_cq_delete_selected_quote_activity($ids) {
+    global $wpdb;
+
+    $ids = array_filter(array_map('absint', (array) $ids));
+    if (empty($ids) || !osl_cq_events_table_exists()) {
+        return 0;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($ids), '%d'));
+    $sql = 'DELETE FROM ' . osl_cq_events_table_name() . ' WHERE id IN (' . $placeholders . ')';
+
+    return absint($wpdb->query($wpdb->prepare($sql, $ids)));
+}
+
+function osl_cq_delete_quote_activity_older_than($days) {
+    global $wpdb;
+
+    $days = absint($days);
+    if (!in_array($days, array(30, 90, 180, 365), true) || !osl_cq_events_table_exists()) {
+        return 0;
+    }
+
+    $cutoff = gmdate('Y-m-d H:i:s', time() - ($days * DAY_IN_SECONDS));
+
+    return absint($wpdb->query(
+        $wpdb->prepare(
+            'DELETE FROM ' . osl_cq_events_table_name() . ' WHERE created_at < %s',
+            $cutoff
+        )
+    ));
+}
+
+function osl_cq_delete_filtered_quote_activity($event_filter = '') {
+    global $wpdb;
+
+    if (!osl_cq_events_table_exists()) {
+        return 0;
+    }
+
+    list($where, $params) = osl_cq_quote_activity_where_sql($event_filter);
+    $sql = 'DELETE FROM ' . osl_cq_events_table_name() . ' ' . $where;
+
+    if (!empty($params)) {
+        $sql = $wpdb->prepare($sql, $params);
+    }
+
+    return absint($wpdb->query($sql));
+}
+
+function osl_cq_maybe_run_quote_activity_retention_cleanup() {
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+
+    $retention = osl_cq_get_quote_activity_retention();
+    if ($retention === 'forever') {
+        return;
+    }
+
+    if (get_transient('osl_cq_quote_activity_retention_ran')) {
+        return;
+    }
+
+    osl_cq_delete_quote_activity_older_than(absint($retention));
+    set_transient('osl_cq_quote_activity_retention_ran', 1, DAY_IN_SECONDS);
+}
+
+function osl_cq_handle_quote_activity_admin_actions() {
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+
+    if (($_GET['page'] ?? '') !== 'osl-cq-activity' && ($_POST['page'] ?? '') !== 'osl-cq-activity') {
+        return;
+    }
+
+    osl_cq_maybe_install_events_table();
+
+    $action = sanitize_key($_REQUEST['osl_cq_activity_action'] ?? '');
+
+    if ($action === 'export') {
+        osl_cq_export_quote_activity_csv($_GET['event_name'] ?? '');
+    }
+
+    if ($action === 'save_retention') {
+        check_admin_referer('osl_cq_save_activity_retention');
+        $retention = sanitize_text_field($_POST['retention_days'] ?? 'forever');
+        if (!array_key_exists($retention, osl_cq_quote_activity_retention_options())) {
+            $retention = 'forever';
+        }
+        update_option('osl_cq_quote_activity_retention_days', $retention, false);
+        osl_cq_redirect_quote_activity(array('osl_cq_notice' => 'retention_saved'));
+    }
+
+    if ($action === 'delete_selected') {
+        check_admin_referer('osl_cq_activity_bulk_delete');
+        $deleted = osl_cq_delete_selected_quote_activity($_POST['activity_ids'] ?? array());
+        osl_cq_redirect_quote_activity(array('osl_cq_deleted' => $deleted));
+    }
+
+    if ($action === 'delete_older_than') {
+        check_admin_referer('osl_cq_activity_delete_older_than');
+        $days = absint($_POST['delete_older_than_days'] ?? 0);
+        $deleted = osl_cq_delete_quote_activity_older_than($days);
+        osl_cq_redirect_quote_activity(array('osl_cq_deleted' => $deleted));
+    }
+
+    if ($action === 'confirm_delete') {
+        check_admin_referer('osl_cq_activity_confirm_delete');
+        $scope = sanitize_key($_POST['delete_scope'] ?? '');
+        $event_filter = osl_cq_sanitize_quote_activity_event_filter($_POST['event_name'] ?? '');
+
+        if ($scope === 'filtered' && $event_filter !== '') {
+            $deleted = osl_cq_delete_filtered_quote_activity($event_filter);
+            osl_cq_redirect_quote_activity(array('event_name' => $event_filter, 'osl_cq_deleted' => $deleted));
+        }
+
+        if ($scope === 'all') {
+            $deleted = osl_cq_delete_filtered_quote_activity('');
+            osl_cq_redirect_quote_activity(array('osl_cq_deleted' => $deleted));
+        }
+    }
+}
+add_action('admin_init', 'osl_cq_handle_quote_activity_admin_actions');
+add_action('admin_init', 'osl_cq_maybe_run_quote_activity_retention_cleanup');

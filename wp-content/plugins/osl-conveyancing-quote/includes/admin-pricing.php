@@ -459,62 +459,175 @@ function osl_cq_activity_page() {
     $per_page = 100;
     $paged = max(1, absint($_GET['paged'] ?? 1));
     $offset = ($paged - 1) * $per_page;
-    $events = osl_cq_get_recent_quote_events($per_page, $offset);
-    $total = osl_cq_count_quote_events();
+    $event_filter = osl_cq_sanitize_quote_activity_event_filter($_GET['event_name'] ?? '');
+    $events = osl_cq_get_recent_quote_events_filtered($per_page, $offset, $event_filter);
+    $total = osl_cq_count_quote_events_filtered($event_filter);
     $total_pages = max(1, (int) ceil($total / $per_page));
-    ?>
-    <div class="wrap osl-cq-wrap">
-        <h1>Quote Activity</h1>
-        <p>Recent conveyancing quote generation and quote-result CTA events. Showing up to <?php echo esc_html($per_page); ?> records per page.</p>
 
-        <table class="widefat striped">
-            <thead>
-                <tr>
-                    <th>Date/time</th>
-                    <th>Event</th>
-                    <th>Transaction type</th>
-                    <th>Property type</th>
-                    <th>Council</th>
-                    <th>Suburb / page path</th>
-                    <th>Quote total / band</th>
-                    <th>Source / medium / campaign</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($events)): ?>
-                    <tr><td colspan="8">No quote activity has been logged yet.</td></tr>
-                <?php else: ?>
-                    <?php foreach ($events as $event): ?>
-                        <tr>
-                            <td><?php echo esc_html($event['created_at']); ?></td>
-                            <td><?php echo esc_html($event['event_name']); ?></td>
-                            <td><?php echo esc_html($event['transaction_type']); ?></td>
-                            <td><?php echo esc_html($event['property_type']); ?></td>
-                            <td><?php echo esc_html($event['council']); ?></td>
-                            <td>
-                                <?php if (!empty($event['suburb'])): ?>
-                                    <strong><?php echo esc_html($event['suburb']); ?></strong><br>
-                                <?php endif; ?>
-                                <span class="osl-cq-muted"><?php echo esc_html($event['page_path']); ?></span>
-                            </td>
-                            <td>
-                                <?php
-                                if ($event['quote_total'] !== null && $event['quote_total'] !== '') {
-                                    echo esc_html('$' . number_format((float) $event['quote_total'], 2));
-                                }
-                                if (!empty($event['quote_total_band'])) {
-                                    echo '<br><span class="osl-cq-muted">' . esc_html($event['quote_total_band']) . '</span>';
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <?php echo esc_html(trim(($event['utm_source'] ?: '—') . ' / ' . ($event['utm_medium'] ?: '—') . ' / ' . ($event['utm_campaign'] ?: '—'))); ?>
-                            </td>
-                        </tr>
+    $export_args = array(
+        'osl_cq_activity_action' => 'export',
+    );
+    if ($event_filter !== '') {
+        $export_args['event_name'] = $event_filter;
+    }
+    $export_url = wp_nonce_url(osl_cq_quote_activity_admin_url($export_args), 'osl_cq_export_activity');
+
+    $confirm_delete = sanitize_key($_GET['confirm_delete'] ?? '');
+    ?>
+    <div class="wrap osl-cq-wrap osl-cq-activity-wrap">
+        <h1>
+            Quote Activity
+            <a class="page-title-action osl-cq-export-button" href="<?php echo esc_url($export_url); ?>">Export CSV</a>
+        </h1>
+
+        <?php if (isset($_GET['osl_cq_deleted'])): ?>
+            <div class="notice notice-success is-dismissible"><p><?php echo esc_html(absint($_GET['osl_cq_deleted'])); ?> quote activity record(s) deleted.</p></div>
+        <?php endif; ?>
+        <?php if (($_GET['osl_cq_notice'] ?? '') === 'retention_saved'): ?>
+            <div class="notice notice-success is-dismissible"><p>Quote activity retention setting saved.</p></div>
+        <?php endif; ?>
+
+        <p>Recent conveyancing quote generation and quote-result CTA events. Showing up to <?php echo esc_html($per_page); ?> records per page.</p>
+        <p class="description">quote_generated records a completed quote. CTA clicked and Email columns populate only when a visitor clicks a result action or voluntarily supplies email details.</p>
+
+        <div class="osl-cq-activity-toolbar">
+            <form method="get" action="<?php echo esc_url(admin_url('admin.php')); ?>">
+                <input type="hidden" name="page" value="osl-cq-activity">
+                <label for="event_name">Filter by event</label>
+                <select name="event_name" id="event_name">
+                    <option value="">All events</option>
+                    <?php foreach (osl_cq_quote_activity_allowed_events() as $event_name): ?>
+                        <option value="<?php echo esc_attr($event_name); ?>" <?php selected($event_filter, $event_name); ?>><?php echo esc_html($event_name); ?></option>
                     <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </select>
+                <button class="button">Filter</button>
+                <a class="button button-primary" href="<?php echo esc_url($export_url); ?>">Export CSV</a>
+            </form>
+        </div>
+
+        <div class="postbox" style="padding:14px 16px;margin-top:16px;">
+            <h2 style="margin-top:0;">Retention and deletion tools</h2>
+
+            <form method="post" style="margin-bottom:12px;">
+                <input type="hidden" name="page" value="osl-cq-activity">
+                <input type="hidden" name="osl_cq_activity_action" value="save_retention">
+                <?php wp_nonce_field('osl_cq_save_activity_retention'); ?>
+                <label for="retention_days">Automatic retention cleanup</label>
+                <select name="retention_days" id="retention_days">
+                    <?php foreach (osl_cq_quote_activity_retention_options() as $value => $label): ?>
+                        <option value="<?php echo esc_attr($value); ?>" <?php selected(osl_cq_get_quote_activity_retention(), $value); ?>><?php echo esc_html($label); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <button class="button">Save retention</button>
+                <p class="description">Cleanup runs from WordPress admin requests at most once daily, never on the public quote form.</p>
+            </form>
+
+            <form method="post" style="margin-bottom:12px;">
+                <input type="hidden" name="page" value="osl-cq-activity">
+                <input type="hidden" name="osl_cq_activity_action" value="delete_older_than">
+                <?php wp_nonce_field('osl_cq_activity_delete_older_than'); ?>
+                <label for="delete_older_than_days">Delete records older than</label>
+                <select name="delete_older_than_days" id="delete_older_than_days">
+                    <option value="30">30 days</option>
+                    <option value="90">90 days</option>
+                    <option value="180">180 days</option>
+                    <option value="365">365 days</option>
+                </select>
+                <button class="button" onclick="return confirm('Delete old quote activity records?');">Delete old records</button>
+            </form>
+
+            <?php if ($event_filter !== ''): ?>
+                <p><a class="button" href="<?php echo esc_url(osl_cq_quote_activity_admin_url(array('event_name' => $event_filter, 'confirm_delete' => 'filtered'))); ?>">Delete all filtered activity</a></p>
+            <?php endif; ?>
+            <p><a class="button" href="<?php echo esc_url(osl_cq_quote_activity_admin_url(array('confirm_delete' => 'all'))); ?>">Delete all activity</a></p>
+
+            <?php if ($confirm_delete === 'all' || ($confirm_delete === 'filtered' && $event_filter !== '')): ?>
+                <div class="notice notice-warning inline">
+                    <p><strong>Confirm deletion.</strong> This permanently deletes quote activity records only.</p>
+                    <form method="post">
+                        <input type="hidden" name="page" value="osl-cq-activity">
+                        <input type="hidden" name="osl_cq_activity_action" value="confirm_delete">
+                        <input type="hidden" name="delete_scope" value="<?php echo esc_attr($confirm_delete); ?>">
+                        <input type="hidden" name="event_name" value="<?php echo esc_attr($event_filter); ?>">
+                        <?php wp_nonce_field('osl_cq_activity_confirm_delete'); ?>
+                        <button class="button button-primary">Yes, delete <?php echo $confirm_delete === 'filtered' ? 'filtered' : 'all'; ?> activity</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <h2>
+            Recent activity
+            <a class="button button-primary" href="<?php echo esc_url($export_url); ?>">Export CSV</a>
+        </h2>
+        <p><?php echo esc_html($total); ?> event(s) logged<?php echo $event_filter ? ' for ' . esc_html($event_filter) : ''; ?>.</p>
+
+        <form method="post">
+            <input type="hidden" name="page" value="osl-cq-activity">
+            <input type="hidden" name="osl_cq_activity_action" value="delete_selected">
+            <?php wp_nonce_field('osl_cq_activity_bulk_delete'); ?>
+
+            <table class="widefat striped">
+                <thead>
+                    <tr>
+                        <th style="width:32px;"><input type="checkbox" onclick="jQuery('.osl-cq-activity-checkbox').prop('checked', this.checked);"></th>
+                        <th>Date/time</th>
+                        <th>Event</th>
+                        <th>Transaction type</th>
+                        <th>Property type</th>
+                        <th>Council</th>
+                        <th>Suburb / page path</th>
+                        <th>Quote total / band</th>
+                        <th>CTA clicked</th>
+                        <th>Email</th>
+                        <th>Source / medium / campaign</th>
+                        <th>Page</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($events)): ?>
+                        <tr><td colspan="12">No quote activity has been logged yet.</td></tr>
+                    <?php else: ?>
+                        <?php foreach ($events as $event): ?>
+                            <tr>
+                                <td><input class="osl-cq-activity-checkbox" type="checkbox" name="activity_ids[]" value="<?php echo esc_attr(absint($event['id'])); ?>"></td>
+                                <td><?php echo esc_html($event['created_at']); ?></td>
+                                <td><code><?php echo esc_html($event['event_name']); ?></code></td>
+                                <td><?php echo esc_html($event['transaction_type']); ?></td>
+                                <td><?php echo esc_html($event['property_type']); ?></td>
+                                <td><?php echo esc_html($event['council']); ?></td>
+                                <td>
+                                    <?php if (!empty($event['suburb'])): ?>
+                                        <strong><?php echo esc_html($event['suburb']); ?></strong><br>
+                                    <?php endif; ?>
+                                    <span class="osl-cq-muted"><?php echo esc_html($event['page_path']); ?></span>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ($event['quote_total'] !== null && $event['quote_total'] !== '') {
+                                        echo esc_html('$' . number_format((float) $event['quote_total'], 2));
+                                    }
+                                    if (!empty($event['quote_total_band'])) {
+                                        echo '<br><span class="osl-cq-muted">' . esc_html($event['quote_total_band']) . '</span>';
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo esc_html(osl_cq_quote_activity_extra_value($event, 'link_url')); ?></td>
+                                <td><?php echo esc_html($event['email']); ?></td>
+                                <td><?php echo esc_html(trim(($event['utm_source'] ?: '—') . ' / ' . ($event['utm_medium'] ?: '—') . ' / ' . ($event['utm_campaign'] ?: '—'))); ?></td>
+                                <td>
+                                    <?php if (!empty($event['page_url'])): ?>
+                                        <a href="<?php echo esc_url($event['page_url']); ?>" target="_blank" rel="noopener">Open source page</a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
+            <p><button class="button" onclick="return confirm('Delete selected quote activity records?');">Delete selected</button></p>
+        </form>
 
         <?php if ($total_pages > 1): ?>
             <div class="tablenav bottom">
