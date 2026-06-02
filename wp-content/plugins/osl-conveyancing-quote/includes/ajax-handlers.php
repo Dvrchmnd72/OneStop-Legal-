@@ -101,8 +101,6 @@ function osl_cq_calculate() {
     $html .= '<div class="osl-cq-result-actions" data-cta-location="quote_result">';
     $html .= '<a class="osl-cq-contact-btn osl-cq-result-contact" href="/contact/">Contact OneStop Legal</a>';
     $html .= '<a class="osl-cq-contact-btn osl-cq-result-email" href="mailto:info@onestoplegal.com.au">Email Us</a>';
-    $html .= '<a class="osl-cq-contact-btn osl-cq-result-phone" href="tel:+61755129827">Call 07 5512 9827</a>';
-    $html .= '<button type="button" class="osl-cq-contact-btn osl-cq-print-quote">Print / Save Quote</button>';
     $html .= '</div>';
     $html .= '</div>';
     $html .= '<div class="osl-cq-summary-right"><div class="osl-cq-summary-header"><h4>OPTIONAL SERVICES</h4></div>';
