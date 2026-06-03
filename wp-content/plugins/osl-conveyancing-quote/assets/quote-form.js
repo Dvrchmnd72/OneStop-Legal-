@@ -31,8 +31,11 @@ jQuery(document).ready(function($) {
     function oslCqFormContext(extra) {
         return $.extend({}, oslCqPageContext(), {
             transaction_type: $("input[name='osl_property_for']:checked").val() || '',
+            state: $('#osl_state').val() || 'QLD',
             property_type: $('#osl_property_type').val() || '',
-            council: $('#osl_council option:selected').text().trim() || $('#osl_council').val() || ''
+            council: (($('#osl_state').val() || 'QLD') === 'QLD')
+                ? ($('#osl_council option:selected').text().trim() || $('#osl_council').val() || '')
+                : ($('#osl_state option:selected').text().trim() || $('#osl_state').val() || '')
         }, extra || {});
     }
 
@@ -126,6 +129,24 @@ jQuery(document).ready(function($) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
     }
 
+    function syncStateFields() {
+        var state = $('#osl_state').val() || 'QLD';
+
+        if (state === 'QLD') {
+            $('.osl-cq-council-field').show();
+        } else {
+            $('.osl-cq-council-field').hide();
+        }
+    }
+
+    syncStateFields();
+
+    $(document).on('change', '#osl_state', function() {
+        syncStateFields();
+        $('#osl-cq-result').empty();
+        lastQuoteData = {};
+    });
+
     // Quote field interaction start tracking.
     $(document).on('focus change click', "#osl-cq-wrapper input, #osl-cq-wrapper select", function() {
         oslCqMarkStarted('quote_field');
@@ -142,6 +163,7 @@ jQuery(document).ready(function($) {
             action: 'osl_cq_calculate',
             nonce: OslCQ.nonce,
             property_for: $("input[name='osl_property_for']:checked").val(),
+            state: $('#osl_state').val() || 'QLD',
             council: $('#osl_council').val(),
             property_type: $('#osl_property_type').val()
         });
@@ -158,8 +180,9 @@ jQuery(document).ready(function($) {
                     $('#osl-cq-result').html(response.data.html);
                     lastQuoteData = {
                         transaction_type: response.data.transaction_type || data.property_for || '',
+                        state: response.data.state || data.state || $('#osl_state').val() || 'QLD',
                         property_type: response.data.property_type || data.property_type || '',
-                        council: response.data.council || $('#osl_council option:selected').text().trim() || '',
+                        council: response.data.council || (($('#osl_state').val() || 'QLD') === 'QLD' ? $('#osl_council option:selected').text().trim() : $('#osl_state option:selected').text().trim()) || '',
                         suburb: response.data.suburb || oslCqPageContext().suburb || '',
                         quote_total: response.data.quote_total || '',
                         quote_total_band: response.data.quote_total_band || ''
@@ -195,6 +218,7 @@ jQuery(document).ready(function($) {
             nonce: OslCQ.nonce,
             email: email,
             property_for: $("input[name='osl_property_for']:checked").val(),
+            state: $('#osl_state').val() || 'QLD',
             council: $('#osl_council').val(),
             property_type: $('#osl_property_type').val()
         });
