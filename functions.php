@@ -715,7 +715,7 @@ add_action('wp_head', function () {
         '@context' => 'https://schema.org',
         '@graph' => array(
             array('@type' => 'Organization', 'name' => 'OneStop Legal', 'url' => home_url('/')),
-            array('@type' => 'LocalBusiness', 'name' => 'OneStop Legal', 'url' => home_url('/'), 'telephone' => '+61 7 2111 6677'),
+            array('@type' => 'LocalBusiness', 'name' => 'OneStop Legal', 'url' => home_url('/'), 'telephone' => '+61 7 3156 1216'),
             array('@type' => 'LegalService', 'name' => 'Conveyancing Services', 'provider' => array('@type' => 'Organization', 'name' => 'OneStop Legal')),
             array('@type' => 'BreadcrumbList', 'itemListElement' => array(
                 array('@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => home_url('/')),
