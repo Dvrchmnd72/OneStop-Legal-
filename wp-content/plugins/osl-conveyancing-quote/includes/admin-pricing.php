@@ -399,14 +399,21 @@ function osl_cq_get_default_fee_fields($type, $property_type, $state = null) {
 
     if ($type === 'purchase') {
         if ($state === 'NSW') {
-            return array(
+            $fields = array(
                 'professional_fee' => 'Professional Fee',
                 'title_search' => 'Title Search',
                 'section_603_certificate' => 'Rate Search Section 603 Certificate',
+                'special_meter_reading' => 'Special Meter Reading',
                 'section_66_certificate' => 'Water Rates Section 66 Certificate',
-                'revenue_nsw_land_tax' => 'Revenue NSW Land Tax',
-                'identity_check' => 'Identity Check',
             );
+
+            if ($property_type === 'unit_townhouse_duplex') {
+                $fields['section_184_certificate'] = 'Section 184 Certificate (Strata Information Certificate)';
+            }
+
+            $fields['identity_check'] = 'Identity Check';
+
+            return $fields;
         }
 
         return array(
@@ -416,6 +423,29 @@ function osl_cq_get_default_fee_fields($type, $property_type, $state = null) {
             'land_tax' => 'Land Tax',
             'identity_check' => 'Identity Check',
         );
+    }
+
+    if ($state === 'NSW') {
+        $fields = array(
+            'professional_fee' => 'Professional Fee',
+            'title_search' => 'Title Search',
+            'dealings_on_title' => 'Dealings on Title per Search',
+            'prepare_contract_of_sale' => 'Prepare Contract of Sale',
+            'section_10_7_2_certificate' => 'Section 10.7(2) Certificate',
+            'sewer_service_diagram' => 'Sewer Service Diagram',
+            'service_location_print' => 'Service Location Print',
+            'certificate_of_land_tax' => 'Certificate of Land Tax',
+            'registered_plan' => 'Registered Plan',
+        );
+
+        if ($property_type === 'unit_townhouse_duplex') {
+            $fields['title_search_common_property'] = 'Title Search Common Property';
+            $fields['body_corporate_bylaws'] = 'Body Corporate Bylaws';
+        }
+
+        $fields['identity_check'] = 'Identity Check';
+
+        return $fields;
     }
 
     return array(
