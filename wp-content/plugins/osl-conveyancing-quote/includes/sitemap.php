@@ -163,23 +163,111 @@ function osl_cq_register_sitemap() {
     });
     add_action('template_redirect', 'osl_cq_render_suburb_sitemap');
 }
-function osl_cq_render_suburb_sitemap() {
-    if (!get_query_var('osl_cq_sitemap')) return;
-    header('Content-Type: application/xml; charset=UTF-8');
-    $pages = get_posts(array(
+function osl_cq_add_sitemap_entry(&$entries, &$seen, $loc, $lastmod, $changefreq, $priority) {
+    $loc = trailingslashit($loc);
+
+    if (isset($seen[$loc])) {
+        return;
+    }
+
+    $seen[$loc] = true;
+    $entries[] = array(
+        'loc' => $loc,
+        'lastmod' => $lastmod,
+        'changefreq' => $changefreq,
+        'priority' => $priority,
+    );
+}
+
+function osl_cq_get_conveyancing_sitemap_entries() {
+    $entries = array();
+    $seen = array();
+
+    $core_pages = array(
+        array('path' => 'conveyancing', 'pri' => '0.9', 'freq' => 'weekly'),
+        array('path' => 'conveyancing/gold-coast', 'pri' => '0.9', 'freq' => 'weekly'),
+        array('path' => 'conveyancing-quote', 'pri' => '0.9', 'freq' => 'weekly'),
+    );
+
+    foreach ($core_pages as $cp) {
+        $page = get_page_by_path($cp['path']);
+        $loc = $page ? get_permalink($page->ID) : home_url('/' . $cp['path'] . '/');
+        $lastmod = $page ? get_the_modified_date('Y-m-d', $page->ID) : date('Y-m-d');
+        osl_cq_add_sitemap_entry($entries, $seen, $loc, $lastmod, $cp['freq'], $cp['pri']);
+    }
+
+    $exclude_ids = array(3341);
+    $exclude_slugs = array('cancel', 'suburb-quote', 'gold-coast-quote', 'settlex-login', 'wills-quote');
+
+    foreach ($exclude_slugs as $slug) {
+        $p = get_page_by_path($slug);
+        if ($p) {
+            $exclude_ids[] = $p->ID;
+        }
+    }
+
+    $regional_hub_ids = array();
+    $regional_hubs = get_posts(array(
+        'post_type'      => 'page',
+        'post_parent'    => 2394,
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'meta_key'       => '_wp_page_template',
+        'meta_value'     => 'page-conveyancing-region.php',
+        'orderby'        => 'post_name',
+        'order'          => 'ASC',
+    ));
+
+    foreach ($regional_hubs as $hub) {
+        $regional_hub_ids[] = $hub->ID;
+        osl_cq_add_sitemap_entry($entries, $seen, get_permalink($hub->ID), get_the_modified_date('Y-m-d', $hub->ID), 'weekly', '0.9');
+    }
+
+    $gc_exclude = array_merge($exclude_ids, $regional_hub_ids);
+    $suburb_pages = get_posts(array(
         'post_type'      => 'page',
         'post_parent'    => 2394,
         'posts_per_page' => -1,
         'post_status'    => 'publish',
         'orderby'        => 'post_name',
         'order'          => 'ASC',
+        'exclude'        => $gc_exclude,
     ));
+
+    foreach ($suburb_pages as $page) {
+        osl_cq_add_sitemap_entry($entries, $seen, get_permalink($page->ID), get_the_modified_date('Y-m-d', $page->ID), 'weekly', '0.8');
+    }
+
+    foreach ($regional_hub_ids as $hub_id) {
+        $regional_suburbs = get_posts(array(
+            'post_type'      => 'page',
+            'post_parent'    => $hub_id,
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'orderby'        => 'post_name',
+            'order'          => 'ASC',
+        ));
+
+        foreach ($regional_suburbs as $page) {
+            osl_cq_add_sitemap_entry($entries, $seen, get_permalink($page->ID), get_the_modified_date('Y-m-d', $page->ID), 'weekly', '0.8');
+        }
+    }
+
+    return $entries;
+}
+
+function osl_cq_render_suburb_sitemap() {
+    if (!get_query_var('osl_cq_sitemap')) return;
+
+    header('Content-Type: application/xml; charset=UTF-8');
+
     echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-    echo osl_sitemap_url(get_permalink(2394), get_the_modified_date('Y-m-d', 2394), 'weekly', '0.9');
-    foreach ($pages as $page) {
-        echo osl_sitemap_url(get_permalink($page->ID), get_the_modified_date('Y-m-d', $page->ID), 'weekly', '0.8');
+
+    foreach (osl_cq_get_conveyancing_sitemap_entries() as $entry) {
+        echo osl_sitemap_url($entry['loc'], $entry['lastmod'], $entry['changefreq'], $entry['priority']);
     }
+
     echo '</urlset>';
     exit;
 }
