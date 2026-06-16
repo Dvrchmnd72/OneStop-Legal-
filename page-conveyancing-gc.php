@@ -146,36 +146,40 @@ get_header();
       <p>Click your suburb for local conveyancing information, or get an instant quote now.</p>
     </div>
     <div class="gc-suburbs-grid">
-      <a href="/surfers-paradise/" class="gc-suburb-link">Surfers Paradise</a>
-      <a href="/broadbeach/" class="gc-suburb-link">Broadbeach</a>
-      <a href="/southport/" class="gc-suburb-link">Southport</a>
-      <a href="/robina/" class="gc-suburb-link">Robina</a>
-      <a href="/burleigh-heads/" class="gc-suburb-link">Burleigh Heads</a>
-      <a href="/palm-beach/" class="gc-suburb-link">Palm Beach</a>
-      <a href="/coolangatta/" class="gc-suburb-link">Coolangatta</a>
-      <a href="/nerang/" class="gc-suburb-link">Nerang</a>
-      <a href="/coomera/" class="gc-suburb-link">Coomera</a>
+      <a href="/conveyancing/surfers-paradise/" class="gc-suburb-link">Surfers Paradise</a>
+      <a href="/conveyancing/broadbeach/" class="gc-suburb-link">Broadbeach</a>
+      <a href="/conveyancing/southport/" class="gc-suburb-link">Southport</a>
+      <a href="/conveyancing/robina/" class="gc-suburb-link">Robina</a>
+      <a href="/conveyancing/burleigh-heads/" class="gc-suburb-link">Burleigh Heads</a>
+      <a href="/conveyancing/palm-beach/" class="gc-suburb-link">Palm Beach</a>
+      <a href="/conveyancing/coolangatta/" class="gc-suburb-link">Coolangatta</a>
+      <a href="/conveyancing/nerang/" class="gc-suburb-link">Nerang</a>
+      <a href="/conveyancing/coomera/" class="gc-suburb-link">Coomera</a>
       <a href="/upper-coomera/" class="gc-suburb-link">Upper Coomera</a>
-      <a href="/hope-island/" class="gc-suburb-link">Hope Island</a>
-      <a href="/helensvale/" class="gc-suburb-link">Helensvale</a>
+      <a href="/conveyancing/hope-island/" class="gc-suburb-link">Hope Island</a>
+      <a href="/conveyancing/helensvale/" class="gc-suburb-link">Helensvale</a>
       <a href="/oxenford/" class="gc-suburb-link">Oxenford</a>
       <a href="/pimpama/" class="gc-suburb-link">Pimpama</a>
       <a href="/ormeau/" class="gc-suburb-link">Ormeau</a>
       <a href="/mudgeeraba/" class="gc-suburb-link">Mudgeeraba</a>
-      <a href="/varsity-lakes/" class="gc-suburb-link">Varsity Lakes</a>
-      <a href="/mermaid-beach/" class="gc-suburb-link">Mermaid Beach</a>
-      <a href="/miami/" class="gc-suburb-link">Miami</a>
+      <a href="/conveyancing/varsity-lakes/" class="gc-suburb-link">Varsity Lakes</a>
+      <a href="/conveyancing/mermaid-beach/" class="gc-suburb-link">Mermaid Beach</a>
+      <a href="/conveyancing/miami/" class="gc-suburb-link">Miami</a>
       <a href="/currumbin/" class="gc-suburb-link">Currumbin</a>
       <a href="/bundall/" class="gc-suburb-link">Bundall</a>
-      <a href="/benowa/" class="gc-suburb-link">Benowa</a>
-      <a href="/ashmore/" class="gc-suburb-link">Ashmore</a>
+      <a href="/conveyancing/benowa/" class="gc-suburb-link">Benowa</a>
+      <a href="/conveyancing/ashmore/" class="gc-suburb-link">Ashmore</a>
+      <a href="/conveyancing/merrimac/" class="gc-suburb-link">Merrimac</a>
+      <a href="/conveyancing/molendinar/" class="gc-suburb-link">Molendinar</a>
+      <a href="/conveyancing/parkwood/" class="gc-suburb-link">Parkwood</a>
+      <a href="/conveyancing/worongary/" class="gc-suburb-link">Worongary</a>
       <a href="/labrador/" class="gc-suburb-link">Labrador</a>
       <a href="/runaway-bay/" class="gc-suburb-link">Runaway Bay</a>
       <a href="/sanctuary-cove/" class="gc-suburb-link">Sanctuary Cove</a>
-      <a href="/pacific-pines/" class="gc-suburb-link">Pacific Pines</a>
-      <a href="/carrara/" class="gc-suburb-link">Carrara</a>
-      <a href="/elanora/" class="gc-suburb-link">Elanora</a>
-      <a href="/tugun/" class="gc-suburb-link">Tugun</a>
+      <a href="/conveyancing/pacific-pines/" class="gc-suburb-link">Pacific Pines</a>
+      <a href="/conveyancing/carrara/" class="gc-suburb-link">Carrara</a>
+      <a href="/conveyancing/elanora/" class="gc-suburb-link">Elanora</a>
+      <a href="/conveyancing/tugun/" class="gc-suburb-link">Tugun</a>
       <a href="/biggera-waters/" class="gc-suburb-link">Biggera Waters</a>
       <a href="/tamborine-mountain/" class="gc-suburb-link">Tamborine Mountain</a>
     </div>
